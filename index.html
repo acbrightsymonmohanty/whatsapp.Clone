@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Clone</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Register Screen -->
+    <div id="register-screen" class="auth-container">
+        <div class="auth-box">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
+            <h1>Register</h1>
+            <form id="register-form">
+                <input type="text" id="reg-username" placeholder="Username" required>
+                <input type="email" id="reg-email" placeholder="Email" required>
+                <input type="password" id="reg-password" placeholder="Password" required>
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="#" onclick="toggleAuth('login')">Login</a></p>
+        </div>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="auth-container" style="display: none;">
+        <div class="auth-box">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
+            <h1>Login</h1>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" onclick="toggleAuth('register')">Register</a></p>
+        </div>
+    </div>
+
+    <!-- Main App (Initially Hidden) -->
+    <div id="app-container" class="container" style="display: none;">
+        <div class="sidebar">
+            <div class="header">
+                <div class="profile-icon" onclick="openProfileModal()">
+                    <img id="profile-image" src="https://via.placeholder.com/40" alt="profile">
+                    <span class="status-dot"></span>
+                </div>
+                <div class="nav-icons">
+                    <i class="fas fa-message"></i>
+                    <i class="fas fa-ellipsis-vertical"></i>
+                </div>
+            </div>
+            <div class="search-container">
+                <div class="input">
+                    
+                    <input type="text" placeholder="Search or start new chat">
+                    <!--<i class="fas fa-search"></i>-->
+                </div>
+            </div>
+            <div class="chat-list" id="chat-list">
+                <!-- Chat list will be populated here -->
+            </div>
+        </div>
+        <div class="main-chat">
+            <div class="chat-header">
+                <div class="chat-info">
+                    <div class="contact-name">Select a chat</div>
+                </div>
+                <div class="chat-icons">
+                    <i class="fas fa-search"></i>
+                    <i class="fas fa-ellipsis-vertical"></i>
+                </div>
+            </div>
+            <div class="chat-messages" id="chat-messages">
+                <!-- Messages will appear here -->
+            </div>
+            <div class="chat-input">
+                <i class="far fa-smile"></i>
+                <i class="fas fa-paperclip"></i>
+                <input type="text" id="message-input" placeholder="Type a message">
+                <button id="send-button">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this modal for profile editing -->
+    <div id="profile-modal" class="modal">
+        <div class="modal-content whatsapp-style">
+            <div class="modal-header">
+                <i class="fas fa-arrow-left" onclick="closeProfileModal()"></i>
+                <h2>Profile</h2>
+            </div>
+            <div class="profile-edit-container">
+                <div class="profile-image-container">
+                    <img id="profile-preview" src="https://via.placeholder.com/150" alt="profile">
+                    <div class="image-overlay">
+                        <i class="fas fa-camera"></i>
+                        <span>CHANGE<br>PROFILE PHOTO</span>
+                        <input type="file" id="profile-upload" accept="image/*">
+                    </div>
+                </div>
+                <div class="profile-edit-form">
+                    <div class="input-group">
+                        <label>
+                            <i class="fas fa-user"></i>
+                            Name
+                        </label>
+                        <input type="text" id="edit-username" placeholder="Enter your name">
+                        <small>This is not your username or pin. This name will be visible to your WhatsApp contacts.</small>
+                    </div>
+                    <div class="input-group">
+                        <label>
+                            <i class="fas fa-info-circle"></i>
+                            About
+                        </label>
+                        <input type="text" id="edit-about" placeholder="Hey there! I am using WhatsApp">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 
