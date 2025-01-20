@@ -30,6 +30,15 @@ class WhatsAppChat {
         this.searchFeature = new ChatSearch();
         this.chatManager = new ChatManager();
         this.setupUserListeners();
+        this.mobileHandler = new MobileResponsive();
+        
+        // Add chat item click handler
+        document.addEventListener('click', (e) => {
+            const chatItem = e.target.closest('.chat-item');
+            if (chatItem) {
+                this.mobileHandler.showMainChat();
+            }
+        });
     }
 
     addHeaderWithLogout() {
@@ -1926,4 +1935,127 @@ class ProfileManager {
 // Initialize the ProfileManager when the DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const profileManager = new ProfileManager();
-}); 
+});
+
+class MobileResponsive {
+    constructor() {
+        this.sidebar = document.querySelector('.sidebar');
+        this.mainChat = document.querySelector('.main-chat');
+        this.backButton = document.querySelector('.back-button');
+        this.init();
+    }
+
+    init() {
+        // Initial setup
+        this.setupBackButton();
+        this.handleScreenSize();
+
+        // Listen for screen size changes
+        window.addEventListener('resize', () => this.handleScreenSize());
+        
+        // Setup chat item click listeners
+        this.setupChatListeners();
+    }
+
+    setupBackButton() {
+        if (this.backButton) {
+            // Hide back button by default
+            this.backButton.style.display = 'none';
+            
+            // Add click handler
+            this.backButton.addEventListener('click', () => {
+                this.showSidebar();
+            });
+        }
+    }
+
+    handleScreenSize() {
+        const isMobile = window.innerWidth <= 768;
+        
+        if (this.backButton) {
+            // Show/hide back button based on screen size
+            this.backButton.style.display = isMobile ? 'flex' : 'none';
+        }
+
+        if (isMobile) {
+            // Mobile view setup
+            this.sidebar.style.display = 'flex';
+            this.mainChat.style.display = 'none';
+        } else {
+            // Desktop view setup
+            this.sidebar.style.display = 'flex';
+            this.mainChat.style.display = 'flex';
+        }
+    }
+
+    setupChatListeners() {
+        const chatItems = document.querySelectorAll('.chat-item');
+        chatItems.forEach(chat => {
+            chat.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    this.showMainChat();
+                }
+            });
+        });
+    }
+
+    showSidebar() {
+        if (window.innerWidth <= 768) {
+            this.sidebar.style.display = 'flex';
+            this.mainChat.style.display = 'none';
+        }
+    }
+
+    showMainChat() {
+        if (window.innerWidth <= 768) {
+            this.sidebar.style.display = 'none';
+            this.mainChat.style.display = 'flex';
+        }
+    }
+}
+
+// Add these styles
+const styles = document.createElement('style');
+styles.textContent = `
+    .back-button {
+        align-items: center;
+        padding: 8px;
+        cursor: pointer;
+        color: #54656f;
+        transition: all 0.2s ease;
+    }
+
+    .back-button i {
+        font-size: 20px;
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            position: relative;
+        }
+
+        .sidebar, .main-chat {
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .main-chat {
+            z-index: 2;
+        }
+
+        .back-button {
+            display: flex !important;
+        }
+    }
+
+    @media screen and (min-width: 769px) {
+        .back-button {
+            display: none !important;
+        }
+    }
+`;
+document.head.appendChild(styles); 

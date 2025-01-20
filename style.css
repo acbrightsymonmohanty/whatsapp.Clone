@@ -144,6 +144,7 @@
     padding: 0 8px;
 }
 
+
 .search-input {
     flex: 1;
     border: none;
@@ -2393,6 +2394,8 @@
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s ease;
+    background: red;
+    margin-left: 55%;
 }
 
 .logout-btn:hover {
@@ -7807,6 +7810,8 @@
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s ease;
+    background: red;
+    margin-left: 55%;
 }
 
 .logout-btn:hover {
@@ -14094,6 +14099,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
+    color: red;
     background-color: rgba(255, 255, 255, 0.1);
     border: none;
     color: white;
@@ -14102,6 +14108,9 @@
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s ease;
+    margin-left: 60%;
+    background: red;
+    margin-left: 55%;
 }
 
 .logout-btn:hover {
@@ -34485,6 +34494,8 @@
     cursor: pointer;
     font-size: 14px;
     transition: all 0.2s ease;
+    background: red;
+    margin-left: 55%;
 }
 
 .logout-btn:hover {
