@@ -544,34 +544,27 @@ function loadUsers() {
 
     // Reference to users in Firebase
     const usersRef = firebase.database().ref('users');
-    
-    usersRef.on('value', (snapshot) => {
-        usersList.innerHTML = ''; // Clear existing list
-        
-        snapshot.forEach((childSnapshot) => {
-            const user = childSnapshot.val();
-            // Don't show current user in the list
-            if (user.id !== currentUser.id) {
-                const userElement = createUserListItem(user);
-                usersList.appendChild(userElement);
-            }
-        });
-    });
-}
 
-// Create user list item with last message and time
-function createUserListItem(user) {
-    const div = document.createElement('div');
-    div.className = 'chat-item';
-    
-    // Get chat ID
-    const chatId = [currentUser.id, user.id].sort().join('_');
-    
-    // Get last message
-    firebase.database().ref('messages')
-        .child(chatId)
-        .limitToLast(1)
-        .once('value', (snapshot) => {
+    // Keep track of user elements by ID
+    const userElements = {};
+
+    // Function to update or create a user list item
+    function updateUser(user) {
+        const chatId = [currentUser.id, user.id].sort().join('_');
+
+        // Check if user element already exists
+        let userElement = userElements[user.id];
+        if (!userElement) {
+            // Create a new user element
+            userElement = document.createElement('div');
+            userElement.className = 'chat-item';
+            userElement.setAttribute('data-id', user.id);
+            usersList.appendChild(userElement);
+            userElements[user.id] = userElement;
+        }
+
+        // Update last message, unread count, and status in real-time
+        firebase.database().ref('messages').child(chatId).limitToLast(1).on('value', (snapshot) => {
             let lastMessage = '';
             let lastTime = '';
             let unreadCount = 0;
@@ -585,7 +578,8 @@ function createUserListItem(user) {
                 }
             });
 
-            div.innerHTML = `
+            // Update the user element
+            userElement.innerHTML = `
                 <div class="user-wrapper">
                     <div class="user-avatar">
                         <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${user.username}&background=00a884&color=fff`}" 
@@ -606,9 +600,43 @@ function createUserListItem(user) {
             `;
         });
 
-    div.addEventListener('click', () => startChat(user));
-    return div;
+        // Add click event to open chat
+        userElement.addEventListener('click', () => startChat(user));
+    }
+
+    // Listen for user additions
+    usersRef.on('child_added', (snapshot) => {
+        const user = snapshot.val();
+        if (user.id !== currentUser.id) {
+            updateUser(user);
+        }
+    });
+
+    // Listen for user updates
+    usersRef.on('child_changed', (snapshot) => {
+        const user = snapshot.val();
+        if (user.id !== currentUser.id) {
+            updateUser(user);
+        }
+    });
+
+    // Listen for user removals
+    usersRef.on('child_removed', (snapshot) => {
+        const user = snapshot.val();
+        const userElement = userElements[user.id];
+        if (userElement) {
+            usersList.removeChild(userElement);
+            delete userElements[user.id];
+        }
+    });
 }
+
+// Helper function to format timestamps
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
 
 // Clean up function to remove listeners
 function cleanupListeners() {
@@ -1203,14 +1231,14 @@ function updateUserStatusUI(userId, status, lastSeen) {
 }
 
 // Periodic status check and update
-setInterval(() => {
+/*setInterval(() => {
     if (currentUser && document.visibilityState === 'visible') {
         firebase.database().ref(`users/${currentUser.id}`).update({
             status: 'online',
             lastSeen: firebase.database.ServerValue.TIMESTAMP
         });
     }
-}, 10000); // Update every 30 seconds
+}, 10000);*/ // Update every 30 seconds
 
 // Load chats with proper formatting and unread counts
 function loadChats() {
