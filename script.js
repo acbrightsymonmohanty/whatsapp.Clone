@@ -27,6 +27,9 @@ class WhatsAppChat {
         this.unsubscribeListeners = [];
         this.addHeaderWithLogout();
         this.init();
+        this.searchFeature = new ChatSearch();
+        this.chatManager = new ChatManager();
+        this.setupUserListeners();
     }
 
     addHeaderWithLogout() {
@@ -131,12 +134,32 @@ class WhatsAppChat {
         });
     }
     logoutUser() {
-        // Assuming Firebase auth is available globally or passed from elsewhere
-        const auth = firebase.auth(); // Replace with your auth service if not using Firebase
-        const logoutHandler = new LogoutHandler(auth);
-        
-        // Call the handleLogout method
-        logoutHandler.handleLogout();
+        // Show confirmation dialog
+        if (confirm('Are you sure you want to logout?')) {
+            // Show loading state
+            document.body.classList.add('loading');
+            
+            // Sign out from Firebase
+            firebase.auth().signOut().then(() => {
+                // Clear any stored data
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Hide app container and show login screen
+                document.getElementById('app-container').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'flex';
+                document.getElementById('profile-modal').style.display = 'none';
+                
+                // Reset form fields
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+            }).catch((error) => {
+                console.error('Logout error:', error);
+                alert('Logout failed. Please try again.');
+            }).finally(() => {
+                document.body.classList.remove('loading');
+            });
+        }
     }
 
     showError(message) {
@@ -259,85 +282,63 @@ class WhatsAppChat {
 
     setupSearchListener() {
         this.searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
+            const searchTerm = e.target.value.trim().toLowerCase();
             this.filterChats(searchTerm);
         });
     }
 
     filterChats(searchTerm) {
-        const chats = this.chatList.querySelectorAll('.chat-item');
+        const chatItems = this.chatList.querySelectorAll('.chat-item');
         let hasResults = false;
 
-        chats.forEach(chat => {
-            const name = chat.querySelector('.chat-name').textContent.toLowerCase();
-            const message = chat.querySelector('.chat-last-message').textContent.toLowerCase();
-            const matches = name.includes(searchTerm) || message.includes(searchTerm);
-
-            chat.style.display = matches || !searchTerm ? 'flex' : 'none';
+        chatItems.forEach(chatItem => {
+            // Get the name from the chat item (checking multiple possible elements)
+            const nameElement = chatItem.querySelector('.chat-name, .user-name') || 
+                              chatItem.querySelector('h2') || 
+                              chatItem.querySelector('strong');
             
-            if (matches && searchTerm) {
-                this.highlightText(chat, searchTerm);
+            if (!nameElement) return;
+
+            const name = nameElement.textContent.toLowerCase();
+            const matches = searchTerm === '' || name.includes(searchTerm);
+
+            // Show/hide chat items based on match
+            chatItem.style.display = matches ? 'flex' : 'none';
+
+            if (matches) {
+                this.highlightText(nameElement, searchTerm);
                 hasResults = true;
             } else {
-                this.removeHighlight(chat);
+                this.removeHighlight(nameElement);
             }
         });
 
-        this.toggleNoResults(!hasResults && searchTerm);
+        this.toggleNoResults(!hasResults && searchTerm !== '');
     }
 
-    createChatElement(chatData, chatId) {
-        const div = document.createElement('div');
-        div.className = 'chat-item';
-        div.dataset.chatId = chatId;
-        div.dataset.timestamp = chatData.lastMessageTime?.toMillis() || 0;
+    highlightText(element, searchTerm) {
+        if (!searchTerm) {
+            element.textContent = element.textContent;
+            return;
+        }
 
-        div.innerHTML = `
-            <div class="chat-avatar">
-                ${chatData.name ? chatData.name.charAt(0).toUpperCase() : 'U'}
-            </div>
-            <div class="chat-details">
-                <div class="chat-header">
-                    <span class="chat-name">${chatData.name || 'Unnamed'}</span>
-                    <span class="chat-time">${this.formatTime(chatData.lastMessageTime)}</span>
-                </div>
-                <div class="chat-info">
-                    <span class="chat-last-message">${chatData.lastMessage || ''}</span>
-                </div>
-            </div>
-        `;
-
-        return div;
+        const text = element.textContent;
+        const highlightedText = text.replace(
+            new RegExp(searchTerm, 'gi'),
+            match => `<span class="highlight">${match}</span>`
+        );
+        element.innerHTML = highlightedText;
     }
 
-    highlightText(chatElement, searchTerm) {
-        const elements = [
-            chatElement.querySelector('.chat-name'),
-            chatElement.querySelector('.chat-last-message')
-        ];
-
-        elements.forEach(element => {
-            if (element) {
-                const text = element.textContent;
-                const highlightedText = text.replace(
-                    new RegExp(searchTerm, 'gi'),
-                    match => `<span class="highlight">${match}</span>`
-                );
-                element.innerHTML = highlightedText;
-            }
-        });
-    }
-
-    removeHighlight(chatElement) {
-        const highlights = chatElement.querySelectorAll('.highlight');
-        highlights.forEach(highlight => {
-            const parent = highlight.parentNode;
-            parent.textContent = parent.textContent;
-        });
+    removeHighlight(element) {
+        if (element) {
+            element.textContent = element.textContent;
+        }
     }
 
     toggleNoResults(show) {
-        let noResults = document.querySelector('.no-results');
+        let noResults = this.chatList.querySelector('.no-results');
+        
         if (show) {
             if (!noResults) {
                 noResults = document.createElement('div');
@@ -345,7 +346,7 @@ class WhatsAppChat {
                 noResults.innerHTML = `
                     <div class="no-results-content">
                         <i class="fas fa-search"></i>
-                        <p>No chats found</p>
+                        <p>No matching users found</p>
                     </div>
                 `;
                 this.chatList.appendChild(noResults);
@@ -372,6 +373,44 @@ class WhatsAppChat {
     cleanup() {
         // Unsubscribe from all listeners
         this.unsubscribeListeners.forEach(unsubscribe => unsubscribe());
+    }
+
+    setupUserListeners() {
+        // Listen for user presence changes
+        firebase.database().ref('.info/connected').on('value', (snap) => {
+            if (snap.val() === true && this.auth.currentUser) {
+                this.updateUserPresence(true);
+            }
+        });
+
+        // Listen for new users
+        firebase.database().ref('users').on('child_added', (snapshot) => {
+            const userData = snapshot.val();
+            if (userData && userData.email !== this.auth.currentUser.email) {
+                this.chatManager.addUserToChat(userData);
+            }
+        });
+
+        // Listen for user removals
+        firebase.database().ref('users').on('child_removed', (snapshot) => {
+            const userData = snapshot.val();
+            if (userData) {
+                this.chatManager.removeUserFromChat(userData.email);
+            }
+        });
+    }
+
+    updateUserPresence(isOnline) {
+        if (!this.auth.currentUser) return;
+
+        const userStatusRef = firebase.database()
+            .ref(`users/${this.auth.currentUser.uid}/status`);
+        
+        userStatusRef.set(isOnline);
+
+        if (isOnline) {
+            userStatusRef.onDisconnect().set(false);
+        }
     }
 }
 
@@ -1587,183 +1626,106 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 class ChatSearch {
-    constructor(chatList) {
+    constructor() {
         this.searchInput = document.querySelector('.search-input');
-        this.chatList = chatList;
-        this.clearButton = document.querySelector('.search-clear');
-        this.searchIndex = new Map();
+        this.chatList = document.querySelector('.chat-list');
         this.init();
     }
 
     init() {
-        this.bindEvents();
-        this.updateSearchIndex();
-    }
-
-    bindEvents() {
-        this.searchInput.addEventListener('input', () => {
-            const searchTerm = this.searchInput.value.trim().toLowerCase();
-            this.performSearch(searchTerm);
-        });
-
-        if (this.clearButton) {
-            this.clearButton.addEventListener('click', () => {
-                this.clearSearch();
-            });
+        if (!this.searchInput || !this.chatList) {
+            console.error('Required elements not found');
+            return;
         }
+        this.setupSearchListener();
     }
 
-    updateSearchIndex() {
-        this.searchIndex.clear();
-        document.querySelectorAll('.chat-item').forEach(chat => {
-            const chatId = chat.dataset.chatId;
-            const searchableText = this.getSearchableText(chat).toLowerCase();
-            this.searchIndex.set(chatId, {
-                element: chat,
-                searchableText: searchableText
-            });
+    setupSearchListener() {
+        this.searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.trim().toLowerCase();
+            this.filterChats(searchTerm);
         });
     }
 
-    getSearchableText(chatElement) {
-        const name = chatElement.querySelector('.chat-name')?.textContent || '';
-        const message = chatElement.querySelector('.chat-last-message')?.textContent || '';
-        const email = chatElement.querySelector('.chat-email')?.textContent || '';
-        return `${name} ${message} ${email}`;
-    }
+    filterChats(searchTerm) {
+        const chatItems = this.chatList.querySelectorAll('.chat-item');
+        let hasResults = false;
 
-    performSearch(searchTerm) {
-        Array.from(this.chatList.children).forEach(chat => {
-            chat.style.display = 'none';
+        chatItems.forEach(chatItem => {
+            // Get the name from the chat item (checking multiple possible elements)
+            const nameElement = chatItem.querySelector('.chat-name, .user-name') || 
+                              chatItem.querySelector('h2') || 
+                              chatItem.querySelector('strong');
+            
+            if (!nameElement) return;
+
+            const name = nameElement.textContent.toLowerCase();
+            const matches = searchTerm === '' || name.includes(searchTerm);
+
+            // Show/hide chat items based on match
+            chatItem.style.display = matches ? 'flex' : 'none';
+
+            if (matches) {
+                this.highlightText(nameElement, searchTerm);
+                hasResults = true;
+            } else {
+                this.removeHighlight(nameElement);
+            }
         });
 
+        this.toggleNoResults(!hasResults && searchTerm !== '');
+    }
+
+    highlightText(element, searchTerm) {
         if (!searchTerm) {
-            this.showAllChats();
+            element.textContent = element.textContent;
             return;
         }
 
-        let hasResults = false;
-        this.searchIndex.forEach((data, chatId) => {
-            if (data.searchableText.includes(searchTerm)) {
-                const chatElement = document.querySelector(`[data-chat-id="${chatId}"]`);
-                if (chatElement) {
-                    this.highlightSearchTerm(chatElement, searchTerm);
-                    chatElement.style.display = 'flex';
-                    hasResults = true;
-                }
-            }
-        });
+        const text = element.textContent;
+        const highlightedText = text.replace(
+            new RegExp(searchTerm, 'gi'),
+            match => `<span class="highlight">${match}</span>`
+        );
+        element.innerHTML = highlightedText;
+    }
 
-        if (!hasResults) {
-            this.showNoResults(searchTerm);
+    removeHighlight(element) {
+        if (element) {
+            element.textContent = element.textContent;
         }
     }
 
-    showAllChats() {
-        Array.from(this.chatList.children).forEach(chat => {
-            chat.style.display = 'flex';
-            // Remove any existing highlights
-            this.removeHighlights(chat);
-        });
-    }
-
-    highlightSearchTerm(chatElement, searchTerm) {
-        const elements = [
-            chatElement.querySelector('.chat-name'),
-            chatElement.querySelector('.chat-last-message'),
-            chatElement.querySelector('.chat-email')
-        ];
-
-        elements.forEach(element => {
-            if (element) {
-                const text = element.textContent;
-                const regex = new RegExp(`(${searchTerm})`, 'gi');
-                element.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
+    toggleNoResults(show) {
+        let noResults = this.chatList.querySelector('.no-results');
+        
+        if (show) {
+            if (!noResults) {
+                noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <div class="no-results-content">
+                        <i class="fas fa-search"></i>
+                        <p>No matching users found</p>
+                    </div>
+                `;
+                this.chatList.appendChild(noResults);
             }
-        });
-    }
-
-    removeHighlights(chatElement) {
-        const highlightedElements = chatElement.querySelectorAll('.highlight');
-        highlightedElements.forEach(element => {
-            const parent = element.parentNode;
-            parent.textContent = parent.textContent;
-        });
-    }
-
-    showNoResults(searchTerm) {
-        const noResults = document.createElement('div');
-        noResults.className = 'no-results';
-        noResults.innerHTML = `
-            <div class="no-results-content">
-                <i class="fas fa-search"></i>
-                <p>No results found for "${searchTerm}"</p>
-                <span class="no-results-tip">Try searching for:</span>
-                <ul class="search-tips">
-                    <li>• Contact names</li>
-                    <li>• Messages</li>
-                    <li>• Email addresses</li>
-                </ul>
-            </div>
-        `;
-        this.chatList.appendChild(noResults);
-    }
-
-    clearSearch() {
-        this.searchInput.value = '';
-        this.showAllChats();
-        this.searchInput.focus();
+        } else if (noResults) {
+            noResults.remove();
+        }
     }
 }
 
-// Initialize when DOM is loaded
+// Initialize search functionality when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Add search container if not present
-    if (!document.querySelector('.search-container')) {
-        const searchContainer = document.createElement('div');
-        searchContainer.className = 'search-container';
-        searchContainer.innerHTML = `
-            <div class="search-box">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Search or start new chat">
-                <i class="fas fa-times search-clear"></i>
-            </div>
-        `;
-        document.querySelector('.chat-list-container').insertBefore(
-            searchContainer,
-            document.querySelector('.chat-list')
-        );
+    // Make sure WhatsApp instance is initialized first
+    if (typeof WhatsAppChat !== 'undefined') {
+        const whatsApp = new WhatsAppChat();
+    } else {
+        console.error('WhatsAppChat class not found');
     }
-
-    // Initialize search
-    const chatSearch = new ChatSearch();
-
-    // Example of adding new chats dynamically
-    window.addNewChat = function(chatData) {
-        const chatItem = createChatItem(chatData);
-        document.querySelector('.chat-list').appendChild(chatItem);
-        chatSearch.updateSearchIndex();
-    };
 });
-
-function createChatItem(data) {
-    const div = document.createElement('div');
-    div.className = 'chat-item';
-    div.innerHTML = `
-        <div class="chat-avatar">${data.name.charAt(0)}</div>
-        <div class="chat-details">
-            <div class="chat-header">
-                <span class="chat-name">${data.name}</span>
-                <span class="chat-time">${data.time || '12:00 PM'}</span>
-            </div>
-            <div class="chat-info">
-                <span class="chat-last-message">${data.lastMessage || ''}</span>
-                <span class="chat-email">${data.email || ''}</span>
-            </div>
-        </div>
-    `;
-    return div;
-}
 
 class ChatManager {
     constructor() {
@@ -1856,4 +1818,112 @@ class ChatManager {
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     const chatManager = new ChatManager();
+});
+
+// Add this to handle profile page logout
+class ProfileManager {
+    constructor() {
+        this.initializeLogout();
+    }
+
+    initializeLogout() {
+        // Find the logout button in the profile modal
+        const logoutBtn = document.querySelector('.logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleLogout();
+            });
+        }
+    }
+
+    async handleLogout() {
+        try {
+            const confirmed = await this.showLogoutConfirmation();
+            
+            if (confirmed) {
+                // Show loading state
+                document.body.classList.add('loading');
+                
+                // Sign out from Firebase
+                await firebase.auth().signOut();
+                
+                // Clear any stored data
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Hide app container and profile modal
+                document.getElementById('app-container').style.display = 'none';
+                document.getElementById('profile-modal').style.display = 'none';
+                
+                // Show login screen
+                document.getElementById('login-screen').style.display = 'flex';
+                
+                // Reset form fields
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            this.showError('Logout failed. Please try again.');
+        } finally {
+            document.body.classList.remove('loading');
+        }
+    }
+
+    showLogoutConfirmation() {
+        return new Promise((resolve) => {
+            const dialogHtml = `
+                <div class="logout-dialog">
+                    <div class="logout-dialog-content">
+                        <h3>Logout</h3>
+                        <p>Are you sure you want to logout?</p>
+                        <div class="logout-dialog-buttons">
+                            <button class="cancel-button">Cancel</button>
+                            <button class="confirm-button">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', dialogHtml);
+            const dialog = document.querySelector('.logout-dialog');
+
+            // Add click handlers
+            dialog.querySelector('.cancel-button').addEventListener('click', () => {
+                dialog.remove();
+                resolve(false);
+            });
+
+            dialog.querySelector('.confirm-button').addEventListener('click', () => {
+                dialog.remove();
+                resolve(true);
+            });
+
+            // Close on outside click
+            dialog.addEventListener('click', (e) => {
+                if (e.target === dialog) {
+                    dialog.remove();
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+    showError(message) {
+        const errorToast = document.createElement('div');
+        errorToast.className = 'error-toast';
+        errorToast.textContent = message;
+        
+        document.body.appendChild(errorToast);
+        
+        setTimeout(() => {
+            errorToast.remove();
+        }, 3000);
+    }
+}
+
+// Initialize the ProfileManager when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const profileManager = new ProfileManager();
 }); 
