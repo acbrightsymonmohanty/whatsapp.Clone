@@ -18,6 +18,371 @@ let currentChat = null;
 let userPresenceRef = null;
 let activeChats = new Map();
 
+class WhatsAppChat {
+    constructor() {
+        this.db = firebase.firestore();
+        this.auth = firebase.auth();
+        this.chatList = document.querySelector('.chat-list');
+        this.searchInput = document.querySelector('.search-input');
+        this.unsubscribeListeners = [];
+        this.addHeaderWithLogout();
+        this.init();
+    }
+
+    addHeaderWithLogout() {
+        // Create header if it doesn't exist
+        const headerHtml = `
+            <div class="whatsapp-header">
+                <div class="header-left">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            ${this.auth.currentUser?.email?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                        <div class="user-name">
+                            ${this.auth.currentUser?.email || 'User'}
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="logout-btn" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Insert header at the top of the chat container
+        const chatContainer = document.querySelector('.chat-container');
+        chatContainer.insertAdjacentHTML('afterbegin', headerHtml);
+
+        // Add logout click handler
+        document.querySelector('.logout-btn').addEventListener('click', () => {
+            this.handleLogout();
+        });
+    }
+     
+    async handleLogout() {
+        try {
+            const confirmed = await this.showLogoutConfirmation();
+            
+            if (confirmed) {
+                // Show loading state
+                const logoutBtn = document.querySelector('.logout-btn');
+                logoutBtn.classList.add('loading');
+                logoutBtn.disabled = true;
+
+                // Cleanup listeners
+                this.cleanup();
+                
+                // Sign out from Firebase
+                await this.auth.signOut();
+                
+                // Redirect to login page
+                window.location.href = '/login.html';
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            this.showError('Logout failed. Please try again.');
+            
+            // Reset button state
+            const logoutBtn = document.querySelector('.logout-btn');
+            logoutBtn.classList.remove('loading');
+            logoutBtn.disabled = false;
+        }
+    }
+
+    showLogoutConfirmation() {
+        return new Promise((resolve) => {
+            const dialogHtml = `
+                <div class="logout-dialog">
+                    <div class="logout-dialog-content">
+                        <h3>Logout</h3>
+                        <p>Are you sure you want to logout?</p>
+                        <div class="logout-dialog-buttons">
+                            <button class="cancel-button">Cancel</button>
+                            <button class="confirm-button">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', dialogHtml);
+            const dialog = document.querySelector('.logout-dialog');
+
+            // Add click handlers
+            dialog.querySelector('.cancel-button').addEventListener('click', () => {
+                dialog.remove();
+                resolve(false);
+            });
+
+            dialog.querySelector('.confirm-button').addEventListener('click', () => {
+                dialog.remove();
+                resolve(true);
+            });
+
+            // Close on outside click
+            dialog.addEventListener('click', (e) => {
+                if (e.target === dialog) {
+                    dialog.remove();
+                    resolve(false);
+                }
+            });
+        });
+    }
+    logoutUser() {
+        // Assuming Firebase auth is available globally or passed from elsewhere
+        const auth = firebase.auth(); // Replace with your auth service if not using Firebase
+        const logoutHandler = new LogoutHandler(auth);
+        
+        // Call the handleLogout method
+        logoutHandler.handleLogout();
+    }
+
+    showError(message) {
+        const errorToast = document.createElement('div');
+        errorToast.className = 'error-toast';
+        errorToast.textContent = message;
+        
+        document.body.appendChild(errorToast);
+        
+        setTimeout(() => {
+            errorToast.remove();
+        }, 3000);
+    }
+
+    init() {
+        this.setupSearchListener();
+        this.setupRealtimeListeners();
+    }
+
+    setupRealtimeListeners() {
+        // Listen for chat updates
+        const chatListener = this.db.collection('chats')
+            .orderBy('lastMessageTime', 'desc')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach(change => {
+                    const chatData = change.doc.data();
+                    const chatId = change.doc.id;
+
+                    switch (change.type) {
+                        case 'added':
+                            this.handleNewChat(chatData, chatId);
+                            break;
+                        case 'modified':
+                            this.handleChatUpdate(chatData, chatId);
+                            break;
+                        case 'removed':
+                            this.handleChatRemoval(chatId);
+                            break;
+                    }
+                });
+            });
+
+        // Listen for message updates
+        const messageListener = this.db.collection('messages')
+            .orderBy('timestamp', 'desc')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === 'added' || change.type === 'modified') {
+                        const messageData = change.doc.data();
+                        this.updateLastMessage(messageData);
+                    }
+                });
+            });
+
+        this.unsubscribeListeners.push(chatListener, messageListener);
+    }
+
+    handleNewChat(chatData, chatId) {
+        const existingChat = document.querySelector(`[data-chat-id="${chatId}"]`);
+        if (!existingChat) {
+            const chatElement = this.createChatElement(chatData, chatId);
+            this.insertChatInOrder(chatElement, chatData.lastMessageTime);
+        }
+    }
+
+    handleChatUpdate(chatData, chatId) {
+        const existingChat = document.querySelector(`[data-chat-id="${chatId}"]`);
+        if (existingChat) {
+            const updatedChat = this.createChatElement(chatData, chatId);
+            existingChat.replaceWith(updatedChat);
+            this.insertChatInOrder(updatedChat, chatData.lastMessageTime);
+        }
+    }
+
+    handleChatRemoval(chatId) {
+        const chatElement = document.querySelector(`[data-chat-id="${chatId}"]`);
+        if (chatElement) {
+            chatElement.remove();
+        }
+    }
+
+    updateLastMessage(messageData) {
+        if (!messageData.chatId) return;
+
+        const chatElement = document.querySelector(`[data-chat-id="${messageData.chatId}"]`);
+        if (chatElement) {
+            const lastMessageEl = chatElement.querySelector('.chat-last-message');
+            const timeEl = chatElement.querySelector('.chat-time');
+
+            if (lastMessageEl) {
+                lastMessageEl.textContent = messageData.text;
+            }
+            if (timeEl && messageData.timestamp) {
+                timeEl.textContent = this.formatTime(messageData.timestamp);
+            }
+
+            this.insertChatInOrder(chatElement, messageData.timestamp);
+        }
+    }
+
+    insertChatInOrder(chatElement, timestamp) {
+        const chats = Array.from(this.chatList.children);
+        let inserted = false;
+
+        for (const chat of chats) {
+            if (chat === chatElement) continue;
+            
+            const currentTimestamp = chat.dataset.timestamp;
+            if (currentTimestamp && timestamp > currentTimestamp) {
+                this.chatList.insertBefore(chatElement, chat);
+                inserted = true;
+                break;
+            }
+        }
+
+        if (!inserted && chatElement.parentElement !== this.chatList) {
+            this.chatList.appendChild(chatElement);
+        }
+    }
+
+    setupSearchListener() {
+        this.searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase().trim();
+            this.filterChats(searchTerm);
+        });
+    }
+
+    filterChats(searchTerm) {
+        const chats = this.chatList.querySelectorAll('.chat-item');
+        let hasResults = false;
+
+        chats.forEach(chat => {
+            const name = chat.querySelector('.chat-name').textContent.toLowerCase();
+            const message = chat.querySelector('.chat-last-message').textContent.toLowerCase();
+            const matches = name.includes(searchTerm) || message.includes(searchTerm);
+
+            chat.style.display = matches || !searchTerm ? 'flex' : 'none';
+            
+            if (matches && searchTerm) {
+                this.highlightText(chat, searchTerm);
+                hasResults = true;
+            } else {
+                this.removeHighlight(chat);
+            }
+        });
+
+        this.toggleNoResults(!hasResults && searchTerm);
+    }
+
+    createChatElement(chatData, chatId) {
+        const div = document.createElement('div');
+        div.className = 'chat-item';
+        div.dataset.chatId = chatId;
+        div.dataset.timestamp = chatData.lastMessageTime?.toMillis() || 0;
+
+        div.innerHTML = `
+            <div class="chat-avatar">
+                ${chatData.name ? chatData.name.charAt(0).toUpperCase() : 'U'}
+            </div>
+            <div class="chat-details">
+                <div class="chat-header">
+                    <span class="chat-name">${chatData.name || 'Unnamed'}</span>
+                    <span class="chat-time">${this.formatTime(chatData.lastMessageTime)}</span>
+                </div>
+                <div class="chat-info">
+                    <span class="chat-last-message">${chatData.lastMessage || ''}</span>
+                </div>
+            </div>
+        `;
+
+        return div;
+    }
+
+    highlightText(chatElement, searchTerm) {
+        const elements = [
+            chatElement.querySelector('.chat-name'),
+            chatElement.querySelector('.chat-last-message')
+        ];
+
+        elements.forEach(element => {
+            if (element) {
+                const text = element.textContent;
+                const highlightedText = text.replace(
+                    new RegExp(searchTerm, 'gi'),
+                    match => `<span class="highlight">${match}</span>`
+                );
+                element.innerHTML = highlightedText;
+            }
+        });
+    }
+
+    removeHighlight(chatElement) {
+        const highlights = chatElement.querySelectorAll('.highlight');
+        highlights.forEach(highlight => {
+            const parent = highlight.parentNode;
+            parent.textContent = parent.textContent;
+        });
+    }
+
+    toggleNoResults(show) {
+        let noResults = document.querySelector('.no-results');
+        if (show) {
+            if (!noResults) {
+                noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <div class="no-results-content">
+                        <i class="fas fa-search"></i>
+                        <p>No chats found</p>
+                    </div>
+                `;
+                this.chatList.appendChild(noResults);
+            }
+        } else if (noResults) {
+            noResults.remove();
+        }
+    }
+
+    formatTime(timestamp) {
+        if (!timestamp) return '';
+        
+        const date = timestamp.toDate();
+        const now = new Date();
+        const today = now.toDateString();
+        const messageDate = date.toDateString();
+
+        if (messageDate === today) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    }
+
+    cleanup() {
+        // Unsubscribe from all listeners
+        this.unsubscribeListeners.forEach(unsubscribe => unsubscribe());
+    }
+}
+
+// Initialize only once when DOM is loaded
+let whatsAppInstance = null;
+document.addEventListener('DOMContentLoaded', () => {
+    if (!whatsAppInstance) {
+        whatsAppInstance = new WhatsAppChat();
+    }
+});
+
 // Register new user with email
 function registerUser(event) {
     event.preventDefault();
@@ -845,7 +1210,7 @@ setInterval(() => {
             lastSeen: firebase.database.ServerValue.TIMESTAMP
         });
     }
-}, 30000); // Update every 30 seconds
+}, 10000); // Update every 30 seconds
 
 // Load chats with proper formatting and unread counts
 function loadChats() {
@@ -1095,4 +1460,372 @@ function openCamera() {
             console.error('Camera access denied:', err);
             alert('Could not access camera');
         });
-} 
+}
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+    const whatsApp = new WhatsAppChat();
+});
+
+class MessageHandler {
+    constructor() {
+        this.messageContainer = document.querySelector('.chat-messages');
+        this.setupMessageHandling();
+    }
+
+    setupMessageHandling() {
+        // Handle message sending
+        document.querySelector('.message-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendMessage(e.target.value);
+                e.target.value = '';
+            }
+        });
+    }
+
+    sendMessage(text) {
+        try {
+            const messageElement = this.createMessageElement(text);
+            this.messageContainer.appendChild(messageElement);
+            this.scrollToBottom();
+        } catch (error) {
+            this.showError('Failed to send message. Please try again.');
+        }
+    }
+
+    createMessageElement(text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message sent';
+
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        
+        // Check if it's a long message
+        if (text.length > 100) {
+            content.classList.add('long');
+        }
+
+        const textElement = document.createElement('div');
+        textElement.className = 'message-text';
+        
+        // Format paragraphs
+        const paragraphs = text.split('\n').filter(p => p.trim());
+        if (paragraphs.length > 1) {
+            textElement.classList.add('paragraph');
+            paragraphs.forEach(p => {
+                const para = document.createElement('p');
+                para.textContent = p;
+                textElement.appendChild(para);
+            });
+        } else {
+            textElement.textContent = text;
+        }
+
+        const timeElement = document.createElement('div');
+        timeElement.className = 'message-time';
+        timeElement.textContent = this.formatTime(new Date());
+
+        content.appendChild(textElement);
+        content.appendChild(timeElement);
+        messageDiv.appendChild(content);
+
+        return messageDiv;
+    }
+
+    formatTime(date) {
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'message-error';
+        errorDiv.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${message}</span>
+        `;
+        this.messageContainer.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 3000);
+    }
+
+    scrollToBottom() {
+        this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const messageHandler = new MessageHandler();
+});
+
+class ChatSearch {
+    constructor(chatList) {
+        this.searchInput = document.querySelector('.search-input');
+        this.chatList = chatList;
+        this.clearButton = document.querySelector('.search-clear');
+        this.searchIndex = new Map();
+        this.init();
+    }
+
+    init() {
+        this.bindEvents();
+        this.updateSearchIndex();
+    }
+
+    bindEvents() {
+        this.searchInput.addEventListener('input', () => {
+            const searchTerm = this.searchInput.value.trim().toLowerCase();
+            this.performSearch(searchTerm);
+        });
+
+        if (this.clearButton) {
+            this.clearButton.addEventListener('click', () => {
+                this.clearSearch();
+            });
+        }
+    }
+
+    updateSearchIndex() {
+        this.searchIndex.clear();
+        document.querySelectorAll('.chat-item').forEach(chat => {
+            const chatId = chat.dataset.chatId;
+            const searchableText = this.getSearchableText(chat).toLowerCase();
+            this.searchIndex.set(chatId, {
+                element: chat,
+                searchableText: searchableText
+            });
+        });
+    }
+
+    getSearchableText(chatElement) {
+        const name = chatElement.querySelector('.chat-name')?.textContent || '';
+        const message = chatElement.querySelector('.chat-last-message')?.textContent || '';
+        const email = chatElement.querySelector('.chat-email')?.textContent || '';
+        return `${name} ${message} ${email}`;
+    }
+
+    performSearch(searchTerm) {
+        Array.from(this.chatList.children).forEach(chat => {
+            chat.style.display = 'none';
+        });
+
+        if (!searchTerm) {
+            this.showAllChats();
+            return;
+        }
+
+        let hasResults = false;
+        this.searchIndex.forEach((data, chatId) => {
+            if (data.searchableText.includes(searchTerm)) {
+                const chatElement = document.querySelector(`[data-chat-id="${chatId}"]`);
+                if (chatElement) {
+                    this.highlightSearchTerm(chatElement, searchTerm);
+                    chatElement.style.display = 'flex';
+                    hasResults = true;
+                }
+            }
+        });
+
+        if (!hasResults) {
+            this.showNoResults(searchTerm);
+        }
+    }
+
+    showAllChats() {
+        Array.from(this.chatList.children).forEach(chat => {
+            chat.style.display = 'flex';
+            // Remove any existing highlights
+            this.removeHighlights(chat);
+        });
+    }
+
+    highlightSearchTerm(chatElement, searchTerm) {
+        const elements = [
+            chatElement.querySelector('.chat-name'),
+            chatElement.querySelector('.chat-last-message'),
+            chatElement.querySelector('.chat-email')
+        ];
+
+        elements.forEach(element => {
+            if (element) {
+                const text = element.textContent;
+                const regex = new RegExp(`(${searchTerm})`, 'gi');
+                element.innerHTML = text.replace(regex, '<span class="highlight">$1</span>');
+            }
+        });
+    }
+
+    removeHighlights(chatElement) {
+        const highlightedElements = chatElement.querySelectorAll('.highlight');
+        highlightedElements.forEach(element => {
+            const parent = element.parentNode;
+            parent.textContent = parent.textContent;
+        });
+    }
+
+    showNoResults(searchTerm) {
+        const noResults = document.createElement('div');
+        noResults.className = 'no-results';
+        noResults.innerHTML = `
+            <div class="no-results-content">
+                <i class="fas fa-search"></i>
+                <p>No results found for "${searchTerm}"</p>
+                <span class="no-results-tip">Try searching for:</span>
+                <ul class="search-tips">
+                    <li>• Contact names</li>
+                    <li>• Messages</li>
+                    <li>• Email addresses</li>
+                </ul>
+            </div>
+        `;
+        this.chatList.appendChild(noResults);
+    }
+
+    clearSearch() {
+        this.searchInput.value = '';
+        this.showAllChats();
+        this.searchInput.focus();
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Add search container if not present
+    if (!document.querySelector('.search-container')) {
+        const searchContainer = document.createElement('div');
+        searchContainer.className = 'search-container';
+        searchContainer.innerHTML = `
+            <div class="search-box">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Search or start new chat">
+                <i class="fas fa-times search-clear"></i>
+            </div>
+        `;
+        document.querySelector('.chat-list-container').insertBefore(
+            searchContainer,
+            document.querySelector('.chat-list')
+        );
+    }
+
+    // Initialize search
+    const chatSearch = new ChatSearch();
+
+    // Example of adding new chats dynamically
+    window.addNewChat = function(chatData) {
+        const chatItem = createChatItem(chatData);
+        document.querySelector('.chat-list').appendChild(chatItem);
+        chatSearch.updateSearchIndex();
+    };
+});
+
+function createChatItem(data) {
+    const div = document.createElement('div');
+    div.className = 'chat-item';
+    div.innerHTML = `
+        <div class="chat-avatar">${data.name.charAt(0)}</div>
+        <div class="chat-details">
+            <div class="chat-header">
+                <span class="chat-name">${data.name}</span>
+                <span class="chat-time">${data.time || '12:00 PM'}</span>
+            </div>
+            <div class="chat-info">
+                <span class="chat-last-message">${data.lastMessage || ''}</span>
+                <span class="chat-email">${data.email || ''}</span>
+            </div>
+        </div>
+    `;
+    return div;
+}
+
+class ChatManager {
+    constructor() {
+        this.db = firebase.firestore();
+        this.chatList = document.querySelector('.chat-list');
+        this.searchManager = new ChatSearch(this.chatList);
+        this.setupRealtimeListeners();
+    }
+
+    setupRealtimeListeners() {
+        // Listen for messages collection changes
+        this.db.collection('messages')
+            .orderBy('timestamp', 'desc')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === 'added' || change.type === 'modified') {
+                        this.updateLastMessage(change.doc.data());
+                    }
+                });
+            });
+
+        // Listen for user status changes
+        this.db.collection('users')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === 'modified') {
+                        this.updateUserStatus(change.doc.id, change.doc.data());
+                    }
+                });
+            });
+    }
+
+    updateLastMessage(messageData) {
+        const chatItem = document.querySelector(`[data-chat-id="${messageData.chatId}"]`);
+        if (chatItem) {
+            // Update last message
+            const lastMessageElement = chatItem.querySelector('.chat-last-message');
+            const timeElement = chatItem.querySelector('.chat-time');
+            
+            if (lastMessageElement) {
+                lastMessageElement.textContent = messageData.text;
+            }
+            
+            if (timeElement) {
+                timeElement.textContent = this.formatTimestamp(messageData.timestamp);
+            }
+
+            // Move chat to top
+            this.moveToTop(chatItem);
+        }
+    }
+
+    moveToTop(chatItem) {
+        const parent = chatItem.parentNode;
+        parent.insertBefore(chatItem, parent.firstChild);
+    }
+
+    formatTimestamp(timestamp) {
+        const date = timestamp.toDate();
+        const now = new Date();
+        
+        if (date.toDateString() === now.toDateString()) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } else {
+            return date.toLocaleDateString([], { weekday: 'short' });
+        }
+    }
+
+    updateUserStatus(userId, status) {
+        const userElement = document.querySelector(`[data-user-id="${userId}"]`);
+        if (userElement) {
+            const statusElement = userElement.querySelector('.user-status');
+            const statusIndicator = userElement.querySelector('.status-indicator');
+
+            if (status === 'online') {
+                statusElement.textContent = 'online';
+                statusElement.style.color = '#00a884';
+                statusIndicator?.classList.add('online');
+                statusIndicator?.classList.remove('offline');
+            } else {
+                statusElement.textContent = 'offline';
+                statusElement.style.color = '#667781';
+                statusIndicator?.classList.add('offline');
+                statusIndicator?.classList.remove('online');
+            }
+        }
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const chatManager = new ChatManager();
+}); 

@@ -11,7 +11,8 @@
     <!-- Register Screen -->
     <div id="register-screen" class="auth-container">
         <div class="auth-box">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp Logo">
+            <img src="https://img.icons8.com/color/48/imessage.png" alt="WhatsApp Logo">
+            
             <h1>Register</h1>
             <form id="register-form">
                 <input type="text" id="reg-username" placeholder="Username" required>
@@ -52,8 +53,8 @@
             </div>
             <div class="search-container">
                 <div class="input">
-                    
-                    <input type="text" placeholder="Search or start new chat">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search or start new chat" >
                     <!--<i class="fas fa-search"></i>-->
                 </div>
             </div>
@@ -91,6 +92,9 @@
             <div class="modal-header">
                 <i class="fas fa-arrow-left" onclick="closeProfileModal()"></i>
                 <h2>Profile</h2>
+                <button class="logout-btn" style="color: red; margin-left:50%" onclick="logoutUser()">
+                    <i class="fa fa-power-off" style="font-size:20px;color:red"></i>
+                  </button>
             </div>
             <div class="profile-edit-container">
                 <div class="profile-image-container">
