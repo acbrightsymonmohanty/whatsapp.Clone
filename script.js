@@ -184,8 +184,9 @@ class WhatsAppChat {
     }
 
     init() {
-        this.setupSearchListener();
-        this.setupRealtimeListeners();
+        this.searchInput = document.querySelector('.search-container .input input');
+        this.chatList = document.querySelector('#chatList');// Update the selector as per your DOM structure
+
     }
 
     setupRealtimeListeners() {
@@ -289,31 +290,37 @@ class WhatsAppChat {
         }
     }
 
+    
+
     setupSearchListener() {
+        this.searchInput = document.querySelector('.search-container .input input');
+        this.chatList = document.querySelector('#chatList');
+        const searchButton = document.querySelector('.search-container .input i');
+    
         this.searchInput.addEventListener('input', (e) => {
             const searchTerm = e.target.value.trim().toLowerCase();
             this.filterChats(searchTerm);
         });
+    
+        searchButton.addEventListener('click', () => {
+            const searchTerm = this.searchInput.value.trim().toLowerCase();
+            this.filterChats(searchTerm);
+        });
     }
-
+    
     filterChats(searchTerm) {
         const chatItems = this.chatList.querySelectorAll('.chat-item');
         let hasResults = false;
-
+    
         chatItems.forEach(chatItem => {
-            // Get the name from the chat item (checking multiple possible elements)
-            const nameElement = chatItem.querySelector('.chat-name, .user-name') || 
-                              chatItem.querySelector('h2') || 
-                              chatItem.querySelector('strong');
-            
+            const nameElement = chatItem.querySelector('.chat-name, .user-name, h2, strong');
             if (!nameElement) return;
-
+    
             const name = nameElement.textContent.toLowerCase();
             const matches = searchTerm === '' || name.includes(searchTerm);
-
-            // Show/hide chat items based on match
+    
             chatItem.style.display = matches ? 'flex' : 'none';
-
+    
             if (matches) {
                 this.highlightText(nameElement, searchTerm);
                 hasResults = true;
@@ -321,33 +328,31 @@ class WhatsAppChat {
                 this.removeHighlight(nameElement);
             }
         });
-
+    
         this.toggleNoResults(!hasResults && searchTerm !== '');
     }
-
+    
     highlightText(element, searchTerm) {
         if (!searchTerm) {
-            element.textContent = element.textContent;
+            element.innerHTML = element.textContent; // Reset to plain text
             return;
         }
-
+    
         const text = element.textContent;
         const highlightedText = text.replace(
-            new RegExp(searchTerm, 'gi'),
-            match => `<span class="highlight">${match}</span>`
+            new RegExp(`(${searchTerm})`, 'gi'),
+            `<span class="highlight">$1</span>`
         );
-        element.innerHTML = highlightedText;
+    
+        element.innerHTML = highlightedText; // Apply the highlight
     }
-
+    
     removeHighlight(element) {
-        if (element) {
-            element.textContent = element.textContent;
-        }
+        element.innerHTML = element.textContent; // Reset to plain text
     }
-
+    
     toggleNoResults(show) {
         let noResults = this.chatList.querySelector('.no-results');
-        
         if (show) {
             if (!noResults) {
                 noResults = document.createElement('div');
@@ -364,6 +369,8 @@ class WhatsAppChat {
             noResults.remove();
         }
     }
+    
+    
 
     formatTime(timestamp) {
         if (!timestamp) return '';
@@ -585,8 +592,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load Users List
 function loadUsers() {
     const usersList = document.querySelector('.chat-list');
-    if (!usersList) {
-        console.error('Chat list element not found');
+    const searchInput = document.querySelector('.search-container input');
+    if (!usersList || !searchInput) {
+        console.error('Chat list or search input element not found');
         return;
     }
 
@@ -595,6 +603,7 @@ function loadUsers() {
 
     // Keep track of user elements by ID
     const userElements = {};
+    const usersData = {}; // Store user data for filtering
 
     // Function to update or create a user list item
     function updateUser(user) {
@@ -656,6 +665,7 @@ function loadUsers() {
     usersRef.on('child_added', (snapshot) => {
         const user = snapshot.val();
         if (user.id !== currentUser.id) {
+            usersData[user.id] = user; // Store user data for search
             updateUser(user);
         }
     });
@@ -664,6 +674,7 @@ function loadUsers() {
     usersRef.on('child_changed', (snapshot) => {
         const user = snapshot.val();
         if (user.id !== currentUser.id) {
+            usersData[user.id] = user; // Update user data for search
             updateUser(user);
         }
     });
@@ -675,9 +686,25 @@ function loadUsers() {
         if (userElement) {
             usersList.removeChild(userElement);
             delete userElements[user.id];
+            delete usersData[user.id];
         }
     });
+
+    // User List Search functionality
+    searchInput.addEventListener('input', (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        Object.values(userElements).forEach((userElement) => {
+            const userId = userElement.getAttribute('data-id');
+            const user = usersData[userId];
+            if (user.username.toLowerCase().includes(searchTerm)) {
+                userElement.style.display = '';
+            } else {
+                userElement.style.display = 'none';
+            }
+        });
+    });
 }
+
 
 // Helper function to format timestamps
 function formatTime(timestamp) {
@@ -1159,7 +1186,7 @@ async function updateProfile() {
         
         setTimeout(() => {
             toast.remove();
-        }, 3000);
+        }, 30);
         
     } catch (error) {
         console.error('Error updating profile:', error);
