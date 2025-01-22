@@ -639,7 +639,7 @@ function loadUsers() {
             userElement.innerHTML = `
                 <div class="user-wrapper">
                     <div class="user-avatar">
-                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${user.username}&background=00a884&color=fff`}" 
+                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${user.username}&background=002b80&color=fff`}" 
                              alt="${user.username}">
                         <span class="status-indicator ${user.status === 'online' ? 'online' : 'offline'}"></span>
                     </div>
@@ -744,7 +744,7 @@ function updateChatHeader(user) {
     const updateHeader = (userData) => {
         chatHeader.innerHTML = `
             <div class="user-avatar">
-                <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=00a884&color=fff`}" 
+                <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=002b80&color=fff`}" 
                      alt="${userData.username}">
                 <span class="status-indicator ${userData.status === 'online' ? 'online' : 'offline'}"></span>
             </div>
@@ -828,10 +828,33 @@ function createMessageElement(message, messageId) {
     const isSent = message.senderId === currentUser.id;
     div.className = `message ${isSent ? 'sent' : 'received'}`;
     div.setAttribute('data-message-id', messageId);
-    
+
+    // Function to detect if a string is a URL
+    const isUrl = (text) => {
+        const urlPattern = /https?:\/\/[\w\-._~:?#@!$&'()*+,;=%]+/g;
+        return urlPattern.test(text);
+    };
+
+    // Function to detect if a string is a phone number
+    const isPhoneNumber = (text) => {
+        const phonePattern = /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/g; // Adjusted pattern for various phone formats including +91
+        return phonePattern.test(text);
+    };
+
+    // Determine content type (URL, phone number, or plain text)
+    let messageContent;
+    if (isUrl(message.text)) {
+        messageContent = `<a href="${message.text}" target="_blank" class="message-text" style="color: blue; text-decoration: none;">${message.text}</a>`;
+    } else if (isPhoneNumber(message.text)) {
+        const formattedNumber = message.text.replace(/\s+/g, ''); // Remove spaces for consistency
+        messageContent = `<a href="tel:${formattedNumber}" class="message-text" style="color: blue; text-decoration: none;">${message.text}</a>`;
+    } else {
+        messageContent = `<p class="message-text">${message.text}</p>`;
+    }
+
     div.innerHTML = `
         <div class="message-content">
-            <p class="message-text">${message.text}</p>
+            ${messageContent}
             <div class="message-info">
                 <span class="time">${formatTime(message.timestamp)}</span>
                 ${isSent ? `
@@ -842,9 +865,11 @@ function createMessageElement(message, messageId) {
             </div>
         </div>
     `;
-    
+
     return div;
 }
+
+
 
 // Add visibility change handler
 document.addEventListener('visibilitychange', () => {
@@ -1053,7 +1078,7 @@ function updateProfileInfo() {
             profileImage.src = currentUser.photoURL;
         } else {
             // Default avatar with user's initial
-            profileImage.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=00a884&color=fff`;
+            profileImage.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=002b80&color=fff`;
         }
     }
 }
@@ -1130,7 +1155,7 @@ function openProfileModal() {
     if (currentUser.photoURL) {
         profilePreview.src = currentUser.photoURL;
     } else {
-        profilePreview.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=00a884&color=fff`;
+        profilePreview.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=002b80&color=fff`;
     }
     
     editUsername.value = currentUser.username || '';
@@ -1359,12 +1384,15 @@ function filterAndDisplayChats(chats, searchTerm) {
 
 // Create chat list item with proper formatting
 function createChatListItem(chat) {
-    const div = document.createElement('div');
+    // Create or find the container for the chat item
+    const div = document.querySelector(`.chat-item[data-chat-id="${chat.id}"]`) || document.createElement('div');
     div.className = 'chat-item';
-    
+    div.setAttribute('data-chat-id', chat.id);
+
     const unreadCount = chat.unreadCount || 0;
     const isUnread = unreadCount > 0 && chat.lastMessageSender !== currentUser.id;
 
+    // Update the content of the chat item
     div.innerHTML = `
         <div class="chat-avatar">
             <img src="${chat.photoURL || `https://ui-avatars.com/api/?name=${chat.name}`}" alt="">
@@ -1389,6 +1417,7 @@ function createChatListItem(chat) {
         </div>
     `;
 
+    // Add click listener to handle chat selection and mark as read
     div.addEventListener('click', () => {
         selectChat(chat);
         markChatAsRead(chat.id);
@@ -1396,6 +1425,44 @@ function createChatListItem(chat) {
 
     return div;
 }
+
+// Function to update chat item in real-time
+function updateChatListItem(chat) {
+    const chatItem = document.querySelector(`.chat-item[data-chat-id="${chat.id}"]`);
+    if (chatItem) {
+        const unreadCount = chat.unreadCount || 0;
+        const isUnread = unreadCount > 0 && chat.lastMessageSender !== currentUser.id;
+
+        chatItem.querySelector('.chat-name').classList.toggle('unread', isUnread);
+        chatItem.querySelector('.chat-time').classList.toggle('unread', isUnread);
+        chatItem.querySelector('.chat-time').textContent = formatTime(chat.lastMessageTime);
+
+        const messageContent = chatItem.querySelector('.message-content');
+        if (messageContent) {
+            messageContent.classList.toggle('unread', isUnread);
+            messageContent.innerHTML = `
+                ${chat.lastMessageSender === currentUser.id ? 
+                    `<span class="message-status">${getStatusIcon(chat.lastMessageStatus)}</span>` : ''}
+                <span class="preview-text">${chat.lastMessage || ''}</span>
+            `;
+        }
+
+        const unreadBadge = chatItem.querySelector('.unread-badge');
+        if (unreadBadge) {
+            if (isUnread) {
+                unreadBadge.querySelector('span').textContent = unreadCount;
+            } else {
+                unreadBadge.remove();
+            }
+        } else if (isUnread) {
+            const badge = document.createElement('div');
+            badge.className = 'unread-badge';
+            badge.innerHTML = `<span>${unreadCount}</span>`;
+            chatItem.querySelector('.chat-message-preview').appendChild(badge);
+        }
+    }
+}
+
 
 // Mark chat as read
 function markChatAsRead(chatId) {
