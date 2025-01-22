@@ -1,3 +1,4 @@
+
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDAXnVfPpJUv9mExO11pwRBAMX94Moa9ww",
@@ -639,7 +640,7 @@ function loadUsers() {
             userElement.innerHTML = `
                 <div class="user-wrapper">
                     <div class="user-avatar">
-                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${user.username}&background=002b80&color=fff`}" 
+                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${user.username}&background=00a884&color=fff`}" 
                              alt="${user.username}">
                         <span class="status-indicator ${user.status === 'online' ? 'online' : 'offline'}"></span>
                     </div>
@@ -744,7 +745,7 @@ function updateChatHeader(user) {
     const updateHeader = (userData) => {
         chatHeader.innerHTML = `
             <div class="user-avatar">
-                <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=002b80&color=fff`}" 
+                <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=00a884&color=fff`}" 
                      alt="${userData.username}">
                 <span class="status-indicator ${userData.status === 'online' ? 'online' : 'offline'}"></span>
             </div>
@@ -1078,7 +1079,7 @@ function updateProfileInfo() {
             profileImage.src = currentUser.photoURL;
         } else {
             // Default avatar with user's initial
-            profileImage.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=002b80&color=fff`;
+            profileImage.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=00a884&color=fff`;
         }
     }
 }
@@ -1155,7 +1156,7 @@ function openProfileModal() {
     if (currentUser.photoURL) {
         profilePreview.src = currentUser.photoURL;
     } else {
-        profilePreview.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=002b80&color=fff`;
+        profilePreview.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=00a884&color=fff`;
     }
     
     editUsername.value = currentUser.username || '';
