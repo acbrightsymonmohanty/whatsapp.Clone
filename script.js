@@ -1,4 +1,3 @@
-
 // Initialize Firebase
 const firebaseConfig = {
     apiKey: "AIzaSyDAXnVfPpJUv9mExO11pwRBAMX94Moa9ww",
@@ -1837,6 +1836,11 @@ class ChatManager {
         this.chatList = document.querySelector('.chat-list');
         this.searchManager = new ChatSearch(this.chatList);
         this.setupRealtimeListeners();
+        this.initializeLoading();
+        this.setupMobileBackButton();
+        this.mainChat = document.querySelector('.main-chat');
+        this.defaultView = document.querySelector('.default-view');
+        this.chatView = document.querySelector('.chat-view');
     }
 
     setupRealtimeListeners() {
@@ -1916,6 +1920,81 @@ class ChatManager {
                 statusIndicator?.classList.remove('online');
             }
         }
+    }
+
+    initializeLoading() {
+        // Show loading screen when refreshing or navigating
+        window.addEventListener('beforeunload', () => {
+            document.body.classList.remove('loaded');
+        });
+
+        // Handle loading state for chat initialization
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.loadInitialData().then(() => {
+                    document.body.classList.add('loaded');
+                });
+            }
+        });
+    }
+
+    async loadInitialData() {
+        try {
+            // Load your initial data here
+            await Promise.all([
+                this.loadChats(),
+                this.loadUserProfile(),
+                // Add other loading promises
+            ]);
+        } catch (error) {
+            console.error('Error loading initial data:', error);
+        }
+    }
+
+    setupMobileBackButton() {
+        const backButton = document.querySelector('.back-button');
+        if (backButton) {
+            backButton.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.body.classList.remove('chat-active');
+                    if (this.defaultView) {
+                        this.defaultView.style.display = 'flex';
+                    }
+                    if (this.chatView) {
+                        this.chatView.style.display = 'none';
+                    }
+                }
+            });
+        }
+    }
+
+    selectChat(chatId, userName, userStatus, userAvatar) {
+        // Update chat header with user info
+        const chatHeader = document.querySelector('.chat-header');
+        if (chatHeader) {
+            chatHeader.querySelector('.chat-avatar').src = userAvatar;
+            chatHeader.querySelector('.contact-name').textContent = userName;
+            chatHeader.querySelector('.contact-status').textContent = userStatus;
+        }
+
+        // Show chat view and hide default view
+        if (this.defaultView) {
+            this.defaultView.style.display = 'none';
+        }
+        if (this.chatView) {
+            this.chatView.style.display = 'flex';
+        }
+        if (this.mainChat) {
+            this.mainChat.classList.add('chat-active');
+        }
+
+        // Handle mobile view
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('chat-active');
+        }
+
+        // Load chat messages
+        this.loadChatMessages(chatId);
     }
 }
 
@@ -2154,3 +2233,28 @@ styles.textContent = `
     }
 `;
 document.head.appendChild(styles); 
+
+// Add this to your existing script
+document.addEventListener('DOMContentLoaded', () => {
+    // Show loading screen
+    const loadingScreen = document.querySelector('.loading-screen');
+    const mainContent = document.querySelector('.container');
+    
+    // Simulate loading time (you can replace this with actual loading logic)
+    setTimeout(() => {
+        if (loadingScreen && mainContent) {
+            // Hide loading screen
+            loadingScreen.style.opacity = '0';
+            loadingScreen.style.transition = 'opacity 0.5s ease';
+            
+            // Show main content
+            mainContent.style.display = 'flex';
+            document.body.classList.add('loaded');
+            
+            // Remove loading screen after fade out
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }
+    }, 2000); // Adjust time as needed
+}); 

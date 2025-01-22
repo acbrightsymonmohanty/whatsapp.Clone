@@ -41,24 +41,30 @@
     <!-- Main App (Initially Hidden) -->
     <div id="app-container" class="container" style="display: none;">
         <div class="sidebar">
-            <div class="header">
-                <div class="profile-icon" onclick="openProfileModal()">
-                    <img id="profile-image" src="https://via.placeholder.com/40" alt="profile">
-                    
+            <div class="sidebar-header">
+                <div class="user-profile" onclick="openProfileModal()">
+                    <img id="profile-image" src="https://via.placeholder.com/40" alt="Profile" class="profile-img">
                 </div>
-                <div class="nav-icons">
+                <div class="header-icons">
+                    <i class="fas fa-circle-notch"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-archive"></i>
+                    <i class="fas fa-users"></i>
                     <i class="fas fa-message"></i>
                     <i class="fas fa-ellipsis-vertical"></i>
+                    
                 </div>
             </div>
+            
             <div class="search-container">
-                <div class="input">
-                    <input type="text" placeholder="Search or start new chat" >
+                <div class="search-box">
                     <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search or start new chat">
                 </div>
             </div>
+
             <div class="chat-list" id="chat-list">
-                <!-- Chat list will be populated here -->
+                <!-- Chat list items here -->
             </div>
         </div>
         <div class="main-chat">
@@ -67,14 +73,22 @@
                     <i class="fas fa-arrow-left"></i>
                 </div>
                 <div class="chat-info">
-                    <img class="chat-avatar" src="https://via.placeholder.com/40" alt="Contact avatar">
-                    <div>
+                    <img class="chat-avatar" src="https://ui-avatars.com/api/?name=User&background=random" alt="Contact avatar">
+                    <div class="contact-info">
                         <div class="contact-name">Select a chat</div>
                         <div class="contact-status">click to chat</div>
                     </div>
                 </div>
-                <div class="chat-icons">
-                    <i class="fas fa-ellipsis-vertical"></i>
+                <div class="chat-actions">
+                    <button class="action-btn">
+                        <i class="fas fa-video"></i>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                    <button class="action-btn">
+                        <i class="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
             <div class="chat-messages" id="chat-messages">
@@ -126,6 +140,24 @@
                         </label>
                         <input type="text" id="edit-about" placeholder="Hey there! I am using WhatsApp">
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add this right after the body tag -->
+    <div class="loading-screen">
+        <div class="loading-content">
+            <img src="https://img.icons8.com/?size=512&id=85088&format=png" alt="WhatsApp" class="loading-logo">
+            <h2>WhatsApp Web</h2>
+            <div class="loading-progress">
+                <div class="loading-bar"></div>
+            </div>
+            <div class="loading-text">
+                <p>Loading your chats</p>
+                <div class="encryption-notice">
+                    <i class="fas fa-lock"></i>
+                    <span>End-to-end encrypted</span>
                 </div>
             </div>
         </div>
