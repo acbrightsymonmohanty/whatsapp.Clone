@@ -50,9 +50,11 @@
                     <i class="fas fa-star"></i>
                     <i class="fas fa-archive"></i>
                     <i class="fas fa-users"></i>
-                    <i class="fas fa-message"></i>
-                    <i class="fas fa-ellipsis-vertical"></i>
-                    
+                    <div class="message-icon-container">
+                        <i class="fas fa-message"></i>
+                        <span class="user-count-badge">0</span>
+                    </div>
+                    <i class="fas fa-ellipsis-vertical" onclick="toggleOptionsMenu()"></i>
                 </div>
             </div>
             
@@ -68,6 +70,20 @@
             </div>
         </div>
         <div class="main-chat">
+            <div class="welcome-screen">
+                <div class="welcome-content">
+                    <img src="https://static.whatsapp.net/rsrc.php/v4/y6/r/wa669aeJeom.png" alt="WhatsApp" class="welcome-logo">
+                    <h1>WhatsApp Web Clone</h1>
+                    <div class="welcome-text">
+                        <p>Send and receive messages without keeping your phone online.</p>
+                        <p>Use WhatsApp on up to 4 linked devices and 1 phone at the same time.</p>
+                    </div>
+                    <div class="encryption-notice">
+                        <i class="fas fa-lock"></i>
+                        <span>End-to-end encrypted</span>
+                    </div>
+                </div>
+            </div>
             <div class="chat-header">
                 <div class="back-button">
                     <i class="fas fa-arrow-left"></i>
@@ -86,23 +102,62 @@
                     <button class="action-btn">
                         <i class="fas fa-phone"></i>
                     </button>
-                    <button class="action-btn">
-                        <i class="fas fa-search"></i>
+                    <button class="action-btn" onclick="toggleChatOptionsMenu()">
+                        <i class="fas fa-ellipsis-vertical"></i>
                     </button>
+                </div>
+
+                <!-- Add this new chat options menu -->
+                <div id="chat-options-menu" class="chat-options-menu">
+                    <ul>
+                        <li><i class="fas fa-user"></i> View contact</li>
+                        <li><i class="fas fa-search"></i> Search</li>
+                        <li><i class="fas fa-list"></i> Add to list</li>
+                        <li><i class="fas fa-photo-video"></i> Media, links, and docs</li>
+                        <li><i class="fas fa-bell-slash"></i> Mute notifications</li>
+                        <li><i class="fas fa-clock"></i> Disappearing messages</li>
+                        <li><i class="fas fa-image"></i> Wallpaper</li>
+                        <li><i class="fas fa-ellipsis-h"></i> More</li>
+                    </ul>
                 </div>
             </div>
             <div class="chat-messages" id="chat-messages">
                 <!-- Messages will appear here -->
             </div>
             <div class="chat-input">
-                <button class="emoji-button"><i class="far fa-smile"></i></button>
-                <i class="fas fa-paperclip"></i>
-                <input type="text" id="message-input" placeholder="Type a message">
-                <button id="send-button">
-                    <i class="fas fa-paper-plane"></i>
-                </button>
+                <div class="input-actions left">
+                    <button class="emoji-button">
+                        <i class="far fa-smile"></i>
+                    </button>
+                    <label class="attach-button">
+                        <i class="fas fa-paperclip"></i>
+                        <input type="file" id="photo-upload" accept="image/*" style="display: none;">
+                    </label>
+                </div>
+                <div class="message-input-container">
+                    <input type="text" id="message-input" placeholder="Type a message">
+                </div>
+                <div class="input-actions right">
+                    <button id="voice-record-btn" class="voice-record-btn">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                    <button id="send-button" class="send-button">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
             </div>
         </div>
+    </div>
+
+    <!-- Add this for voice recording UI -->
+    <div class="voice-recording-ui" style="display: none;">
+        <div class="recording-wave">
+            <div class="wave"></div>
+        </div>
+        <div class="recording-time">0:00</div>
+        <button class="cancel-recording">
+            <i class="fas fa-times"></i>
+        </button>
     </div>
 
     <!-- Add this modal for profile editing -->
@@ -163,10 +218,23 @@
         </div>
     </div>
 
+    <!-- Add this right after the sidebar-header div -->
+    <div id="options-menu" class="options-menu">
+        <ul>
+            <li><i class="fas fa-users"></i> New group</li>
+            <li><i class="fas fa-broadcast-tower"></i> New broadcast</li>
+            <li><i class="fas fa-laptop"></i> Linked devices</li>
+            <li><i class="fas fa-star"></i> Starred messages</li>
+            <li><i class="fas fa-money-bill"></i> Payments</li>
+            <li><i class="fas fa-cog"></i> Settings</li>
+        </ul>
+    </div>
+
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-storage.js"></script>
     <script src="script.js"></script>
 </body>
 </html> 
