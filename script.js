@@ -1,1 +1,3148 @@
-function _0x1c58(_0x5efae1,_0x12cf06){const _0x3004f1=_0x3004();return _0x1c58=function(_0x1c58a0,_0xbee41f){_0x1c58a0=_0x1c58a0-0x6f;let _0x55e6fb=_0x3004f1[_0x1c58a0];return _0x55e6fb;},_0x1c58(_0x5efae1,_0x12cf06);}const _0x2e0a48=_0x1c58;(function(_0x5388c0,_0x496db9){const _0x278f28=_0x1c58,_0x87ae74=_0x5388c0();while(!![]){try{const _0x3b186b=parseInt(_0x278f28(0x174))/0x1*(-parseInt(_0x278f28(0xeb))/0x2)+parseInt(_0x278f28(0x124))/0x3+parseInt(_0x278f28(0x1a8))/0x4+parseInt(_0x278f28(0x208))/0x5+-parseInt(_0x278f28(0x217))/0x6+parseInt(_0x278f28(0x12f))/0x7+parseInt(_0x278f28(0xfa))/0x8*(parseInt(_0x278f28(0x95))/0x9);if(_0x3b186b===_0x496db9)break;else _0x87ae74['push'](_0x87ae74['shift']());}catch(_0xe37a92){_0x87ae74['push'](_0x87ae74['shift']());}}}(_0x3004,0xa61ca));const firebaseConfig={'apiKey':'AIzaSyDAXnVfPpJUv9mExO11pwRBAMX94Moa9ww','authDomain':_0x2e0a48(0x1b7),'databaseURL':_0x2e0a48(0x152),'projectId':_0x2e0a48(0x1dc),'storageBucket':_0x2e0a48(0x1f1),'messagingSenderId':_0x2e0a48(0x1d9),'appId':'1:996681924328:web:f598b6e7b06b339118535d'};firebase[_0x2e0a48(0x205)](firebaseConfig);const auth=firebase[_0x2e0a48(0x17b)](),database=firebase['database']();let currentUser=null,currentChat=null,userPresenceRef=null,activeChats=new Map();class WhatsAppChat{constructor(){const _0x22f13f=_0x2e0a48;this['db']=firebase['firestore'](),this[_0x22f13f(0x17b)]=firebase[_0x22f13f(0x17b)](),this['chatList']=document[_0x22f13f(0xd1)](_0x22f13f(0xe1)),this[_0x22f13f(0x139)]=document[_0x22f13f(0xd1)]('.search-input'),this[_0x22f13f(0xe7)]=[],this[_0x22f13f(0x153)](),this[_0x22f13f(0x164)](),this[_0x22f13f(0x1b1)]=new ChatSearch(),this[_0x22f13f(0xf0)]=new ChatManager(),this[_0x22f13f(0x200)](),this[_0x22f13f(0x1c0)]=new MobileResponsive(),document['addEventListener'](_0x22f13f(0xb1),_0x4817a2=>{const _0x468f5e=_0x22f13f,_0x4219c0=_0x4817a2[_0x468f5e(0x194)]['closest'](_0x468f5e(0x191));_0x4219c0&&this['mobileHandler'][_0x468f5e(0x158)]();});}[_0x2e0a48(0x153)](){const _0x10c2de=_0x2e0a48,_0x4855ee=_0x10c2de(0x1aa)+(this[_0x10c2de(0x17b)][_0x10c2de(0x1f8)]?.[_0x10c2de(0x19a)]?.[_0x10c2de(0x1e3)](0x0)[_0x10c2de(0x72)]()||'U')+_0x10c2de(0x116)+(this[_0x10c2de(0x17b)][_0x10c2de(0x1f8)]?.[_0x10c2de(0x19a)]||_0x10c2de(0xc1))+_0x10c2de(0x102),_0x5a04a3=document[_0x10c2de(0xd1)]('.chat-container');_0x5a04a3[_0x10c2de(0x1ce)](_0x10c2de(0x1fb),_0x4855ee),document[_0x10c2de(0xd1)](_0x10c2de(0x120))[_0x10c2de(0x1c6)](_0x10c2de(0xb1),()=>{const _0x82a2cd=_0x10c2de;this[_0x82a2cd(0x21b)]();});}async[_0x2e0a48(0x21b)](){const _0x4512ff=_0x2e0a48;try{const _0x2d086c=await this[_0x4512ff(0x96)]();if(_0x2d086c){const _0x575d61=document[_0x4512ff(0xd1)](_0x4512ff(0x120));_0x575d61['classList'][_0x4512ff(0xd0)](_0x4512ff(0x222)),_0x575d61['disabled']=!![],this[_0x4512ff(0x105)](),await this[_0x4512ff(0x17b)][_0x4512ff(0x195)](),window[_0x4512ff(0x17e)][_0x4512ff(0xf8)]=_0x4512ff(0x1e9);}}catch(_0x2a4c88){console['error']('Logout\x20error:',_0x2a4c88),this['showError'](_0x4512ff(0x91));const _0xd61d77=document[_0x4512ff(0xd1)]('.logout-btn');_0xd61d77[_0x4512ff(0x1c7)]['remove'](_0x4512ff(0x222)),_0xd61d77[_0x4512ff(0x201)]=![];}}['showLogoutConfirmation'](){return new Promise(_0x55aa23=>{const _0x43a06a=_0x1c58,_0x197582='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22logout-dialog\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22logout-dialog-content\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h3>Logout</h3>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Are\x20you\x20sure\x20you\x20want\x20to\x20logout?</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22logout-dialog-buttons\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cancel-button\x22>Cancel</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22confirm-button\x22>Logout</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20';document['body'][_0x43a06a(0x1ce)](_0x43a06a(0x12b),_0x197582);const _0x4efa5a=document['querySelector']('.logout-dialog');_0x4efa5a['querySelector']('.cancel-button')[_0x43a06a(0x1c6)](_0x43a06a(0xb1),()=>{const _0x34e3ae=_0x43a06a;_0x4efa5a[_0x34e3ae(0xaf)](),_0x55aa23(![]);}),_0x4efa5a[_0x43a06a(0xd1)](_0x43a06a(0x1cd))[_0x43a06a(0x1c6)]('click',()=>{const _0x310759=_0x43a06a;_0x4efa5a[_0x310759(0xaf)](),_0x55aa23(!![]);}),_0x4efa5a[_0x43a06a(0x1c6)]('click',_0x3d3363=>{const _0x31687c=_0x43a06a;_0x3d3363[_0x31687c(0x194)]===_0x4efa5a&&(_0x4efa5a[_0x31687c(0xaf)](),_0x55aa23(![]));});});}[_0x2e0a48(0x13d)](){const _0x3fc94b=_0x2e0a48;confirm(_0x3fc94b(0x22a))&&(document[_0x3fc94b(0x1cb)][_0x3fc94b(0x1c7)][_0x3fc94b(0xd0)](_0x3fc94b(0x222)),firebase['auth']()[_0x3fc94b(0x195)]()['then'](()=>{const _0x4e1e41=_0x3fc94b;localStorage[_0x4e1e41(0x1c1)](),sessionStorage[_0x4e1e41(0x1c1)](),document[_0x4e1e41(0xdc)](_0x4e1e41(0x104))[_0x4e1e41(0xa0)][_0x4e1e41(0x13a)]=_0x4e1e41(0x1d3),document[_0x4e1e41(0xdc)]('login-screen')[_0x4e1e41(0xa0)][_0x4e1e41(0x13a)]='flex',document['getElementById'](_0x4e1e41(0x8d))[_0x4e1e41(0xa0)]['display']=_0x4e1e41(0x1d3),document['getElementById']('login-email')[_0x4e1e41(0x11a)]='',document[_0x4e1e41(0xdc)](_0x4e1e41(0x163))[_0x4e1e41(0x11a)]='';})[_0x3fc94b(0xab)](_0x11921a=>{const _0x37104b=_0x3fc94b;console[_0x37104b(0x199)]('Logout\x20error:',_0x11921a),alert(_0x37104b(0x91));})[_0x3fc94b(0xd4)](()=>{const _0x13eb08=_0x3fc94b;document[_0x13eb08(0x1cb)][_0x13eb08(0x1c7)][_0x13eb08(0xaf)](_0x13eb08(0x222));}));}[_0x2e0a48(0x18d)](_0x58af74){const _0x492ec2=_0x2e0a48,_0x3b098e=document['createElement']('div');_0x3b098e[_0x492ec2(0x71)]=_0x492ec2(0x18c),_0x3b098e[_0x492ec2(0x228)]=_0x58af74,document[_0x492ec2(0x1cb)]['appendChild'](_0x3b098e),setTimeout(()=>{const _0x3136be=_0x492ec2;_0x3b098e[_0x3136be(0xaf)]();},0xbb8);}[_0x2e0a48(0x164)](){const _0x5d6c8b=_0x2e0a48;this['searchInput']=document[_0x5d6c8b(0xd1)](_0x5d6c8b(0xbe)),this[_0x5d6c8b(0xad)]=document[_0x5d6c8b(0xd1)](_0x5d6c8b(0x1d8));}[_0x2e0a48(0x114)](){const _0x279547=_0x2e0a48,_0x123139=this['db'][_0x279547(0x219)]('chats')[_0x279547(0x1c3)](_0x279547(0x99),_0x279547(0x1ee))[_0x279547(0xc7)](_0x141ee4=>{_0x141ee4['docChanges']()['forEach'](_0x12a2cd=>{const _0x285214=_0x1c58,_0x3bb785=_0x12a2cd['doc'][_0x285214(0xa7)](),_0x1306a6=_0x12a2cd[_0x285214(0xae)]['id'];switch(_0x12a2cd[_0x285214(0x1bb)]){case'added':this['handleNewChat'](_0x3bb785,_0x1306a6);break;case _0x285214(0x21a):this['handleChatUpdate'](_0x3bb785,_0x1306a6);break;case _0x285214(0xcd):this[_0x285214(0xc2)](_0x1306a6);break;}});}),_0x227297=this['db'][_0x279547(0x219)]('messages')['orderBy'](_0x279547(0x1bf),'desc')[_0x279547(0xc7)](_0x2a240e=>{const _0x35ec93=_0x279547;_0x2a240e[_0x35ec93(0x223)]()['forEach'](_0xbededd=>{const _0x1d3e2d=_0x35ec93;if(_0xbededd['type']===_0x1d3e2d(0x1c5)||_0xbededd[_0x1d3e2d(0x1bb)]===_0x1d3e2d(0x21a)){const _0x1f3886=_0xbededd[_0x1d3e2d(0xae)]['data']();this[_0x1d3e2d(0xee)](_0x1f3886);}});});this[_0x279547(0xe7)]['push'](_0x123139,_0x227297);}['handleNewChat'](_0x10ff3e,_0x5a0507){const _0xdb93ae=_0x2e0a48,_0x427cbf=document[_0xdb93ae(0xd1)](_0xdb93ae(0xb7)+_0x5a0507+'\x22]');if(!_0x427cbf){const _0x17a970=this[_0xdb93ae(0x180)](_0x10ff3e,_0x5a0507);this[_0xdb93ae(0x14e)](_0x17a970,_0x10ff3e[_0xdb93ae(0x99)]);}}['handleChatUpdate'](_0x56f6f7,_0x37cfd2){const _0x43813f=_0x2e0a48,_0x17288b=document[_0x43813f(0xd1)](_0x43813f(0xb7)+_0x37cfd2+'\x22]');if(_0x17288b){const _0x1a27d7=this[_0x43813f(0x180)](_0x56f6f7,_0x37cfd2);_0x17288b[_0x43813f(0xac)](_0x1a27d7),this[_0x43813f(0x14e)](_0x1a27d7,_0x56f6f7[_0x43813f(0x99)]);}}[_0x2e0a48(0xc2)](_0x2cb5c2){const _0x3a4233=_0x2e0a48,_0xecac62=document[_0x3a4233(0xd1)]('[data-chat-id=\x22'+_0x2cb5c2+'\x22]');_0xecac62&&_0xecac62[_0x3a4233(0xaf)]();}[_0x2e0a48(0xee)](_0x426eee){const _0x110fc2=_0x2e0a48;if(!_0x426eee[_0x110fc2(0xb3)])return;const _0x131d51=document[_0x110fc2(0xd1)](_0x110fc2(0xb7)+_0x426eee[_0x110fc2(0xb3)]+'\x22]');if(_0x131d51){const _0x3c4f80=_0x131d51[_0x110fc2(0xd1)](_0x110fc2(0xfd)),_0x31217d=_0x131d51[_0x110fc2(0xd1)](_0x110fc2(0x129));_0x3c4f80&&(_0x3c4f80[_0x110fc2(0x228)]=_0x426eee[_0x110fc2(0x11c)]),_0x31217d&&_0x426eee[_0x110fc2(0x1bf)]&&(_0x31217d[_0x110fc2(0x228)]=this[_0x110fc2(0x1d5)](_0x426eee['timestamp'])),this[_0x110fc2(0x14e)](_0x131d51,_0x426eee[_0x110fc2(0x1bf)]);}}[_0x2e0a48(0x14e)](_0x29601c,_0x34f1c3){const _0x5386bf=_0x2e0a48,_0x4abd96=Array[_0x5386bf(0xd3)](this[_0x5386bf(0xad)][_0x5386bf(0xea)]);let _0x1b4f7a=![];for(const _0x1acae6 of _0x4abd96){if(_0x1acae6===_0x29601c)continue;const _0x30618c=_0x1acae6[_0x5386bf(0x17d)][_0x5386bf(0x1bf)];if(_0x30618c&&_0x34f1c3>_0x30618c){this[_0x5386bf(0xad)][_0x5386bf(0xbd)](_0x29601c,_0x1acae6),_0x1b4f7a=!![];break;}}!_0x1b4f7a&&_0x29601c[_0x5386bf(0x19d)]!==this[_0x5386bf(0xad)]&&this[_0x5386bf(0xad)][_0x5386bf(0x133)](_0x29601c);}[_0x2e0a48(0x13e)](){const _0x40ce92=_0x2e0a48;this['searchInput']=document[_0x40ce92(0xd1)](_0x40ce92(0xbe)),this[_0x40ce92(0xad)]=document[_0x40ce92(0xd1)](_0x40ce92(0x1d8));const _0x487fee=document[_0x40ce92(0xd1)](_0x40ce92(0x9b));this[_0x40ce92(0x139)]['addEventListener'](_0x40ce92(0x9f),_0x28945d=>{const _0x7a94f3=_0x40ce92,_0x5f1fc6=_0x28945d['target']['value']['trim']()[_0x7a94f3(0x211)]();this[_0x7a94f3(0x1ed)](_0x5f1fc6);}),_0x487fee[_0x40ce92(0x1c6)](_0x40ce92(0xb1),()=>{const _0x9fcb27=_0x40ce92,_0x30e51b=this[_0x9fcb27(0x139)][_0x9fcb27(0x11a)][_0x9fcb27(0x15e)]()[_0x9fcb27(0x211)]();this[_0x9fcb27(0x1ed)](_0x30e51b);});}[_0x2e0a48(0x1ed)](_0x35eeab){const _0x378da3=_0x2e0a48,_0x1f138d=this[_0x378da3(0xad)][_0x378da3(0x84)](_0x378da3(0x191));let _0x51d36e=![];_0x1f138d[_0x378da3(0x86)](_0x1b7373=>{const _0x3b181d=_0x378da3,_0x387823=_0x1b7373['querySelector'](_0x3b181d(0x1bd));if(!_0x387823)return;const _0x2f30a2=_0x387823[_0x3b181d(0x228)]['toLowerCase'](),_0x3f88dd=_0x35eeab===''||_0x2f30a2[_0x3b181d(0x103)](_0x35eeab);_0x1b7373[_0x3b181d(0xa0)][_0x3b181d(0x13a)]=_0x3f88dd?_0x3b181d(0xb6):_0x3b181d(0x1d3),_0x3f88dd?(this[_0x3b181d(0xdf)](_0x387823,_0x35eeab),_0x51d36e=!![]):this[_0x3b181d(0x1e1)](_0x387823);}),this[_0x378da3(0x107)](!_0x51d36e&&_0x35eeab!=='');}['highlightText'](_0x52285c,_0x29199c){const _0x4a3969=_0x2e0a48;if(!_0x29199c){_0x52285c['innerHTML']=_0x52285c['textContent'];return;}const _0x4a1bc6=_0x52285c[_0x4a3969(0x228)],_0x12e336=_0x4a1bc6[_0x4a3969(0xbf)](new RegExp('('+_0x29199c+')','gi'),_0x4a3969(0x131));_0x52285c[_0x4a3969(0x1cc)]=_0x12e336;}[_0x2e0a48(0x1e1)](_0x189aa1){const _0x25a80a=_0x2e0a48;_0x189aa1[_0x25a80a(0x1cc)]=_0x189aa1[_0x25a80a(0x228)];}[_0x2e0a48(0x107)](_0x11d28f){const _0x40933f=_0x2e0a48;let _0x9dd646=this['chatList'][_0x40933f(0xd1)](_0x40933f(0x187));if(_0x11d28f)!_0x9dd646&&(_0x9dd646=document[_0x40933f(0x10a)](_0x40933f(0xa3)),_0x9dd646[_0x40933f(0x71)]=_0x40933f(0x19c),_0x9dd646[_0x40933f(0x1cc)]=_0x40933f(0x1fe),this[_0x40933f(0xad)][_0x40933f(0x133)](_0x9dd646));else _0x9dd646&&_0x9dd646['remove']();}['formatTime'](_0x183021){const _0x2c96e3=_0x2e0a48;if(!_0x183021)return'';const _0x318d9f=_0x183021[_0x2c96e3(0xa1)](),_0x584e0e=new Date(),_0x4b8409=_0x584e0e['toDateString'](),_0xa88677=_0x318d9f[_0x2c96e3(0x18e)]();if(_0xa88677===_0x4b8409)return _0x318d9f['toLocaleTimeString']([],{'hour':_0x2c96e3(0x1d0),'minute':_0x2c96e3(0x1d0)});return _0x318d9f[_0x2c96e3(0x166)]([],{'month':_0x2c96e3(0x1ec),'day':_0x2c96e3(0x10f)});}[_0x2e0a48(0x105)](){const _0x2e7ab9=_0x2e0a48;this['unsubscribeListeners'][_0x2e7ab9(0x86)](_0x366ccf=>_0x366ccf());}[_0x2e0a48(0x200)](){const _0x42ce15=_0x2e0a48;firebase[_0x42ce15(0x77)]()[_0x42ce15(0x125)](_0x42ce15(0x82))['on'](_0x42ce15(0x11a),_0x6b5e30=>{const _0x5eeaac=_0x42ce15;_0x6b5e30[_0x5eeaac(0x16f)]()===!![]&&this[_0x5eeaac(0x17b)][_0x5eeaac(0x1f8)]&&this[_0x5eeaac(0x1ac)](!![]);}),firebase[_0x42ce15(0x77)]()[_0x42ce15(0x125)](_0x42ce15(0x212))['on']('child_added',_0x1575d0=>{const _0x69fe04=_0x42ce15,_0x3549f6=_0x1575d0[_0x69fe04(0x16f)]();_0x3549f6&&_0x3549f6[_0x69fe04(0x19a)]!==this[_0x69fe04(0x17b)][_0x69fe04(0x1f8)][_0x69fe04(0x19a)]&&this[_0x69fe04(0xf0)]['addUserToChat'](_0x3549f6);}),firebase[_0x42ce15(0x77)]()[_0x42ce15(0x125)](_0x42ce15(0x212))['on'](_0x42ce15(0x155),_0x11cc20=>{const _0x53fa91=_0x42ce15,_0x901795=_0x11cc20[_0x53fa91(0x16f)]();_0x901795&&this[_0x53fa91(0xf0)][_0x53fa91(0x94)](_0x901795[_0x53fa91(0x19a)]);});}[_0x2e0a48(0x1ac)](_0x2fc0df){const _0x35d08d=_0x2e0a48;if(!this[_0x35d08d(0x17b)][_0x35d08d(0x1f8)])return;const _0x2bbb43=firebase[_0x35d08d(0x77)]()[_0x35d08d(0x125)](_0x35d08d(0x198)+this[_0x35d08d(0x17b)][_0x35d08d(0x1f8)]['uid']+_0x35d08d(0x1da));_0x2bbb43[_0x35d08d(0xf6)](_0x2fc0df),_0x2fc0df&&_0x2bbb43[_0x35d08d(0x121)]()['set'](![]);}}let whatsAppInstance=null;document[_0x2e0a48(0x1c6)]('DOMContentLoaded',()=>{!whatsAppInstance&&(whatsAppInstance=new WhatsAppChat());});function registerUser(_0x356ca6){const _0x39b36d=_0x2e0a48;_0x356ca6[_0x39b36d(0x109)](),console['log'](_0x39b36d(0x1c4));const _0x2e05b5=document[_0x39b36d(0xdc)](_0x39b36d(0x162))['value'][_0x39b36d(0x15e)](),_0x314614=document[_0x39b36d(0xdc)](_0x39b36d(0x21c))[_0x39b36d(0x11a)][_0x39b36d(0x15e)](),_0x28481f=document[_0x39b36d(0xdc)](_0x39b36d(0x1e0))[_0x39b36d(0x11a)];console[_0x39b36d(0x1a1)](_0x39b36d(0x1e6),{'username':_0x2e05b5,'email':_0x314614}),firebase[_0x39b36d(0x17b)]()[_0x39b36d(0x108)](_0x314614,_0x28481f)['then'](_0x386eaa=>{const _0x518fd9=_0x39b36d;console['log'](_0x518fd9(0x175),_0x386eaa);const _0x430d69=_0x386eaa[_0x518fd9(0x9d)],_0x1a1dd2={'id':_0x430d69[_0x518fd9(0x1f6)],'username':_0x2e05b5,'email':_0x314614,'createdAt':firebase[_0x518fd9(0x77)][_0x518fd9(0x150)]['TIMESTAMP'],'status':_0x518fd9(0xbc)};return console[_0x518fd9(0x1a1)]('Saving\x20user\x20data:',_0x1a1dd2),firebase[_0x518fd9(0x77)]()['ref'](_0x518fd9(0x198)+_0x430d69[_0x518fd9(0x1f6)])[_0x518fd9(0xf6)](_0x1a1dd2);})[_0x39b36d(0xb2)](()=>{const _0x5c2f91=_0x39b36d;console[_0x5c2f91(0x1a1)](_0x5c2f91(0x16c)),alert(_0x5c2f91(0xff));})[_0x39b36d(0xab)](_0x2d6c1b=>{const _0x3703f9=_0x39b36d;console[_0x3703f9(0x199)](_0x3703f9(0x15d),_0x2d6c1b),alert('Registration\x20failed:\x20'+_0x2d6c1b[_0x3703f9(0xf4)]);});}function loginUser(_0x34cd32){const _0x2285a1=_0x2e0a48;_0x34cd32[_0x2285a1(0x109)]();const _0x54ec61=document[_0x2285a1(0xdc)]('login-email')[_0x2285a1(0x11a)]['trim'](),_0x5d66d3=document[_0x2285a1(0xdc)](_0x2285a1(0x163))[_0x2285a1(0x11a)];auth['signInWithEmailAndPassword'](_0x54ec61,_0x5d66d3)[_0x2285a1(0xb2)](_0x371ed9=>{const _0x4215e6=_0x2285a1;console[_0x4215e6(0x1a1)]('Login\x20successful');})[_0x2285a1(0xab)](_0x1c8531=>{const _0x590168=_0x2285a1;console[_0x590168(0x199)]('Login\x20error:',_0x1c8531),alert(_0x590168(0x1d1)+_0x1c8531[_0x590168(0xf4)]);});}auth[_0x2e0a48(0xfe)](_0x5bdad3=>{const _0x246502=_0x2e0a48;_0x5bdad3?(console[_0x246502(0x1a1)](_0x246502(0x1db),_0x5bdad3),database[_0x246502(0x125)]('users/'+_0x5bdad3[_0x246502(0x1f6)])[_0x246502(0x15f)](_0x246502(0x11a))[_0x246502(0xb2)](_0x515374=>{const _0x15d0eb=_0x246502;currentUser=_0x515374[_0x15d0eb(0x16f)](),showApp(),database['ref']('users/'+_0x5bdad3[_0x15d0eb(0x1f6)])['update']({'status':_0x15d0eb(0xbc),'lastSeen':firebase[_0x15d0eb(0x77)][_0x15d0eb(0x150)][_0x15d0eb(0x188)]});})):(currentUser=null,document['getElementById'](_0x246502(0x6f))[_0x246502(0xa0)][_0x246502(0x13a)]=_0x246502(0xb6),document[_0x246502(0xdc)]('login-screen')[_0x246502(0xa0)][_0x246502(0x13a)]=_0x246502(0x1d3),document[_0x246502(0xdc)](_0x246502(0x104))[_0x246502(0xa0)][_0x246502(0x13a)]=_0x246502(0x1d3));});function showApp(){const _0x4c52f4=_0x2e0a48;document[_0x4c52f4(0xdc)]('register-screen')[_0x4c52f4(0xa0)][_0x4c52f4(0x13a)]=_0x4c52f4(0x1d3),document[_0x4c52f4(0xdc)]('login-screen')[_0x4c52f4(0xa0)][_0x4c52f4(0x13a)]=_0x4c52f4(0x1d3),document[_0x4c52f4(0xdc)](_0x4c52f4(0x104))[_0x4c52f4(0xa0)][_0x4c52f4(0x13a)]=_0x4c52f4(0xb6),initializeApp(currentUser),updateProfileInfo();}function initializeApp(_0x133e59){currentUser=_0x133e59,loadUsers(),setupPresence();}function signOut(){const _0x317a69=_0x2e0a48;cleanupPresence(),auth[_0x317a69(0x195)]()['then'](()=>{const _0x4a1146=_0x317a69;window[_0x4a1146(0x17e)][_0x4a1146(0x1d6)]();})[_0x317a69(0xab)](_0x4d1dbe=>{const _0x1f345a=_0x317a69;console[_0x1f345a(0x199)](_0x1f345a(0x130),_0x4d1dbe);});}function toggleAuth(_0x501171){const _0x32de56=_0x2e0a48;_0x501171===_0x32de56(0xa6)?(document['getElementById'](_0x32de56(0x6f))[_0x32de56(0xa0)][_0x32de56(0x13a)]='none',document['getElementById'](_0x32de56(0x117))['style']['display']=_0x32de56(0xb6)):(document[_0x32de56(0xdc)]('register-screen')[_0x32de56(0xa0)][_0x32de56(0x13a)]='flex',document[_0x32de56(0xdc)]('login-screen')[_0x32de56(0xa0)][_0x32de56(0x13a)]=_0x32de56(0x1d3));}document[_0x2e0a48(0x1c6)](_0x2e0a48(0xe6),()=>{const _0x3de2bc=_0x2e0a48;console[_0x3de2bc(0x1a1)](_0x3de2bc(0x14b));const _0x5ec748=document[_0x3de2bc(0xdc)]('register-form');_0x5ec748[_0x3de2bc(0x1c6)]('submit',_0x9a8615=>{const _0x45af83=_0x3de2bc;console[_0x45af83(0x1a1)](_0x45af83(0xfb)),registerUser(_0x9a8615);});const _0x6174f5=document['getElementById'](_0x3de2bc(0x1f9));_0x6174f5[_0x3de2bc(0x1c6)](_0x3de2bc(0x14f),_0x46576e=>{const _0x15e7c1=_0x3de2bc;console[_0x15e7c1(0x1a1)](_0x15e7c1(0x215)),loginUser(_0x46576e);});const _0x374b7d=document[_0x3de2bc(0xd1)]('.user-img');_0x374b7d&&_0x374b7d[_0x3de2bc(0x1c6)](_0x3de2bc(0xb1),()=>{const _0xf5f9bb=_0x3de2bc;console['log'](_0xf5f9bb(0x1e5));});});function loadUsers(){const _0x49dac2=_0x2e0a48,_0x365bbe=document[_0x49dac2(0xd1)](_0x49dac2(0xe1)),_0x3b8320=document[_0x49dac2(0xd1)](_0x49dac2(0x135));if(!_0x365bbe||!_0x3b8320){console[_0x49dac2(0x199)]('Chat\x20list\x20or\x20search\x20input\x20element\x20not\x20found');return;}const _0x58410e=firebase[_0x49dac2(0x77)]()['ref'](_0x49dac2(0x212)),_0x20927e={},_0x2bdbe2={};function _0x47d949(_0x3fcba7){const _0xaea0c3=_0x49dac2,_0x5be930=[currentUser['id'],_0x3fcba7['id']]['sort']()[_0xaea0c3(0x19e)]('_');let _0x35dd4a=_0x20927e[_0x3fcba7['id']];!_0x35dd4a&&(_0x35dd4a=document[_0xaea0c3(0x10a)](_0xaea0c3(0xa3)),_0x35dd4a[_0xaea0c3(0x71)]='chat-item',_0x35dd4a[_0xaea0c3(0x80)](_0xaea0c3(0x1b0),_0x3fcba7['id']),_0x365bbe[_0xaea0c3(0x133)](_0x35dd4a),_0x20927e[_0x3fcba7['id']]=_0x35dd4a),firebase['database']()[_0xaea0c3(0x125)](_0xaea0c3(0x184))[_0xaea0c3(0x1a6)](_0x5be930)[_0xaea0c3(0xf5)](0x1)['on'](_0xaea0c3(0x11a),_0x2013c2=>{const _0x14e893=_0xaea0c3;let _0x5778ab='',_0x1e1da9='',_0x29d98a=0x0;_0x2013c2['forEach'](_0x5f16b9=>{const _0x30a4f3=_0x1c58,_0x194750=_0x5f16b9['val']();_0x5778ab=_0x194750[_0x30a4f3(0x11c)],_0x1e1da9=formatTime(_0x194750[_0x30a4f3(0x1bf)]),!_0x194750[_0x30a4f3(0x209)]&&_0x194750[_0x30a4f3(0x1b6)]!==currentUser['id']&&_0x29d98a++;}),_0x35dd4a[_0x14e893(0x1cc)]=_0x14e893(0x170)+(_0x3fcba7[_0x14e893(0x185)]||_0x14e893(0x160)+_0x3fcba7[_0x14e893(0x144)]+_0x14e893(0x79))+_0x14e893(0xc3)+_0x3fcba7[_0x14e893(0x144)]+_0x14e893(0x1a5)+(_0x3fcba7[_0x14e893(0x177)]===_0x14e893(0xbc)?'online':_0x14e893(0xc4))+_0x14e893(0x97)+_0x3fcba7['username']+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22last-time\x22>'+_0x1e1da9+_0x14e893(0xf1)+(_0x5778ab||'Click\x20to\x20start\x20chat')+_0x14e893(0x1ba)+(_0x29d98a>0x0?_0x14e893(0xc6)+_0x29d98a+_0x14e893(0x113):'')+_0x14e893(0x134);}),_0x35dd4a[_0xaea0c3(0x1c6)](_0xaea0c3(0xb1),()=>startChat(_0x3fcba7));}_0x58410e['on'](_0x49dac2(0x14a),_0x13c125=>{const _0x36dfaa=_0x49dac2,_0x924866=_0x13c125[_0x36dfaa(0x16f)]();_0x924866['id']!==currentUser['id']&&(_0x2bdbe2[_0x924866['id']]=_0x924866,_0x47d949(_0x924866));}),_0x58410e['on'](_0x49dac2(0x11b),_0x1a9aab=>{const _0x3bdecb=_0x49dac2,_0xdd649f=_0x1a9aab[_0x3bdecb(0x16f)]();_0xdd649f['id']!==currentUser['id']&&(_0x2bdbe2[_0xdd649f['id']]=_0xdd649f,_0x47d949(_0xdd649f));}),_0x58410e['on']('child_removed',_0x407f1e=>{const _0x1bee8b=_0x49dac2,_0x45c132=_0x407f1e[_0x1bee8b(0x16f)](),_0x540b27=_0x20927e[_0x45c132['id']];_0x540b27&&(_0x365bbe[_0x1bee8b(0x13f)](_0x540b27),delete _0x20927e[_0x45c132['id']],delete _0x2bdbe2[_0x45c132['id']]);}),_0x3b8320[_0x49dac2(0x1c6)]('input',_0x18a78c=>{const _0x2e1965=_0x49dac2,_0x5dfddc=_0x18a78c['target'][_0x2e1965(0x11a)][_0x2e1965(0x211)]();Object[_0x2e1965(0xc0)](_0x20927e)['forEach'](_0x106113=>{const _0x38bed7=_0x2e1965,_0x431632=_0x106113[_0x38bed7(0x83)](_0x38bed7(0x1b0)),_0x4ff5a0=_0x2bdbe2[_0x431632];_0x4ff5a0[_0x38bed7(0x144)][_0x38bed7(0x211)]()[_0x38bed7(0x103)](_0x5dfddc)?_0x106113['style'][_0x38bed7(0x13a)]='':_0x106113[_0x38bed7(0xa0)]['display']=_0x38bed7(0x1d3);});});}function formatTime(_0x429477){const _0x445efe=_0x2e0a48,_0x2b98c8=new Date(_0x429477);return _0x2b98c8[_0x445efe(0x1b3)]([],{'hour':'2-digit','minute':_0x445efe(0x1d0)});}function cleanupListeners(){const _0x2a924d=_0x2e0a48;firebase[_0x2a924d(0x77)]()['ref'](_0x2a924d(0x212))[_0x2a924d(0xf2)](),firebase['database']()[_0x2a924d(0x125)](_0x2a924d(0x184))['off']();}function startChat(_0x5bde52){const _0x43e532=_0x2e0a48;currentChat&&firebase[_0x43e532(0x77)]()['ref']('messages/'+currentChat['id'])[_0x43e532(0xf2)](),currentChat={'id':[currentUser['id'],_0x5bde52['id']]['sort']()[_0x43e532(0x19e)]('_'),'user':_0x5bde52},document['querySelector'](_0x43e532(0xce))['classList'][_0x43e532(0xd0)](_0x43e532(0x145)),updateChatHeader(_0x5bde52),loadMessages(currentChat['id']);}function _0x3004(){const _0x56e3f3=['data-b828d.firebaseapp.com','.logout-dialog','emoji-picker\x20hidden','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','type','chat-item','.chat-name,\x20.user-name,\x20h2,\x20strong','[data-user-id=\x22','timestamp','mobileHandler','clear','.message-content','orderBy','Registration\x20started','added','addEventListener','classList','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22preview-text\x22>','Error\x20uploading\x20profile\x20image:','Error\x20updating\x20profile:','body','innerHTML','.confirm-button','insertAdjacentHTML','.search-input','2-digit','Login\x20failed:\x20','getDownloadURL','none','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22chat-message-preview\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22message-content\x20','formatTime','reload','message-content','#chatList','996681924328','/status','User\x20is\x20signed\x20in:','data-b828d','</h2>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22chat-time\x20','<a\x20href=\x22','message-error','reg-password','removeHighlight','.chat-input\x20input','charAt','<i\x20class=\x22fas\x20fa-check-double\x22\x20style=\x22color:\x20#53bdeb;\x22></i>','Profile\x20clicked','Registering\x20with:','message\x20','image/*','/login.html','sent','message-input','short','filterChats','desc','chats/','srcObject','data-b828d.firebasestorage.app','file','accept','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22chat-avatar\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<img\x20src=\x22','\x22\x20class=\x22message-text\x22\x20style=\x22color:\x20blue;\x20text-decoration:\x20none;\x22>','uid','block','currentUser','login-form','chats','afterbegin','show','Hey\x20there!\x20I\x20am\x20using\x20WhatsApp','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22no-results-content\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-search\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>No\x20matching\x20users\x20found</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','head','setupUserListeners','disabled','lastSeen','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22message-status\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','sidebar','initializeApp','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20','.back-button','2066450gQAlXH','read','profile-upload','firestore','searchManager','mainChat','put','Enter','resize','toLowerCase','users','visible','profile-preview','Login\x20form\x20submitted','selectChat','5792802zsfjdi','last\x20seen\x20','collection','modified','handleLogout','reg-email','message-text','handleScreenSize','Image\x20size\x20should\x20be\x20less\x20than\x205MB','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22status-indicator\x20','document','loading','docChanges','[data-message-id=\x22','messages/','<a\x20href=\x22tel:','.chat-messages','textContent','setupChatListeners','Are\x20you\x20sure\x20you\x20want\x20to\x20logout?','keypress','register-screen','showSidebar','className','toUpperCase','last\x20seen\x20today\x20at\x20','createMessageElement','edit-username','translateX(0)','database','message-time','&background=00a884&color=fff','closest','unreadCount','*/*','name','chat-active','\x20at\x20','setAttribute','Please\x20enter\x20a\x20name','.info/connected','getAttribute','querySelectorAll','sendMessage','forEach','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','/updateStatus','shiftKey','transform','filter','lastMessageSender','profile-modal','loadUserProfile','firstChild','messageContainer','Logout\x20failed.\x20Please\x20try\x20again.','</p>','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','removeUserFromChat','162549oXQFGm','showLogoutConfirmation','\x22></span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-info-top\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22user-name\x22>','</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22contact-status\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','lastMessageTime','setupBackButton','.search-container\x20.input\x20i','</a>','user','formatTimestamp','input','style','toDate','data-message-id','div','send-button','Picker','login','data','floor','image/','application/json','catch','replaceWith','chatList','doc','remove','innerWidth','click','then','chatId','chat-messages','#667781','flex','[data-chat-id=\x22','Failed\x20to\x20update\x20profile','hour','setDate','.contact-name','online','insertBefore','.search-container\x20.input\x20input','replace','values','User','handleChatRemoval','\x22\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20alt=\x22','offline','hidden','<span\x20class=\x22unread-count\x22>','onSnapshot','.status-indicator','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22preview-text\x22>','loadInitialData','initializeLoading','\x20ago','removed','.main-chat','stopPropagation','add','querySelector','toggle','from','finally','element','change','.profile-icon','#00a884','image','lastMessageStatus','selectionStart','getElementById','message\x20sent','key','highlightText','push','.chat-list','scrollHeight','participants','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22logout-dialog\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22logout-dialog-content\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h3>Logout</h3>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<p>Are\x20you\x20sure\x20you\x20want\x20to\x20logout?</p>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22logout-dialog-buttons\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22cancel-button\x22>Cancel</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22confirm-button\x22>Logout</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','DOMContentLoaded','unsubscribeListeners','absolute','Logout\x20error:','children','2vCVWQE','profile-images/','chatView','updateLastMessage','initializeLogout','chatManager','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-info-bottom\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22last-message\x22>','off','last\x20seen\x20yesterday\x20at\x20','message','limitToLast','set','light','href','paragraph','400YkbVSn','Register\x20form\x20submitted','.chat-message-preview','.chat-last-message','onAuthStateChanged','Registration\x20successful!','.chats-list','focus','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22header-right\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<button\x20class=\x22logout-btn\x22\x20title=\x22Logout\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-sign-out-alt\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20Logout\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</button>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20','includes','app-container','cleanup','substring','toggleNoResults','createUserWithEmailAndPassword','preventDefault','createElement','.chat-input','en-US','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','numeric','Could\x20not\x20access\x20camera','getUserMedia','lastMessage','</span>','setupRealtimeListeners','getDate','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-name\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','login-screen','updateUserStatus','<span>','value','child_changed','text','setupMobileBackButton','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<i\x20class=\x22fas\x20fa-exclamation-circle\x22></i>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','<span\x20class=\x22highlight\x22>','.logout-btn','onDisconnect','files','.default-view','527538qpqJzb','ref','native','\x22\x20target=\x22_blank\x22\x20class=\x22message-text\x22\x20style=\x22color:\x20blue;\x20text-decoration:\x20none;\x22>','<i\x20class=\x22fas\x20fa-check\x22\x20style=\x22color:\x20#8696a0;\x22></i>','.chat-time','edit-about','beforeend','.attach-menu','length','unread','1927478WJUCFo','Error\x20signing\x20out:','<span\x20class=\x22highlight\x22>$1</span>','visibilitychange','appendChild','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','.search-container\x20input','split','equalTo','.contact-status','searchInput','display','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22unread-badge\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span>','play','logoutUser','setupSearchListener','removeChild','moveToTop','setSelectionRange','photo','.container','username','active','<i\x20class=\x22fas\x20fa-check-double\x22\x20style=\x22color:\x20#8696a0;\x22></i>','minute','Required\x20elements\x20not\x20found','.chat-header\x20.chat-info','child_added','DOM\x20Loaded','.message-status','</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','insertChatInOrder','submit','ServerValue','mediaDevices','https://data-b828d-default-rtdb.firebaseio.com','addHeaderWithLogout','.message-input','child_removed','color','😵‍','showMainChat','<p\x20class=\x22message-text\x22>','size','.modal-content','translateX(100%)','Registration\x20error:','trim','once','https://ui-avatars.com/api/?name=','now','reg-username','login-password','init','Yesterday','toLocaleDateString','.attach-option','delivered','<span\x20class=\x22message-status\x22>','video','.chat-avatar','User\x20data\x20saved\x20successfully','Upload\x20failed.\x20Please\x20try\x20again.','.chat-header','val','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-wrapper\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-avatar\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<img\x20src=\x22','loadChats','\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22message-content\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','startsWith','536575VaOyys','User\x20created\x20in\x20Auth:','test','status','data-chat-id','WhatsAppChat\x20class\x20not\x20found','hours','auth','about','dataset','location','Error\x20loading\x20initial\x20data:','createChatElement','facebook','src','contains','messages','photoURL','defaultView','.no-results','TIMESTAMP','POST','backButton','parentNode','error-toast','showError','toDateString','.attach-button','profile-image','.chat-item','slice','update','target','signOut','long','toast-message','users/','error','email','loaded','no-results','parentElement','join','minutes','opacity\x200.5s\x20ease','log','.user-status','60px','orderByChild','\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22status-indicator\x20','child','loadChatMessages','1659584KdVnSO','scrollToBottom','\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22whatsapp-header\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22header-left\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-profile\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-avatar\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20','last\x20seen\x20just\x20now','updateUserPresence','unread-badge','.input-container','.chat-item[data-chat-id=\x22','data-id','searchFeature','\x0a\x20\x20\x20\x20<style>\x0a\x20\x20\x20\x20\x20\x20\x20\x20.toast-message\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20position:\x20fixed;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20bottom:\x2020px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20left:\x2050%;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20transform:\x20translateX(-50%);\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20background:\x20#333;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20color:\x20white;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20padding:\x2012px\x2024px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20border-radius:\x204px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20z-index:\x201001;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20animation:\x20fadeInOut\x203s\x20ease-in-out;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20@keyframes\x20fadeInOut\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x200%,\x20100%\x20{\x20opacity:\x200;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x2010%,\x2090%\x20{\x20opacity:\x201;\x20}\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20</style>\x0a','toLocaleTimeString','onclick','setupMessageHandling','senderId'];_0x3004=function(){return _0x56e3f3;};return _0x3004();}function updateChatHeader(_0x4007e3){const _0x477435=_0x2e0a48,_0x5240b9=document[_0x477435(0xd1)](_0x477435(0x149)),_0x26c630=_0x4ba67b=>{const _0x6e5a9e=_0x477435;_0x5240b9[_0x6e5a9e(0x1cc)]='\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22user-avatar\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<img\x20src=\x22'+(_0x4ba67b[_0x6e5a9e(0x185)]||_0x6e5a9e(0x160)+_0x4ba67b['username']+'&background=00a884&color=fff')+'\x22\x20\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20alt=\x22'+_0x4ba67b[_0x6e5a9e(0x144)]+_0x6e5a9e(0x220)+(_0x4ba67b[_0x6e5a9e(0x177)]===_0x6e5a9e(0xbc)?_0x6e5a9e(0xbc):'offline')+'\x22></span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22contact-info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22contact-name\x22>'+_0x4ba67b['username']+_0x6e5a9e(0x98)+(_0x4ba67b[_0x6e5a9e(0x177)]===_0x6e5a9e(0xbc)?_0x6e5a9e(0xbc):formatLastSeen(_0x4ba67b['lastSeen']))+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20';};_0x26c630(_0x4007e3);const _0x1654a5=firebase[_0x477435(0x77)]()[_0x477435(0x125)]('users/'+_0x4007e3['id']);_0x1654a5['on']('value',_0x811b5a=>{const _0x5b7e89=_0x477435,_0x44654a=_0x811b5a[_0x5b7e89(0x16f)]();_0x44654a&&_0x26c630(_0x44654a);});}function loadMessages(_0x13959f){const _0x350e01=_0x2e0a48,_0x2ce79d=document[_0x350e01(0xdc)](_0x350e01(0xb4));_0x2ce79d[_0x350e01(0x1cc)]='',firebase[_0x350e01(0x77)]()[_0x350e01(0x125)]('messages/'+_0x13959f)['on'](_0x350e01(0x14a),_0x187299=>{const _0x6b4c39=_0x350e01,_0x352a15=_0x187299[_0x6b4c39(0x16f)](),_0x3c3e00=_0x187299[_0x6b4c39(0xde)],_0x323a8d=createMessageElement(_0x352a15,_0x3c3e00);_0x2ce79d['appendChild'](_0x323a8d),_0x2ce79d['scrollTop']=_0x2ce79d[_0x6b4c39(0xe2)],_0x352a15[_0x6b4c39(0x1b6)]!==currentUser['id']&&!_0x352a15[_0x6b4c39(0x209)]&&firebase[_0x6b4c39(0x77)]()[_0x6b4c39(0x125)](_0x6b4c39(0x225)+_0x13959f+'/'+_0x3c3e00)['update']({'read':!![],'readAt':firebase[_0x6b4c39(0x77)][_0x6b4c39(0x150)]['TIMESTAMP']});}),firebase[_0x350e01(0x77)]()['ref'](_0x350e01(0x225)+_0x13959f)['on'](_0x350e01(0x11b),_0x38379f=>{const _0x71b178=_0x350e01,_0x175039=_0x38379f['val'](),_0x24b495=document[_0x71b178(0xd1)](_0x71b178(0x224)+_0x38379f[_0x71b178(0xde)]+'\x22]');_0x24b495&&updateMessageStatus(_0x24b495,_0x175039);});}function updateMessageStatus(_0xe9a173,_0xdb90be){const _0x4de1fb=_0x2e0a48,_0x9a4130=_0xe9a173[_0x4de1fb(0xd1)](_0x4de1fb(0x14c));_0x9a4130&&(_0x9a4130[_0x4de1fb(0x1cc)]=getMessageStatusIcon(_0xdb90be));}function getMessageStatusIcon(_0x138323){const _0xdcfc3f=_0x2e0a48;if(_0x138323[_0xdcfc3f(0x209)])return _0xdcfc3f(0x1e4);else{if(_0x138323[_0xdcfc3f(0x168)])return _0xdcfc3f(0x146);}return _0xdcfc3f(0x128);}function createMessageElement(_0x24c431,_0xabd946){const _0x371f1d=_0x2e0a48,_0x4553c1=document[_0x371f1d(0x10a)]('div'),_0x13b58a=_0x24c431[_0x371f1d(0x1b6)]===currentUser['id'];_0x4553c1[_0x371f1d(0x71)]=_0x371f1d(0x1e7)+(_0x13b58a?'sent':'received'),_0x4553c1[_0x371f1d(0x80)](_0x371f1d(0xa2),_0xabd946);const _0x1d9765=_0x18f0f0=>{const _0x38f69b=_0x371f1d,_0x2d1803=/https?:\/\/[\w\-._~:?#@!$&'()*+,;=%]+/g;return _0x2d1803[_0x38f69b(0x176)](_0x18f0f0);},_0x3b380b=_0x1cf88c=>{const _0x2e92cf=/\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/g;return _0x2e92cf['test'](_0x1cf88c);};let _0x42c655;if(_0x1d9765(_0x24c431[_0x371f1d(0x11c)]))_0x42c655=_0x371f1d(0x1de)+_0x24c431[_0x371f1d(0x11c)]+_0x371f1d(0x127)+_0x24c431[_0x371f1d(0x11c)]+_0x371f1d(0x9c);else{if(_0x3b380b(_0x24c431['text'])){const _0x3ea0ee=_0x24c431['text'][_0x371f1d(0xbf)](/\s+/g,'');_0x42c655=_0x371f1d(0x226)+_0x3ea0ee+_0x371f1d(0x1f5)+_0x24c431[_0x371f1d(0x11c)]+_0x371f1d(0x9c);}else _0x42c655=_0x371f1d(0x159)+_0x24c431[_0x371f1d(0x11c)]+_0x371f1d(0x92);}return _0x4553c1['innerHTML']=_0x371f1d(0x172)+_0x42c655+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22message-info\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<span\x20class=\x22time\x22>'+formatTime(_0x24c431[_0x371f1d(0x1bf)])+_0x371f1d(0x14d)+(_0x13b58a?_0x371f1d(0x203)+getMessageStatusIcon(_0x24c431)+'\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20':'')+_0x371f1d(0x206),_0x4553c1;}document[_0x2e0a48(0x1c6)](_0x2e0a48(0x132),()=>{const _0xba0718=_0x2e0a48;document['visibilityState']===_0xba0718(0x213)&&currentChat&&firebase[_0xba0718(0x77)]()['ref'](_0xba0718(0x225)+currentChat['id'])['orderByChild'](_0xba0718(0x209))[_0xba0718(0x137)](![])['once'](_0xba0718(0x11a),_0x1b79be=>{_0x1b79be['forEach'](_0x1a4d5a=>{const _0x436755=_0x1c58,_0x3460a6=_0x1a4d5a[_0x436755(0x16f)]();_0x3460a6['senderId']!==currentUser['id']&&_0x1a4d5a[_0x436755(0x125)]['update']({'read':!![],'readAt':firebase[_0x436755(0x77)][_0x436755(0x150)][_0x436755(0x188)]});});});});function sendMessage(){const _0x29aaf7=_0x2e0a48;if(!currentChat)return;const _0xb8d8b4=document[_0x29aaf7(0xdc)]('message-input'),_0x2f1422=_0xb8d8b4[_0x29aaf7(0x11a)][_0x29aaf7(0x15e)]();if(!_0x2f1422)return;const _0x1a0355={'text':_0x2f1422,'senderId':currentUser['id'],'timestamp':Date[_0x29aaf7(0x161)](),'status':_0x29aaf7(0x1ea),'read':![],'delivered':![]};_0xb8d8b4['value']='';const _0x4a5403=currentChat['id'];firebase[_0x29aaf7(0x77)]()[_0x29aaf7(0x125)](_0x29aaf7(0x184))['child'](_0x4a5403)['push'](_0x1a0355)['then'](()=>{const _0xe81d2b=_0x29aaf7;_0xb8d8b4[_0xe81d2b(0x101)](),updateLastMessage(_0x4a5403,_0x1a0355),scrollToBottom();});}function initializeEmojiPicker(){const _0x231e59=_0x2e0a48,_0x4f60a9=document[_0x231e59(0xd1)]('.emoji-button'),_0x37a1bb=document[_0x231e59(0xdc)](_0x231e59(0x1eb)),_0x56959b=document[_0x231e59(0x10a)](_0x231e59(0xa3));_0x56959b[_0x231e59(0x71)]=_0x231e59(0x1b9),emojis[_0x231e59(0x86)](_0x271a90=>{const _0x43ee1c=_0x231e59,_0x2cf2b9=document['createElement']('span');_0x2cf2b9[_0x43ee1c(0x228)]=_0x271a90,_0x2cf2b9[_0x43ee1c(0x1b4)]=()=>{const _0x3563cb=_0x43ee1c,_0x400587=_0x37a1bb[_0x3563cb(0xdb)],_0x30da70=_0x37a1bb[_0x3563cb(0x11a)][_0x3563cb(0x106)](0x0,_0x400587),_0x1b6e82=_0x37a1bb[_0x3563cb(0x11a)][_0x3563cb(0x106)](_0x400587);_0x37a1bb[_0x3563cb(0x11a)]=_0x30da70+_0x271a90+_0x1b6e82,_0x37a1bb[_0x3563cb(0x101)]();const _0x2d3421=_0x400587+_0x271a90[_0x3563cb(0x12d)];_0x37a1bb[_0x3563cb(0x141)](_0x2d3421,_0x2d3421),_0x56959b[_0x3563cb(0x1c7)][_0x3563cb(0xd0)](_0x3563cb(0xc5));},_0x56959b['appendChild'](_0x2cf2b9);}),document[_0x231e59(0xd1)]('.chat-input')['appendChild'](_0x56959b),_0x4f60a9[_0x231e59(0x1b4)]=_0x332313=>{const _0x2f3a0c=_0x231e59;_0x332313[_0x2f3a0c(0xcf)](),_0x56959b[_0x2f3a0c(0x1c7)][_0x2f3a0c(0xd2)](_0x2f3a0c(0xc5));},document[_0x231e59(0x1c6)]('click',_0x201248=>{const _0x233e16=_0x231e59;!_0x56959b[_0x233e16(0x183)](_0x201248[_0x233e16(0x194)])&&!_0x4f60a9[_0x233e16(0x183)](_0x201248['target'])&&_0x56959b['classList'][_0x233e16(0xd0)](_0x233e16(0xc5));}),_0x37a1bb[_0x231e59(0x1c6)](_0x231e59(0x22b),_0x28a9fd=>{const _0xaa9cb5=_0x231e59;_0x28a9fd[_0xaa9cb5(0xde)]===_0xaa9cb5(0x20f)&&!_0x28a9fd[_0xaa9cb5(0x89)]&&(_0x28a9fd[_0xaa9cb5(0x109)](),sendMessage(),_0x56959b[_0xaa9cb5(0x1c7)]['add'](_0xaa9cb5(0xc5)));}),document[_0x231e59(0xdc)](_0x231e59(0xa4))[_0x231e59(0x1c6)]('click',_0x25504e=>{const _0x1aba70=_0x231e59;_0x25504e[_0x1aba70(0x109)](),sendMessage(),_0x56959b[_0x1aba70(0x1c7)][_0x1aba70(0xd0)](_0x1aba70(0xc5));});}document['addEventListener'](_0x2e0a48(0xe6),()=>{initializeEmojiPicker();});function markMessagesAsRead(_0x2bef95){const _0x30f277=_0x2e0a48;firebase[_0x30f277(0x77)]()['ref'](_0x30f277(0x184))[_0x30f277(0x1a6)](_0x2bef95)[_0x30f277(0x1a4)](_0x30f277(0x1b6))[_0x30f277(0x137)](currentChat[_0x30f277(0x9d)]['id'])[_0x30f277(0x15f)](_0x30f277(0x11a),_0x326ce4=>{const _0x3fac4c=_0x30f277;_0x326ce4[_0x3fac4c(0x86)](_0x403465=>{const _0xbb6130=_0x3fac4c,_0x42d63e=_0x403465[_0xbb6130(0x16f)]();!_0x42d63e['read']&&_0x403465[_0xbb6130(0x125)][_0xbb6130(0x193)]({'read':!![],'readAt':firebase[_0xbb6130(0x77)][_0xbb6130(0x150)]['TIMESTAMP']});});});}function updateChatStatus(_0x5d2b22){const _0x3d8980=_0x2e0a48,_0x293236=document[_0x3d8980(0xd1)](_0x3d8980(0x138));_0x293236&&(_0x293236[_0x3d8980(0x228)]=_0x5d2b22===_0x3d8980(0xbc)?'online':formatLastSeen(currentChat[_0x3d8980(0x9d)][_0x3d8980(0x202)]));}function formatTime(_0xf3e590){const _0x47efc1=_0x2e0a48;if(!_0xf3e590)return'';const _0x4b9c33=new Date(_0xf3e590),_0x3d818b=new Date(),_0x388d09=_0x3d818b-_0x4b9c33,_0x27f33b=0x18*0x3c*0x3c*0x3e8,_0x2b5d39=0x7*_0x27f33b;if(_0x388d09<_0x27f33b&&_0x4b9c33[_0x47efc1(0x115)]()===_0x3d818b['getDate']())return _0x4b9c33[_0x47efc1(0x1b3)](_0x47efc1(0x10c),{'hour':_0x47efc1(0x10f),'minute':_0x47efc1(0x1d0),'hour12':!![]});if(_0x388d09<0x2*_0x27f33b&&_0x4b9c33[_0x47efc1(0x115)]()===_0x3d818b[_0x47efc1(0x115)]()-0x1)return _0x47efc1(0x165);if(_0x388d09<_0x2b5d39)return _0x4b9c33[_0x47efc1(0x166)](_0x47efc1(0x10c),{'weekday':'short'});return _0x4b9c33[_0x47efc1(0x166)](_0x47efc1(0x10c),{'month':_0x47efc1(0x1ec),'day':_0x47efc1(0x10f)});}function formatLastSeen(_0xc54251){const _0x2eb12e=_0x2e0a48;if(!_0xc54251)return _0x2eb12e(0xc4);const _0x565ad2=new Date(),_0x2b10e6=new Date(_0xc54251),_0x3e97d9=_0x565ad2-_0x2b10e6,_0x1eae8e=Math[_0x2eb12e(0xa8)](_0x3e97d9/0xea60),_0x49ad2a=Math['floor'](_0x3e97d9/0x36ee80),_0x552018=Math[_0x2eb12e(0xa8)](_0x3e97d9/0x5265c00);if(_0x1eae8e<0x1)return _0x2eb12e(0x1ab);if(_0x1eae8e<0x3c)return _0x2eb12e(0x218)+_0x1eae8e+'\x20'+(_0x1eae8e===0x1?_0x2eb12e(0x147):_0x2eb12e(0x19f))+_0x2eb12e(0xcc);if(_0x49ad2a<0x18)return _0x2eb12e(0x218)+_0x49ad2a+'\x20'+(_0x49ad2a===0x1?_0x2eb12e(0xb9):_0x2eb12e(0x17a))+_0x2eb12e(0xcc);if(_0x2b10e6['toDateString']()===_0x565ad2[_0x2eb12e(0x18e)]())return _0x2eb12e(0x73)+_0x2b10e6[_0x2eb12e(0x1b3)](_0x2eb12e(0x10c),{'hour':'numeric','minute':'2-digit','hour12':!![]});const _0x5048d6=new Date(_0x565ad2);_0x5048d6[_0x2eb12e(0xba)](_0x5048d6[_0x2eb12e(0x115)]()-0x1);if(_0x2b10e6['toDateString']()===_0x5048d6[_0x2eb12e(0x18e)]())return _0x2eb12e(0xf3)+_0x2b10e6['toLocaleTimeString']('en-US',{'hour':'numeric','minute':_0x2eb12e(0x1d0),'hour12':!![]});return'last\x20seen\x20'+_0x2b10e6[_0x2eb12e(0x166)]('en-US',{'month':_0x2eb12e(0x1ec),'day':_0x2eb12e(0x10f)})+_0x2eb12e(0x7f)+_0x2b10e6[_0x2eb12e(0x1b3)]('en-US',{'hour':_0x2eb12e(0x10f),'minute':'2-digit','hour12':!![]});}document[_0x2e0a48(0x1c6)]('DOMContentLoaded',()=>{const _0x2b8f5b=_0x2e0a48,_0x503951=document[_0x2b8f5b(0xdc)](_0x2b8f5b(0x1eb)),_0x5768d1=document[_0x2b8f5b(0xdc)](_0x2b8f5b(0xa4));_0x503951['addEventListener'](_0x2b8f5b(0x22b),_0x42efc2=>{const _0x5b15e0=_0x2b8f5b;_0x42efc2['key']===_0x5b15e0(0x20f)&&!_0x42efc2[_0x5b15e0(0x89)]&&(_0x42efc2['preventDefault'](),sendMessage());}),_0x5768d1['addEventListener'](_0x2b8f5b(0xb1),_0x56c6b0=>{const _0x2303f1=_0x2b8f5b;_0x56c6b0[_0x2303f1(0x109)](),sendMessage();});const _0x1d2aac=document[_0x2b8f5b(0xd1)]('.back-button');_0x1d2aac&&_0x1d2aac['addEventListener'](_0x2b8f5b(0xb1),()=>{const _0x2e85ac=_0x2b8f5b;document['querySelector'](_0x2e85ac(0xce))[_0x2e85ac(0x1c7)]['remove'](_0x2e85ac(0x145));});});function updateProfileInfo(){const _0x853484=_0x2e0a48;if(currentUser){const _0x17e5f4=document[_0x853484(0xdc)]('profile-image');currentUser[_0x853484(0x185)]?_0x17e5f4['src']=currentUser[_0x853484(0x185)]:_0x17e5f4[_0x853484(0x182)]=_0x853484(0x160)+currentUser['username']+_0x853484(0x79);}}async function handleProfileImageUpload(_0x542848){const _0x359c1e=_0x2e0a48;if(!_0x542848)return;try{const _0x147baa=storage[_0x359c1e(0x125)](),_0x121632=_0x147baa[_0x359c1e(0x1a6)](_0x359c1e(0xec)+currentUser['id']+'/'+Date[_0x359c1e(0x161)]()+'_'+_0x542848[_0x359c1e(0x7d)]),_0x346fb6=await _0x121632[_0x359c1e(0x20e)](_0x542848),_0x4ccc14=await _0x346fb6[_0x359c1e(0x125)][_0x359c1e(0x1d2)]();return await firebase[_0x359c1e(0x77)]()['ref'](_0x359c1e(0x198)+currentUser['id'])[_0x359c1e(0x193)]({'photoURL':_0x4ccc14}),currentUser[_0x359c1e(0x185)]=_0x4ccc14,document[_0x359c1e(0xdc)](_0x359c1e(0x190))[_0x359c1e(0x182)]=_0x4ccc14,document[_0x359c1e(0xdc)](_0x359c1e(0x214))[_0x359c1e(0x182)]=_0x4ccc14,_0x4ccc14;}catch(_0x23b861){console[_0x359c1e(0x199)](_0x359c1e(0x1c9),_0x23b861),alert('Failed\x20to\x20upload\x20image.\x20Please\x20try\x20again.');}}document[_0x2e0a48(0x1c6)](_0x2e0a48(0xe6),()=>{const _0x4f846b=_0x2e0a48,_0x5d094a=document[_0x4f846b(0xdc)](_0x4f846b(0x20a));_0x5d094a&&_0x5d094a[_0x4f846b(0x1c6)](_0x4f846b(0xd6),async _0x2f4785=>{const _0x539489=_0x4f846b,_0x156a92=_0x2f4785[_0x539489(0x194)]['files'][0x0];if(_0x156a92){if(!_0x156a92[_0x539489(0x1bb)][_0x539489(0x173)](_0x539489(0xa9))){alert('Please\x20upload\x20an\x20image\x20file');return;}if(_0x156a92[_0x539489(0x15a)]>0x5*0x400*0x400){alert(_0x539489(0x21f));return;}await handleProfileImageUpload(_0x156a92);}});const _0x55caf5=document['querySelector'](_0x4f846b(0xd7));_0x55caf5&&_0x55caf5[_0x4f846b(0x1c6)](_0x4f846b(0xb1),openProfileModal);});function openProfileModal(){const _0x21067e=_0x2e0a48,_0x1b4ace=document['getElementById']('profile-modal'),_0x5e22cb=document[_0x21067e(0xdc)](_0x21067e(0x214)),_0x24e9aa=document[_0x21067e(0xdc)](_0x21067e(0x75)),_0x9f387a=document[_0x21067e(0xdc)](_0x21067e(0x12a));currentUser[_0x21067e(0x185)]?_0x5e22cb[_0x21067e(0x182)]=currentUser[_0x21067e(0x185)]:_0x5e22cb['src']=_0x21067e(0x160)+currentUser[_0x21067e(0x144)]+_0x21067e(0x79),_0x24e9aa[_0x21067e(0x11a)]=currentUser[_0x21067e(0x144)]||'',_0x9f387a[_0x21067e(0x11a)]=currentUser[_0x21067e(0x17c)]||_0x21067e(0x1fd),_0x1b4ace[_0x21067e(0xa0)][_0x21067e(0x13a)]=_0x21067e(0x1f7),_0x1b4ace[_0x21067e(0xd1)](_0x21067e(0x15b))[_0x21067e(0xa0)]['transform']=_0x21067e(0x76);}function closeProfileModal(){const _0x36f9e8=_0x2e0a48,_0x3b507a=document['getElementById'](_0x36f9e8(0x8d)),_0x104e03=_0x3b507a[_0x36f9e8(0xd1)](_0x36f9e8(0x15b));_0x104e03['style'][_0x36f9e8(0x8a)]=_0x36f9e8(0x15c),setTimeout(()=>{const _0x66e0af=_0x36f9e8;_0x3b507a[_0x66e0af(0xa0)][_0x66e0af(0x13a)]=_0x66e0af(0x1d3),_0x104e03['style']['transform']='';},0x12c);}async function updateProfile(){const _0x55a0e7=_0x2e0a48,_0x6271a6=document['getElementById'](_0x55a0e7(0x75))[_0x55a0e7(0x11a)][_0x55a0e7(0x15e)](),_0x242d31=document[_0x55a0e7(0xdc)](_0x55a0e7(0x12a))['value']['trim']();if(!_0x6271a6){alert(_0x55a0e7(0x81));return;}try{await firebase[_0x55a0e7(0x77)]()['ref'](_0x55a0e7(0x198)+currentUser['id'])[_0x55a0e7(0x193)]({'username':_0x6271a6,'about':_0x242d31}),currentUser['username']=_0x6271a6,currentUser['about']=_0x242d31,updateProfileInfo(),closeProfileModal();const _0x21be73=document[_0x55a0e7(0x10a)](_0x55a0e7(0xa3));_0x21be73[_0x55a0e7(0x71)]=_0x55a0e7(0x197),_0x21be73[_0x55a0e7(0x228)]='Profile\x20updated\x20successfully',document[_0x55a0e7(0x1cb)][_0x55a0e7(0x133)](_0x21be73),setTimeout(()=>{_0x21be73['remove']();},0x1e);}catch(_0x280c55){console[_0x55a0e7(0x199)](_0x55a0e7(0x1ca),_0x280c55),alert(_0x55a0e7(0xb8));}}document[_0x2e0a48(0x1ff)][_0x2e0a48(0x1ce)](_0x2e0a48(0x12b),_0x2e0a48(0x1b2));function setupPresence(){const _0x543a51=_0x2e0a48;if(!currentUser)return;const _0x37f3bd=firebase['database']()['ref'](_0x543a51(0x198)+currentUser['id']),_0x3f9fbe=firebase[_0x543a51(0x77)]()['ref'](_0x543a51(0x82));_0x37f3bd[_0x543a51(0x193)]({'status':_0x543a51(0xbc),'lastSeen':firebase[_0x543a51(0x77)][_0x543a51(0x150)][_0x543a51(0x188)]}),_0x3f9fbe['on'](_0x543a51(0x11a),_0x59f0ee=>{const _0x411cb9=_0x543a51;_0x59f0ee[_0x411cb9(0x16f)]()===!![]&&(_0x37f3bd['update']({'status':'online','lastSeen':firebase[_0x411cb9(0x77)]['ServerValue']['TIMESTAMP']}),_0x37f3bd[_0x411cb9(0x121)]()[_0x411cb9(0x193)]({'status':_0x411cb9(0xc4),'lastSeen':firebase[_0x411cb9(0x77)][_0x411cb9(0x150)][_0x411cb9(0x188)]}));}),document[_0x543a51(0x1c6)]('visibilitychange',()=>{const _0x17679b=_0x543a51;document['visibilityState']===_0x17679b(0x213)&&_0x37f3bd['update']({'status':_0x17679b(0xbc),'lastSeen':firebase[_0x17679b(0x77)][_0x17679b(0x150)][_0x17679b(0x188)]});}),window['addEventListener']('beforeunload',()=>{const _0x1a1575=_0x543a51;fetch(YOUR_API_ENDPOINT+_0x1a1575(0x88),{'method':_0x1a1575(0x189),'keepalive':!![],'headers':{'Content-Type':_0x1a1575(0xaa)},'body':JSON['stringify']({'userId':currentUser['id'],'status':_0x1a1575(0xc4),'lastSeen':Date['now']()})});}),firebase[_0x543a51(0x77)]()[_0x543a51(0x125)](_0x543a51(0x212))['on'](_0x543a51(0x11a),_0x3bd72c=>{const _0x1348e1=_0x543a51;_0x3bd72c[_0x1348e1(0x86)](_0x4ee489=>{const _0x344001=_0x1348e1,_0x536249=_0x4ee489['val']();updateUserStatusUI(_0x536249['id'],_0x536249[_0x344001(0x177)],_0x536249[_0x344001(0x202)]);});});}function updateUserStatusUI(_0x2e0253,_0xae9770,_0xeb8c9e){const _0x55c262=_0x2e0a48,_0x20ad92=document['querySelector'](_0x55c262(0x1be)+_0x2e0253+'\x22]');if(!_0x20ad92)return;const _0x29733b=_0x20ad92[_0x55c262(0xd1)](_0x55c262(0x1a2)),_0x4ebf7a=_0x20ad92['querySelector']('.status-indicator');if(_0xae9770===_0x55c262(0xbc))_0x29733b[_0x55c262(0x228)]=_0x55c262(0xbc),_0x29733b['style']['color']=_0x55c262(0xd8),_0x4ebf7a?.[_0x55c262(0x1c7)]['add'](_0x55c262(0xbc)),_0x4ebf7a?.[_0x55c262(0x1c7)]['remove'](_0x55c262(0xc4));else{const _0x3a52f3=formatLastSeen(_0xeb8c9e);_0x29733b['textContent']=_0x3a52f3,_0x29733b[_0x55c262(0xa0)][_0x55c262(0x156)]=_0x55c262(0xb5),_0x4ebf7a?.[_0x55c262(0x1c7)]['add']('offline'),_0x4ebf7a?.[_0x55c262(0x1c7)][_0x55c262(0xaf)](_0x55c262(0xbc));}}function loadChats(){const _0x103927=_0x2e0a48,_0xd29af8=document[_0x103927(0xd1)](_0x103927(0x100)),_0x3984c8=document[_0x103927(0xd1)](_0x103927(0x1cf));let _0x2b1dbb=[];firebase[_0x103927(0x77)]()[_0x103927(0x125)](_0x103927(0x1fa))[_0x103927(0x1a4)]('lastMessageTime')['on'](_0x103927(0x11a),_0x7b68ad=>{const _0x15a6e1=_0x103927;_0x2b1dbb=[],_0x7b68ad[_0x15a6e1(0x86)](_0x23dda5=>{const _0x406acd=_0x15a6e1;_0x23dda5['val']()[_0x406acd(0xe3)][_0x406acd(0x103)](currentUser['id'])&&_0x2b1dbb['unshift']({'id':_0x23dda5[_0x406acd(0xde)],..._0x23dda5[_0x406acd(0x16f)]()});}),filterAndDisplayChats(_0x2b1dbb,_0x3984c8[_0x15a6e1(0x11a)]);}),_0x3984c8[_0x103927(0x1c6)](_0x103927(0x9f),_0xb44263=>{const _0x5b6de0=_0x103927;filterAndDisplayChats(_0x2b1dbb,_0xb44263[_0x5b6de0(0x194)][_0x5b6de0(0x11a)]);});}function filterAndDisplayChats(_0x8f4166,_0x430b1e){const _0x5322c4=_0x2e0a48,_0x2cac09=document[_0x5322c4(0xd1)](_0x5322c4(0x100));_0x2cac09[_0x5322c4(0x1cc)]='';const _0x16b69a=_0x8f4166[_0x5322c4(0x8b)](_0x15a4cb=>_0x15a4cb[_0x5322c4(0x7d)][_0x5322c4(0x211)]()[_0x5322c4(0x103)](_0x430b1e[_0x5322c4(0x211)]())||_0x15a4cb[_0x5322c4(0x112)]&&_0x15a4cb[_0x5322c4(0x112)]['toLowerCase']()[_0x5322c4(0x103)](_0x430b1e[_0x5322c4(0x211)]()));_0x16b69a[_0x5322c4(0x86)](_0x2548c9=>{const _0x3be75e=createChatListItem(_0x2548c9);_0x2cac09['appendChild'](_0x3be75e);});}function createChatListItem(_0x2f5a9b){const _0x1c644e=_0x2e0a48,_0x5320d8=document['querySelector'](_0x1c644e(0x1af)+_0x2f5a9b['id']+'\x22]')||document['createElement'](_0x1c644e(0xa3));_0x5320d8['className']=_0x1c644e(0x1bc),_0x5320d8[_0x1c644e(0x80)](_0x1c644e(0x178),_0x2f5a9b['id']);const _0x73d5dc=_0x2f5a9b[_0x1c644e(0x7b)]||0x0,_0x1f31f7=_0x73d5dc>0x0&&_0x2f5a9b[_0x1c644e(0x8c)]!==currentUser['id'];return _0x5320d8[_0x1c644e(0x1cc)]=_0x1c644e(0x1f4)+(_0x2f5a9b['photoURL']||'https://ui-avatars.com/api/?name='+_0x2f5a9b[_0x1c644e(0x7d)])+'\x22\x20alt=\x22\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22chat-content\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<div\x20class=\x22chat-header\x22>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20<h2\x20class=\x22chat-name\x20'+(_0x1f31f7?_0x1c644e(0x12e):'')+'\x22>'+_0x2f5a9b['name']+_0x1c644e(0x1dd)+(_0x1f31f7?_0x1c644e(0x12e):'')+'\x22>'+formatTime(_0x2f5a9b[_0x1c644e(0x99)])+_0x1c644e(0x1d4)+(_0x1f31f7?_0x1c644e(0x12e):'')+_0x1c644e(0x10e)+(_0x2f5a9b[_0x1c644e(0x8c)]===currentUser['id']?_0x1c644e(0x169)+getStatusIcon(_0x2f5a9b[_0x1c644e(0xda)])+'</span>':'')+_0x1c644e(0xc9)+(_0x2f5a9b[_0x1c644e(0x112)]||'')+'</span>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20</div>\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20'+(_0x1f31f7?_0x1c644e(0x13b)+_0x73d5dc+_0x1c644e(0x93):'')+_0x1c644e(0x206),_0x5320d8['addEventListener'](_0x1c644e(0xb1),()=>{selectChat(_0x2f5a9b),markChatAsRead(_0x2f5a9b['id']);}),_0x5320d8;}function updateChatListItem(_0x59714a){const _0xdff53a=_0x2e0a48,_0x5eaa91=document['querySelector'](_0xdff53a(0x1af)+_0x59714a['id']+'\x22]');if(_0x5eaa91){const _0x4537ba=_0x59714a[_0xdff53a(0x7b)]||0x0,_0x14b894=_0x4537ba>0x0&&_0x59714a[_0xdff53a(0x8c)]!==currentUser['id'];_0x5eaa91['querySelector']('.chat-name')[_0xdff53a(0x1c7)]['toggle'](_0xdff53a(0x12e),_0x14b894),_0x5eaa91[_0xdff53a(0xd1)](_0xdff53a(0x129))[_0xdff53a(0x1c7)][_0xdff53a(0xd2)](_0xdff53a(0x12e),_0x14b894),_0x5eaa91[_0xdff53a(0xd1)](_0xdff53a(0x129))[_0xdff53a(0x228)]=formatTime(_0x59714a['lastMessageTime']);const _0x127cc9=_0x5eaa91[_0xdff53a(0xd1)](_0xdff53a(0x1c2));_0x127cc9&&(_0x127cc9[_0xdff53a(0x1c7)][_0xdff53a(0xd2)](_0xdff53a(0x12e),_0x14b894),_0x127cc9[_0xdff53a(0x1cc)]=_0xdff53a(0x87)+(_0x59714a[_0xdff53a(0x8c)]===currentUser['id']?'<span\x20class=\x22message-status\x22>'+getStatusIcon(_0x59714a[_0xdff53a(0xda)])+_0xdff53a(0x113):'')+_0xdff53a(0x1c8)+(_0x59714a[_0xdff53a(0x112)]||'')+_0xdff53a(0x10d));const _0x579ef6=_0x5eaa91[_0xdff53a(0xd1)]('.unread-badge');if(_0x579ef6)_0x14b894?_0x579ef6[_0xdff53a(0xd1)]('span')[_0xdff53a(0x228)]=_0x4537ba:_0x579ef6[_0xdff53a(0xaf)]();else{if(_0x14b894){const _0x6c0148=document[_0xdff53a(0x10a)](_0xdff53a(0xa3));_0x6c0148[_0xdff53a(0x71)]=_0xdff53a(0x1ad),_0x6c0148['innerHTML']=_0xdff53a(0x119)+_0x4537ba+_0xdff53a(0x113),_0x5eaa91['querySelector'](_0xdff53a(0xfc))[_0xdff53a(0x133)](_0x6c0148);}}}}function markChatAsRead(_0x1ac1b4){const _0x4eb1ba=_0x2e0a48;firebase['database']()[_0x4eb1ba(0x125)](_0x4eb1ba(0x1ef)+_0x1ac1b4)[_0x4eb1ba(0x193)]({'unreadCount':0x0});}function formatTime(_0x548531){const _0x416388=_0x2e0a48;if(!_0x548531)return'';const _0x29801d=new Date(_0x548531),_0x2c095e=new Date(),_0x3a23be=_0x2c095e-_0x29801d,_0xa21958=0x18*0x3c*0x3c*0x3e8;if(_0x3a23be<_0xa21958&&_0x29801d[_0x416388(0x115)]()===_0x2c095e[_0x416388(0x115)]())return _0x29801d[_0x416388(0x1b3)](_0x416388(0x10c),{'hour':_0x416388(0x10f),'minute':_0x416388(0x1d0),'hour12':!![]});else{if(_0x3a23be<0x2*_0xa21958&&_0x29801d['getDate']()===_0x2c095e[_0x416388(0x115)]()-0x1)return'Yesterday';else return _0x3a23be<0x7*_0xa21958?_0x29801d[_0x416388(0x166)](_0x416388(0x10c),{'weekday':_0x416388(0x1ec)}):_0x29801d[_0x416388(0x166)](_0x416388(0x10c),{'day':'2-digit','month':_0x416388(0x1d0),'year':_0x416388(0x1d0)});}}function setupMessageInput(){const _0x3f9f2e=_0x2e0a48,_0x568b24=document[_0x3f9f2e(0xd1)](_0x3f9f2e(0x1ae)),_0x3c17f9=document[_0x3f9f2e(0xd1)](_0x3f9f2e(0x154)),_0x3b8889=document['querySelector']('.emoji-button'),_0x31edb0=document[_0x3f9f2e(0xd1)](_0x3f9f2e(0x18f)),_0x1fef46=document[_0x3f9f2e(0xd1)](_0x3f9f2e(0x12c)),_0xb15752=new EmojiMart[(_0x3f9f2e(0xa5))]({'onEmojiSelect':_0x2bfef9=>{const _0x1728be=_0x3f9f2e,_0x52b1e2=_0x3c17f9[_0x1728be(0xdb)],_0x14968e=_0x3c17f9[_0x1728be(0x11a)];_0x3c17f9['value']=_0x14968e[_0x1728be(0x192)](0x0,_0x52b1e2)+_0x2bfef9[_0x1728be(0x126)]+_0x14968e['slice'](_0x52b1e2),_0x3c17f9['focus']();},'theme':_0x3f9f2e(0xf7),'set':_0x3f9f2e(0x181),'showPreview':![],'showSkinTones':![],'style':{'position':_0x3f9f2e(0xe8),'bottom':_0x3f9f2e(0x1a3),'left':'0','display':_0x3f9f2e(0x1d3),'zIndex':0x3e7}});_0x568b24[_0x3f9f2e(0x133)](_0xb15752[_0x3f9f2e(0xd5)]),_0x3b8889[_0x3f9f2e(0x1c6)](_0x3f9f2e(0xb1),()=>{const _0x283351=_0x3f9f2e;_0xb15752['element'][_0x283351(0xa0)][_0x283351(0x13a)]=_0xb15752[_0x283351(0xd5)][_0x283351(0xa0)][_0x283351(0x13a)]==='none'?_0x283351(0x1f7):'none';}),_0x31edb0['addEventListener'](_0x3f9f2e(0xb1),()=>{const _0x36d60a=_0x3f9f2e;_0x1fef46['classList'][_0x36d60a(0xd2)](_0x36d60a(0x1fc));}),document[_0x3f9f2e(0x84)](_0x3f9f2e(0x167))[_0x3f9f2e(0x86)](_0x4c7fd7=>{const _0x18830b=_0x3f9f2e;_0x4c7fd7[_0x18830b(0x1c6)](_0x18830b(0xb1),()=>{const _0xbca540=_0x18830b;switch(_0x4c7fd7[_0xbca540(0x17d)]['type']){case _0xbca540(0x142):uploadFile(_0xbca540(0x1e8));break;case'document':uploadFile(_0xbca540(0x7c));break;case'camera':openCamera();break;}_0x1fef46[_0xbca540(0x1c7)][_0xbca540(0xaf)](_0xbca540(0x1fc));});}),document[_0x3f9f2e(0x1c6)](_0x3f9f2e(0xb1),_0xc0e9cd=>{const _0x1373de=_0x3f9f2e;!_0xc0e9cd['target'][_0x1373de(0x7a)]('.emoji-button')&&(_0xb15752[_0x1373de(0xd5)]['style'][_0x1373de(0x13a)]=_0x1373de(0x1d3)),!_0xc0e9cd[_0x1373de(0x194)][_0x1373de(0x7a)](_0x1373de(0x18f))&&!_0xc0e9cd[_0x1373de(0x194)][_0x1373de(0x7a)](_0x1373de(0x12c))&&_0x1fef46[_0x1373de(0x1c7)][_0x1373de(0xaf)]('show');});}function uploadFile(_0x151c59){const _0x3f2fbd=_0x2e0a48,_0x3e021f=document[_0x3f2fbd(0x10a)]('input');_0x3e021f['type']=_0x3f2fbd(0x1f2),_0x3e021f[_0x3f2fbd(0x1f3)]=_0x151c59,_0x3e021f['onchange']=_0x53bc5d=>{const _0x5a255c=_0x3f2fbd,_0x25c2e1=_0x53bc5d[_0x5a255c(0x194)][_0x5a255c(0x122)][0x0];_0x25c2e1&&uploadToStorage(_0x25c2e1);},_0x3e021f['click']();}async function uploadToStorage(_0x4519bd){const _0x512c7d=_0x2e0a48,_0x2e288c=firebase['storage']()[_0x512c7d(0x125)](),_0x261ad7=_0x2e288c['child']('uploads/'+Date[_0x512c7d(0x161)]()+'_'+_0x4519bd['name']);try{const _0x2e1d92=await _0x261ad7[_0x512c7d(0x20e)](_0x4519bd),_0x238969=await _0x2e1d92['ref'][_0x512c7d(0x1d2)]();sendFileMessage(_0x238969,_0x4519bd['type']);}catch(_0x511b3a){console['error']('Upload\x20failed:',_0x511b3a),alert(_0x512c7d(0x16d));}}function sendFileMessage(_0x2cf5af,_0x1d12d3){const _0x3e0f28=_0x2e0a48,_0x3acc35={'senderId':currentUser['id'],'timestamp':firebase['database'][_0x3e0f28(0x150)]['TIMESTAMP'],'fileURL':_0x2cf5af,'fileType':_0x1d12d3,'type':_0x1d12d3[_0x3e0f28(0x173)]('image/')?_0x3e0f28(0xd9):_0x3e0f28(0x221)};firebase[_0x3e0f28(0x77)]()[_0x3e0f28(0x125)]('messages/'+currentChat['id'])[_0x3e0f28(0xe0)](_0x3acc35);}function openCamera(){const _0x1d29e1=_0x2e0a48,_0xfe7fc1=document[_0x1d29e1(0x10a)](_0x1d29e1(0x16a)),_0x2a2ae2=document['createElement']('canvas');navigator[_0x1d29e1(0x151)][_0x1d29e1(0x111)]({'video':!![]})[_0x1d29e1(0xb2)](_0x5c5144=>{const _0x8c5a8a=_0x1d29e1;_0xfe7fc1[_0x8c5a8a(0x1f0)]=_0x5c5144,_0xfe7fc1[_0x8c5a8a(0x13c)]();const _0x19a4ef=createCameraUI(_0xfe7fc1,_0x5c5144);document['body'][_0x8c5a8a(0x133)](_0x19a4ef);})[_0x1d29e1(0xab)](_0x2b663e=>{const _0x5bc425=_0x1d29e1;console[_0x5bc425(0x199)]('Camera\x20access\x20denied:',_0x2b663e),alert(_0x5bc425(0x110));});}document['addEventListener']('DOMContentLoaded',()=>{const _0x5e5399=new WhatsAppChat();});class MessageHandler{constructor(){const _0x1be7f0=_0x2e0a48;this[_0x1be7f0(0x90)]=document[_0x1be7f0(0xd1)](_0x1be7f0(0x227)),this[_0x1be7f0(0x1b5)]();}[_0x2e0a48(0x1b5)](){const _0x373f93=_0x2e0a48;document[_0x373f93(0xd1)](_0x373f93(0x154))['addEventListener'](_0x373f93(0x22b),_0x46301e=>{const _0xede50f=_0x373f93;_0x46301e[_0xede50f(0xde)]===_0xede50f(0x20f)&&!_0x46301e[_0xede50f(0x89)]&&(_0x46301e[_0xede50f(0x109)](),this[_0xede50f(0x85)](_0x46301e[_0xede50f(0x194)][_0xede50f(0x11a)]),_0x46301e[_0xede50f(0x194)][_0xede50f(0x11a)]='');});}[_0x2e0a48(0x85)](_0x4e0db7){const _0x7294cd=_0x2e0a48;try{const _0x4b3112=this[_0x7294cd(0x74)](_0x4e0db7);this[_0x7294cd(0x90)][_0x7294cd(0x133)](_0x4b3112),this[_0x7294cd(0x1a9)]();}catch(_0x3e4910){this[_0x7294cd(0x18d)]('Failed\x20to\x20send\x20message.\x20Please\x20try\x20again.');}}[_0x2e0a48(0x74)](_0x1b26bc){const _0x5e8b9a=_0x2e0a48,_0x32ecee=document['createElement'](_0x5e8b9a(0xa3));_0x32ecee[_0x5e8b9a(0x71)]=_0x5e8b9a(0xdd);const _0x1a9fa7=document[_0x5e8b9a(0x10a)](_0x5e8b9a(0xa3));_0x1a9fa7[_0x5e8b9a(0x71)]=_0x5e8b9a(0x1d7);_0x1b26bc[_0x5e8b9a(0x12d)]>0x64&&_0x1a9fa7[_0x5e8b9a(0x1c7)]['add'](_0x5e8b9a(0x196));const _0xaba968=document['createElement'](_0x5e8b9a(0xa3));_0xaba968[_0x5e8b9a(0x71)]=_0x5e8b9a(0x21d);const _0x4c9fe0=_0x1b26bc[_0x5e8b9a(0x136)]('\x0a')['filter'](_0x12eeba=>_0x12eeba[_0x5e8b9a(0x15e)]());_0x4c9fe0['length']>0x1?(_0xaba968[_0x5e8b9a(0x1c7)][_0x5e8b9a(0xd0)](_0x5e8b9a(0xf9)),_0x4c9fe0['forEach'](_0x3cd8c2=>{const _0x21e473=_0x5e8b9a,_0x126c90=document[_0x21e473(0x10a)]('p');_0x126c90['textContent']=_0x3cd8c2,_0xaba968['appendChild'](_0x126c90);})):_0xaba968[_0x5e8b9a(0x228)]=_0x1b26bc;const _0x3d5887=document['createElement'](_0x5e8b9a(0xa3));return _0x3d5887[_0x5e8b9a(0x71)]=_0x5e8b9a(0x78),_0x3d5887['textContent']=this['formatTime'](new Date()),_0x1a9fa7['appendChild'](_0xaba968),_0x1a9fa7[_0x5e8b9a(0x133)](_0x3d5887),_0x32ecee[_0x5e8b9a(0x133)](_0x1a9fa7),_0x32ecee;}[_0x2e0a48(0x1d5)](_0x1a82c1){const _0xb8af97=_0x2e0a48;return _0x1a82c1[_0xb8af97(0x1b3)]([],{'hour':_0xb8af97(0x1d0),'minute':_0xb8af97(0x1d0)});}[_0x2e0a48(0x18d)](_0x2c6981){const _0x5e2c65=_0x2e0a48,_0x584bb3=document['createElement']('div');_0x584bb3[_0x5e2c65(0x71)]=_0x5e2c65(0x1df),_0x584bb3['innerHTML']=_0x5e2c65(0x11e)+_0x2c6981+_0x5e2c65(0xe4),this[_0x5e2c65(0x90)][_0x5e2c65(0x133)](_0x584bb3),setTimeout(()=>_0x584bb3['remove'](),0xbb8);}[_0x2e0a48(0x1a9)](){const _0x89e491=_0x2e0a48;this['messageContainer']['scrollTop']=this['messageContainer'][_0x89e491(0xe2)];}}document[_0x2e0a48(0x1c6)](_0x2e0a48(0xe6),()=>{const _0x570342=new MessageHandler();});class ChatSearch{constructor(){const _0x50c1dc=_0x2e0a48;this[_0x50c1dc(0x139)]=document[_0x50c1dc(0xd1)]('.search-input'),this[_0x50c1dc(0xad)]=document['querySelector'](_0x50c1dc(0xe1)),this[_0x50c1dc(0x164)]();}[_0x2e0a48(0x164)](){const _0x5dca3d=_0x2e0a48;if(!this[_0x5dca3d(0x139)]||!this['chatList']){console[_0x5dca3d(0x199)](_0x5dca3d(0x148));return;}this[_0x5dca3d(0x13e)]();}[_0x2e0a48(0x13e)](){const _0x3c4039=_0x2e0a48;this[_0x3c4039(0x139)][_0x3c4039(0x1c6)](_0x3c4039(0x9f),_0x4ebfb1=>{const _0xfd468e=_0x3c4039,_0x287827=_0x4ebfb1[_0xfd468e(0x194)]['value'][_0xfd468e(0x15e)]()[_0xfd468e(0x211)]();this[_0xfd468e(0x1ed)](_0x287827);});}[_0x2e0a48(0x1ed)](_0x4f02d8){const _0x49d318=_0x2e0a48,_0x1f3ea9=this['chatList']['querySelectorAll']('.chat-item');let _0x37ef5a=![];_0x1f3ea9[_0x49d318(0x86)](_0x455ab7=>{const _0x51b482=_0x49d318,_0x43626e=_0x455ab7[_0x51b482(0xd1)]('.chat-name,\x20.user-name')||_0x455ab7[_0x51b482(0xd1)]('h2')||_0x455ab7[_0x51b482(0xd1)]('strong');if(!_0x43626e)return;const _0x1109fc=_0x43626e['textContent'][_0x51b482(0x211)](),_0x27a52b=_0x4f02d8===''||_0x1109fc[_0x51b482(0x103)](_0x4f02d8);_0x455ab7[_0x51b482(0xa0)]['display']=_0x27a52b?_0x51b482(0xb6):_0x51b482(0x1d3),_0x27a52b?(this[_0x51b482(0xdf)](_0x43626e,_0x4f02d8),_0x37ef5a=!![]):this['removeHighlight'](_0x43626e);}),this[_0x49d318(0x107)](!_0x37ef5a&&_0x4f02d8!=='');}['highlightText'](_0x55204a,_0x418ab1){const _0x55d315=_0x2e0a48;if(!_0x418ab1){_0x55204a[_0x55d315(0x228)]=_0x55204a['textContent'];return;}const _0x5bb134=_0x55204a['textContent'],_0x4570f2=_0x5bb134['replace'](new RegExp(_0x418ab1,'gi'),_0x4b4ba9=>_0x55d315(0x11f)+_0x4b4ba9+_0x55d315(0x113));_0x55204a[_0x55d315(0x1cc)]=_0x4570f2;}[_0x2e0a48(0x1e1)](_0x2aefe0){const _0x412926=_0x2e0a48;_0x2aefe0&&(_0x2aefe0[_0x412926(0x228)]=_0x2aefe0[_0x412926(0x228)]);}[_0x2e0a48(0x107)](_0x5d1163){const _0x534cbe=_0x2e0a48;let _0xfc186c=this[_0x534cbe(0xad)]['querySelector'](_0x534cbe(0x187));if(_0x5d1163)!_0xfc186c&&(_0xfc186c=document['createElement']('div'),_0xfc186c[_0x534cbe(0x71)]=_0x534cbe(0x19c),_0xfc186c[_0x534cbe(0x1cc)]=_0x534cbe(0x1fe),this[_0x534cbe(0xad)]['appendChild'](_0xfc186c));else _0xfc186c&&_0xfc186c[_0x534cbe(0xaf)]();}}document[_0x2e0a48(0x1c6)](_0x2e0a48(0xe6),()=>{const _0x5179ec=_0x2e0a48;if(typeof WhatsAppChat!=='undefined'){const _0x349625=new WhatsAppChat();}else console[_0x5179ec(0x199)](_0x5179ec(0x179));});class ChatManager{constructor(){const _0x40aa7c=_0x2e0a48;this['db']=firebase[_0x40aa7c(0x20b)](),this['chatList']=document['querySelector'](_0x40aa7c(0xe1)),this[_0x40aa7c(0x20c)]=new ChatSearch(this['chatList']),this['setupRealtimeListeners'](),this[_0x40aa7c(0xcb)](),this[_0x40aa7c(0x11d)](),this[_0x40aa7c(0x20d)]=document[_0x40aa7c(0xd1)](_0x40aa7c(0xce)),this[_0x40aa7c(0x186)]=document[_0x40aa7c(0xd1)](_0x40aa7c(0x123)),this[_0x40aa7c(0xed)]=document[_0x40aa7c(0xd1)]('.chat-view');}['setupRealtimeListeners'](){const _0x5e2e65=_0x2e0a48;this['db'][_0x5e2e65(0x219)](_0x5e2e65(0x184))[_0x5e2e65(0x1c3)](_0x5e2e65(0x1bf),_0x5e2e65(0x1ee))[_0x5e2e65(0xc7)](_0x2bc8e8=>{const _0x4226a1=_0x5e2e65;_0x2bc8e8[_0x4226a1(0x223)]()['forEach'](_0x4ca668=>{const _0x37b730=_0x4226a1;(_0x4ca668[_0x37b730(0x1bb)]==='added'||_0x4ca668[_0x37b730(0x1bb)]===_0x37b730(0x21a))&&this['updateLastMessage'](_0x4ca668[_0x37b730(0xae)][_0x37b730(0xa7)]());});}),this['db'][_0x5e2e65(0x219)](_0x5e2e65(0x212))[_0x5e2e65(0xc7)](_0x162794=>{const _0x4c2595=_0x5e2e65;_0x162794[_0x4c2595(0x223)]()['forEach'](_0x226595=>{const _0x3a7ea0=_0x4c2595;_0x226595[_0x3a7ea0(0x1bb)]===_0x3a7ea0(0x21a)&&this[_0x3a7ea0(0x118)](_0x226595[_0x3a7ea0(0xae)]['id'],_0x226595[_0x3a7ea0(0xae)][_0x3a7ea0(0xa7)]());});});}[_0x2e0a48(0xee)](_0x1edb81){const _0xf977be=_0x2e0a48,_0x260f0d=document[_0xf977be(0xd1)](_0xf977be(0xb7)+_0x1edb81[_0xf977be(0xb3)]+'\x22]');if(_0x260f0d){const _0x44f92a=_0x260f0d[_0xf977be(0xd1)](_0xf977be(0xfd)),_0x10e232=_0x260f0d[_0xf977be(0xd1)]('.chat-time');_0x44f92a&&(_0x44f92a[_0xf977be(0x228)]=_0x1edb81[_0xf977be(0x11c)]),_0x10e232&&(_0x10e232[_0xf977be(0x228)]=this[_0xf977be(0x9e)](_0x1edb81[_0xf977be(0x1bf)])),this[_0xf977be(0x140)](_0x260f0d);}}[_0x2e0a48(0x140)](_0x3bcf79){const _0x139cba=_0x2e0a48,_0x44ac5e=_0x3bcf79[_0x139cba(0x18b)];_0x44ac5e[_0x139cba(0xbd)](_0x3bcf79,_0x44ac5e[_0x139cba(0x8f)]);}[_0x2e0a48(0x9e)](_0x2e9c99){const _0x45c0ad=_0x2e0a48,_0x4a2cc9=_0x2e9c99['toDate'](),_0xc9fa3f=new Date();return _0x4a2cc9[_0x45c0ad(0x18e)]()===_0xc9fa3f['toDateString']()?_0x4a2cc9[_0x45c0ad(0x1b3)]([],{'hour':_0x45c0ad(0x1d0),'minute':_0x45c0ad(0x1d0)}):_0x4a2cc9[_0x45c0ad(0x166)]([],{'weekday':_0x45c0ad(0x1ec)});}[_0x2e0a48(0x118)](_0xd353a7,_0x211666){const _0x39817c=_0x2e0a48,_0x5bf4e1=document[_0x39817c(0xd1)]('[data-user-id=\x22'+_0xd353a7+'\x22]');if(_0x5bf4e1){const _0x1b7813=_0x5bf4e1[_0x39817c(0xd1)](_0x39817c(0x1a2)),_0x29e247=_0x5bf4e1[_0x39817c(0xd1)](_0x39817c(0xc8));_0x211666==='online'?(_0x1b7813[_0x39817c(0x228)]=_0x39817c(0xbc),_0x1b7813[_0x39817c(0xa0)][_0x39817c(0x156)]=_0x39817c(0xd8),_0x29e247?.[_0x39817c(0x1c7)][_0x39817c(0xd0)](_0x39817c(0xbc)),_0x29e247?.[_0x39817c(0x1c7)][_0x39817c(0xaf)](_0x39817c(0xc4))):(_0x1b7813[_0x39817c(0x228)]=_0x39817c(0xc4),_0x1b7813[_0x39817c(0xa0)][_0x39817c(0x156)]='#667781',_0x29e247?.[_0x39817c(0x1c7)][_0x39817c(0xd0)](_0x39817c(0xc4)),_0x29e247?.[_0x39817c(0x1c7)][_0x39817c(0xaf)](_0x39817c(0xbc)));}}[_0x2e0a48(0xcb)](){const _0x3bc3ed=_0x2e0a48;window['addEventListener']('beforeunload',()=>{const _0x45bce1=_0x1c58;document[_0x45bce1(0x1cb)]['classList'][_0x45bce1(0xaf)](_0x45bce1(0x19b));}),firebase[_0x3bc3ed(0x17b)]()['onAuthStateChanged'](_0x5cafb9=>{const _0xd129f0=_0x3bc3ed;_0x5cafb9&&this[_0xd129f0(0xca)]()[_0xd129f0(0xb2)](()=>{const _0x407d3d=_0xd129f0;document[_0x407d3d(0x1cb)]['classList']['add']('loaded');});});}async['loadInitialData'](){const _0x399d2b=_0x2e0a48;try{await Promise['all']([this[_0x399d2b(0x171)](),this[_0x399d2b(0x8e)]()]);}catch(_0x2d2db3){console[_0x399d2b(0x199)](_0x399d2b(0x17f),_0x2d2db3);}}[_0x2e0a48(0x11d)](){const _0x103ed2=_0x2e0a48,_0x5bc202=document['querySelector'](_0x103ed2(0x207));_0x5bc202&&_0x5bc202[_0x103ed2(0x1c6)](_0x103ed2(0xb1),()=>{const _0x3f23fe=_0x103ed2;window['innerWidth']<=0x300&&(document[_0x3f23fe(0x1cb)]['classList'][_0x3f23fe(0xaf)](_0x3f23fe(0x7e)),this['defaultView']&&(this[_0x3f23fe(0x186)][_0x3f23fe(0xa0)][_0x3f23fe(0x13a)]=_0x3f23fe(0xb6)),this[_0x3f23fe(0xed)]&&(this[_0x3f23fe(0xed)][_0x3f23fe(0xa0)][_0x3f23fe(0x13a)]=_0x3f23fe(0x1d3)));});}[_0x2e0a48(0x216)](_0x18d857,_0x1fef58,_0x3e1dc7,_0x1e04e6){const _0x31d916=_0x2e0a48,_0x54feb4=document[_0x31d916(0xd1)](_0x31d916(0x16e));_0x54feb4&&(_0x54feb4[_0x31d916(0xd1)](_0x31d916(0x16b))[_0x31d916(0x182)]=_0x1e04e6,_0x54feb4[_0x31d916(0xd1)](_0x31d916(0xbb))[_0x31d916(0x228)]=_0x1fef58,_0x54feb4[_0x31d916(0xd1)](_0x31d916(0x138))['textContent']=_0x3e1dc7),this[_0x31d916(0x186)]&&(this['defaultView'][_0x31d916(0xa0)]['display']=_0x31d916(0x1d3)),this[_0x31d916(0xed)]&&(this[_0x31d916(0xed)][_0x31d916(0xa0)]['display']='flex'),this[_0x31d916(0x20d)]&&this[_0x31d916(0x20d)][_0x31d916(0x1c7)]['add'](_0x31d916(0x7e)),window[_0x31d916(0xb0)]<=0x300&&document['body'][_0x31d916(0x1c7)][_0x31d916(0xd0)]('chat-active'),this[_0x31d916(0x1a7)](_0x18d857);}}document['addEventListener'](_0x2e0a48(0xe6),()=>{const _0x86cfab=new ChatManager();});class ProfileManager{constructor(){const _0x57f4ec=_0x2e0a48;this[_0x57f4ec(0xef)]();}[_0x2e0a48(0xef)](){const _0x354744=_0x2e0a48,_0x17636c=document[_0x354744(0xd1)](_0x354744(0x120));_0x17636c&&_0x17636c[_0x354744(0x1c6)](_0x354744(0xb1),_0x52e08b=>{const _0x418b0f=_0x354744;_0x52e08b[_0x418b0f(0x109)](),this[_0x418b0f(0x21b)]();});}async[_0x2e0a48(0x21b)](){const _0x1264fb=_0x2e0a48;try{const _0x5aab62=await this['showLogoutConfirmation']();_0x5aab62&&(document['body'][_0x1264fb(0x1c7)]['add'](_0x1264fb(0x222)),await firebase[_0x1264fb(0x17b)]()[_0x1264fb(0x195)](),localStorage['clear'](),sessionStorage[_0x1264fb(0x1c1)](),document['getElementById'](_0x1264fb(0x104))[_0x1264fb(0xa0)][_0x1264fb(0x13a)]='none',document['getElementById'](_0x1264fb(0x8d))[_0x1264fb(0xa0)]['display']=_0x1264fb(0x1d3),document[_0x1264fb(0xdc)](_0x1264fb(0x117))['style'][_0x1264fb(0x13a)]='flex',document[_0x1264fb(0xdc)]('login-email')[_0x1264fb(0x11a)]='',document[_0x1264fb(0xdc)](_0x1264fb(0x163))['value']='');}catch(_0x4f7488){console[_0x1264fb(0x199)](_0x1264fb(0xe9),_0x4f7488),this[_0x1264fb(0x18d)]('Logout\x20failed.\x20Please\x20try\x20again.');}finally{document[_0x1264fb(0x1cb)]['classList'][_0x1264fb(0xaf)](_0x1264fb(0x222));}}[_0x2e0a48(0x96)](){return new Promise(_0x560dfa=>{const _0x325fde=_0x1c58,_0x362ba5=_0x325fde(0xe5);document[_0x325fde(0x1cb)][_0x325fde(0x1ce)](_0x325fde(0x12b),_0x362ba5);const _0x4eadd9=document['querySelector'](_0x325fde(0x1b8));_0x4eadd9[_0x325fde(0xd1)]('.cancel-button')[_0x325fde(0x1c6)]('click',()=>{const _0x8faa9b=_0x325fde;_0x4eadd9[_0x8faa9b(0xaf)](),_0x560dfa(![]);}),_0x4eadd9[_0x325fde(0xd1)](_0x325fde(0x1cd))[_0x325fde(0x1c6)](_0x325fde(0xb1),()=>{const _0x269258=_0x325fde;_0x4eadd9[_0x269258(0xaf)](),_0x560dfa(!![]);}),_0x4eadd9[_0x325fde(0x1c6)](_0x325fde(0xb1),_0x269c5b=>{const _0x3ffe2c=_0x325fde;_0x269c5b['target']===_0x4eadd9&&(_0x4eadd9[_0x3ffe2c(0xaf)](),_0x560dfa(![]));});});}[_0x2e0a48(0x18d)](_0x49f62c){const _0x31fafd=_0x2e0a48,_0x57836d=document[_0x31fafd(0x10a)](_0x31fafd(0xa3));_0x57836d[_0x31fafd(0x71)]=_0x31fafd(0x18c),_0x57836d[_0x31fafd(0x228)]=_0x49f62c,document['body'][_0x31fafd(0x133)](_0x57836d),setTimeout(()=>{const _0x4926a5=_0x31fafd;_0x57836d[_0x4926a5(0xaf)]();},0xbb8);}}document['addEventListener']('DOMContentLoaded',()=>{const _0x21b2de=new ProfileManager();});class MobileResponsive{constructor(){const _0x5d96b7=_0x2e0a48;this[_0x5d96b7(0x204)]=document[_0x5d96b7(0xd1)]('.sidebar'),this['mainChat']=document[_0x5d96b7(0xd1)](_0x5d96b7(0xce)),this['backButton']=document[_0x5d96b7(0xd1)]('.back-button'),this[_0x5d96b7(0x164)]();}['init'](){const _0xb8ea89=_0x2e0a48;this[_0xb8ea89(0x9a)](),this[_0xb8ea89(0x21e)](),window[_0xb8ea89(0x1c6)](_0xb8ea89(0x210),()=>this[_0xb8ea89(0x21e)]()),this['setupChatListeners']();}['setupBackButton'](){const _0x1962d2=_0x2e0a48;this[_0x1962d2(0x18a)]&&(this['backButton'][_0x1962d2(0xa0)]['display']=_0x1962d2(0x1d3),this['backButton'][_0x1962d2(0x1c6)]('click',()=>{this['showSidebar']();}));}['handleScreenSize'](){const _0x5d6ef8=_0x2e0a48,_0x491e97=window[_0x5d6ef8(0xb0)]<=0x300;this[_0x5d6ef8(0x18a)]&&(this[_0x5d6ef8(0x18a)]['style'][_0x5d6ef8(0x13a)]=_0x491e97?'flex':_0x5d6ef8(0x1d3)),_0x491e97?(this[_0x5d6ef8(0x204)]['style'][_0x5d6ef8(0x13a)]=_0x5d6ef8(0xb6),this[_0x5d6ef8(0x20d)][_0x5d6ef8(0xa0)][_0x5d6ef8(0x13a)]=_0x5d6ef8(0x1d3)):(this[_0x5d6ef8(0x204)][_0x5d6ef8(0xa0)][_0x5d6ef8(0x13a)]=_0x5d6ef8(0xb6),this[_0x5d6ef8(0x20d)]['style']['display']='flex');}[_0x2e0a48(0x229)](){const _0x2445fd=_0x2e0a48,_0x34a24b=document['querySelectorAll'](_0x2445fd(0x191));_0x34a24b[_0x2445fd(0x86)](_0x6f97aa=>{const _0x527e60=_0x2445fd;_0x6f97aa[_0x527e60(0x1c6)](_0x527e60(0xb1),()=>{const _0xe6cebf=_0x527e60;window[_0xe6cebf(0xb0)]<=0x300&&this[_0xe6cebf(0x158)]();});});}[_0x2e0a48(0x70)](){const _0xb55355=_0x2e0a48;window[_0xb55355(0xb0)]<=0x300&&(this['sidebar']['style'][_0xb55355(0x13a)]=_0xb55355(0xb6),this[_0xb55355(0x20d)][_0xb55355(0xa0)]['display']=_0xb55355(0x1d3));}[_0x2e0a48(0x158)](){const _0xeffdf2=_0x2e0a48;window['innerWidth']<=0x300&&(this[_0xeffdf2(0x204)]['style'][_0xeffdf2(0x13a)]=_0xeffdf2(0x1d3),this[_0xeffdf2(0x20d)][_0xeffdf2(0xa0)][_0xeffdf2(0x13a)]=_0xeffdf2(0xb6));}}const styles=document['createElement']('style');styles[_0x2e0a48(0x228)]='\x0a\x20\x20\x20\x20.back-button\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20align-items:\x20center;\x0a\x20\x20\x20\x20\x20\x20\x20\x20padding:\x208px;\x0a\x20\x20\x20\x20\x20\x20\x20\x20cursor:\x20pointer;\x0a\x20\x20\x20\x20\x20\x20\x20\x20color:\x20#54656f;\x0a\x20\x20\x20\x20\x20\x20\x20\x20transition:\x20all\x200.2s\x20ease;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20.back-button\x20i\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20font-size:\x2020px;\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20@media\x20screen\x20and\x20(max-width:\x20768px)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20.container\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20position:\x20relative;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20.sidebar,\x20.main-chat\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20width:\x20100%;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20position:\x20absolute;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20left:\x200;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20top:\x200;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20height:\x20100%;\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20transition:\x20all\x200.3s\x20ease;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20.main-chat\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20z-index:\x202;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20\x20\x20\x20\x20.back-button\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20display:\x20flex\x20!important;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20}\x0a\x0a\x20\x20\x20\x20@media\x20screen\x20and\x20(min-width:\x20769px)\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20.back-button\x20{\x0a\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20\x20display:\x20none\x20!important;\x0a\x20\x20\x20\x20\x20\x20\x20\x20}\x0a\x20\x20\x20\x20}\x0a',document[_0x2e0a48(0x1ff)]['appendChild'](styles),document[_0x2e0a48(0x1c6)]('DOMContentLoaded',()=>{const _0x3101d1=_0x2e0a48,_0x3dd7ce=document[_0x3101d1(0xd1)]('.loading-screen'),_0x3a5e70=document[_0x3101d1(0xd1)](_0x3101d1(0x143));setTimeout(()=>{const _0x24b7cf=_0x3101d1;_0x3dd7ce&&_0x3a5e70&&(_0x3dd7ce[_0x24b7cf(0xa0)]['opacity']='0',_0x3dd7ce[_0x24b7cf(0xa0)]['transition']=_0x24b7cf(0x1a0),_0x3a5e70['style'][_0x24b7cf(0x13a)]='flex',document['body'][_0x24b7cf(0x1c7)][_0x24b7cf(0xd0)]('loaded'),setTimeout(()=>{const _0x26d4ff=_0x24b7cf;_0x3dd7ce[_0x26d4ff(0xa0)][_0x26d4ff(0x13a)]=_0x26d4ff(0x1d3);},0x1f4));},0x7d0);});const emojis=['😀','😃','😄','😁','😆','😅','😂','🤣','😊','😇','🙂','🙃','😉','😌','😍','😘','😗','😙','😚','😋','😛','😝','😜','🤪','🤨','🧐','🤓','😎','🤩','😏','😒','😞','😔','😟','😕','🙁','😣','😖','😫','😩','😢','😭','😤','😠','😡','🤬','🤯','😳','😱','😨','😰','😥','😓','🤗','🤔','😑','😬','🙄','😲','😴','🤤','😪','😵',_0x2e0a48(0x157),'🤐','🤢','😷','🤒','🤕','🤑','🤠','😈'];function initializeEmojiPicker(){const _0x5310eb=_0x2e0a48,_0x164682=document[_0x5310eb(0xd1)]('.emoji-button'),_0x159910=document[_0x5310eb(0xd1)](_0x5310eb(0x1e2)),_0x1b5cb2=document['createElement'](_0x5310eb(0xa3));_0x1b5cb2['className']=_0x5310eb(0x1b9),emojis['forEach'](_0x5953c7=>{const _0x5b9107=_0x5310eb,_0x4b6055=document[_0x5b9107(0x10a)]('span');_0x4b6055[_0x5b9107(0x228)]=_0x5953c7,_0x4b6055[_0x5b9107(0x1b4)]=()=>{const _0x586f1b=_0x5b9107,_0x2f7a6f=_0x159910[_0x586f1b(0xdb)],_0x599e52=_0x159910[_0x586f1b(0x11a)][_0x586f1b(0x106)](0x0,_0x2f7a6f),_0x32ce80=_0x159910[_0x586f1b(0x11a)][_0x586f1b(0x106)](_0x2f7a6f);_0x159910[_0x586f1b(0x11a)]=_0x599e52+_0x5953c7+_0x32ce80,_0x159910['focus']();const _0x2cbdc9=_0x2f7a6f+_0x5953c7[_0x586f1b(0x12d)];_0x159910[_0x586f1b(0x141)](_0x2cbdc9,_0x2cbdc9),_0x1b5cb2[_0x586f1b(0x1c7)][_0x586f1b(0xd0)](_0x586f1b(0xc5));},_0x1b5cb2[_0x5b9107(0x133)](_0x4b6055);}),document['querySelector'](_0x5310eb(0x10b))[_0x5310eb(0x133)](_0x1b5cb2),_0x164682[_0x5310eb(0x1b4)]=_0x4ef242=>{const _0x3d5615=_0x5310eb;_0x4ef242[_0x3d5615(0xcf)](),_0x1b5cb2[_0x3d5615(0x1c7)][_0x3d5615(0xd2)](_0x3d5615(0xc5));},document[_0x5310eb(0x1c6)]('click',_0x13b9f8=>{const _0x37f717=_0x5310eb;!_0x1b5cb2['contains'](_0x13b9f8[_0x37f717(0x194)])&&!_0x164682[_0x37f717(0x183)](_0x13b9f8[_0x37f717(0x194)])&&_0x1b5cb2[_0x37f717(0x1c7)][_0x37f717(0xd0)](_0x37f717(0xc5));});}initializeEmojiPicker();
+// Initialize Firebase
+const firebaseConfig = {
+    apiKey: "AIzaSyDAXnVfPpJUv9mExO11pwRBAMX94Moa9ww",
+    authDomain: "data-b828d.firebaseapp.com",
+    databaseURL: "https://data-b828d-default-rtdb.firebaseio.com",
+    projectId: "data-b828d",
+    storageBucket: "data-b828d.firebasestorage.app",
+    messagingSenderId: "996681924328",
+    appId: "1:996681924328:web:f598b6e7b06b339118535d"
+};
+
+// Initialize Firebase
+firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+const database = firebase.database();
+let currentUser = null;
+let currentChat = null;
+let userPresenceRef = null;
+let activeChats = new Map();
+
+class WhatsAppChat {
+    constructor() {
+        this.db = firebase.firestore();
+        this.auth = firebase.auth();
+        this.chatList = document.querySelector('.chat-list');
+        this.searchInput = document.querySelector('.search-input');
+        this.unsubscribeListeners = [];
+        this.addHeaderWithLogout();
+        this.init();
+        this.searchFeature = new ChatSearch();
+        this.chatManager = new ChatManager();
+        this.setupUserListeners();
+        this.mobileHandler = new MobileResponsive();
+        
+        // Add chat item click handler
+        document.addEventListener('click', (e) => {
+            const chatItem = e.target.closest('.chat-item');
+            if (chatItem) {
+                this.mobileHandler.showMainChat();
+            }
+        });
+    }
+
+    addHeaderWithLogout() {
+        // Create header if it doesn't exist
+        const headerHtml = `
+            <div class="whatsapp-header">
+                <div class="header-left">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            ${this.auth.currentUser?.email?.charAt(0).toUpperCase() || 'U'}
+                        </div>
+                        <div class="user-name">
+                            ${this.auth.currentUser?.email || 'User'}
+                        </div>
+                    </div>
+                </div>
+                <div class="header-right">
+                    <button class="logout-btn" title="Logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        Logout
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Insert header at the top of the chat container
+        const chatContainer = document.querySelector('.chat-container');
+        chatContainer.insertAdjacentHTML('afterbegin', headerHtml);
+
+        // Add logout click handler
+        document.querySelector('.logout-btn').addEventListener('click', () => {
+            this.handleLogout();
+        });
+    }
+     
+    async handleLogout() {
+        try {
+            const confirmed = await this.showLogoutConfirmation();
+            
+            if (confirmed) {
+                // Show loading state
+                const logoutBtn = document.querySelector('.logout-btn');
+                logoutBtn.classList.add('loading');
+                logoutBtn.disabled = true;
+
+                // Cleanup listeners
+                this.cleanup();
+                
+                // Sign out from Firebase
+                await this.auth.signOut();
+                
+                // Redirect to login page
+                window.location.href = '/login.html';
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            this.showError('Logout failed. Please try again.');
+            
+            // Reset button state
+            const logoutBtn = document.querySelector('.logout-btn');
+            logoutBtn.classList.remove('loading');
+            logoutBtn.disabled = false;
+        }
+    }
+
+    showLogoutConfirmation() {
+        return new Promise((resolve) => {
+            const dialogHtml = `
+                <div class="logout-dialog">
+                    <div class="logout-dialog-content">
+                        <h3>Logout</h3>
+                        <p>Are you sure you want to logout?</p>
+                        <div class="logout-dialog-buttons">
+                            <button class="cancel-button">Cancel</button>
+                            <button class="confirm-button">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', dialogHtml);
+            const dialog = document.querySelector('.logout-dialog');
+
+            // Add click handlers
+            dialog.querySelector('.cancel-button').addEventListener('click', () => {
+                dialog.remove();
+                resolve(false);
+            });
+
+            dialog.querySelector('.confirm-button').addEventListener('click', () => {
+                dialog.remove();
+                resolve(true);
+            });
+
+            // Close on outside click
+            dialog.addEventListener('click', (e) => {
+                if (e.target === dialog) {
+                    dialog.remove();
+                    resolve(false);
+                }
+            });
+        });
+    }
+    logoutUser() {
+        // Show confirmation dialog
+        if (confirm('Are you sure you want to logout?')) {
+            // Show loading state
+            document.body.classList.add('loading');
+            
+            // Sign out from Firebase
+            firebase.auth().signOut().then(() => {
+                // Clear any stored data
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Hide app container and show login screen
+                document.getElementById('app-container').style.display = 'none';
+                document.getElementById('login-screen').style.display = 'flex';
+                document.getElementById('profile-modal').style.display = 'none';
+                
+                // Reset form fields
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+            }).catch((error) => {
+                console.error('Logout error:', error);
+                alert('Logout failed. Please try again.');
+            }).finally(() => {
+                document.body.classList.remove('loading');
+            });
+        }
+    }
+
+    showError(message) {
+        const errorToast = document.createElement('div');
+        errorToast.className = 'error-toast';
+        errorToast.textContent = message;
+        
+        document.body.appendChild(errorToast);
+        
+        setTimeout(() => {
+            errorToast.remove();
+        }, 3000);
+    }
+
+    init() {
+        this.searchInput = document.querySelector('.search-container .input input');
+        this.chatList = document.querySelector('#chatList');// Update the selector as per your DOM structure
+
+    }
+
+    setupRealtimeListeners() {
+        // Listen for chat updates
+        const chatListener = this.db.collection('chats')
+            .orderBy('lastMessageTime', 'desc')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach(change => {
+                    const chatData = change.doc.data();
+                    const chatId = change.doc.id;
+
+                    switch (change.type) {
+                        case 'added':
+                            this.handleNewChat(chatData, chatId);
+                            break;
+                        case 'modified':
+                            this.handleChatUpdate(chatData, chatId);
+                            break;
+                        case 'removed':
+                            this.handleChatRemoval(chatId);
+                            break;
+                    }
+                });
+            });
+
+        // Listen for message updates
+        const messageListener = this.db.collection('messages')
+            .orderBy('timestamp', 'desc')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach(change => {
+                    if (change.type === 'added' || change.type === 'modified') {
+                        const messageData = change.doc.data();
+                        this.updateLastMessage(messageData);
+                    }
+                });
+            });
+
+        this.unsubscribeListeners.push(chatListener, messageListener);
+    }
+
+    handleNewChat(chatData, chatId) {
+        const existingChat = document.querySelector(`[data-chat-id="${chatId}"]`);
+        if (!existingChat) {
+            const chatElement = this.createChatElement(chatData, chatId);
+            this.insertChatInOrder(chatElement, chatData.lastMessageTime);
+        }
+    }
+
+    handleChatUpdate(chatData, chatId) {
+        const existingChat = document.querySelector(`[data-chat-id="${chatId}"]`);
+        if (existingChat) {
+            const updatedChat = this.createChatElement(chatData, chatId);
+            existingChat.replaceWith(updatedChat);
+            this.insertChatInOrder(updatedChat, chatData.lastMessageTime);
+        }
+    }
+
+    handleChatRemoval(chatId) {
+        const chatElement = document.querySelector(`[data-chat-id="${chatId}"]`);
+        if (chatElement) {
+            chatElement.remove();
+        }
+    }
+
+    updateLastMessage(messageData) {
+        if (!messageData.chatId) return;
+
+        const chatElement = document.querySelector(`[data-chat-id="${messageData.chatId}"]`);
+        if (chatElement) {
+            const lastMessageEl = chatElement.querySelector('.chat-last-message');
+            const timeEl = chatElement.querySelector('.chat-time');
+
+            if (lastMessageEl) {
+                lastMessageEl.textContent = messageData.text;
+            }
+            if (timeEl && messageData.timestamp) {
+                timeEl.textContent = this.formatTime(messageData.timestamp);
+            }
+
+            this.insertChatInOrder(chatElement, messageData.timestamp);
+        }
+    }
+
+    insertChatInOrder(chatElement, timestamp) {
+        const chats = Array.from(this.chatList.children);
+        let inserted = false;
+
+        for (const chat of chats) {
+            if (chat === chatElement) continue;
+            
+            const currentTimestamp = chat.dataset.timestamp;
+            if (currentTimestamp && timestamp > currentTimestamp) {
+                this.chatList.insertBefore(chatElement, chat);
+                inserted = true;
+                break;
+            }
+        }
+
+        if (!inserted && chatElement.parentElement !== this.chatList) {
+            this.chatList.appendChild(chatElement);
+        }
+    }
+
+    
+
+    setupSearchListener() {
+        this.searchInput = document.querySelector('.search-container .input input');
+        this.chatList = document.querySelector('#chatList');
+        const searchButton = document.querySelector('.search-container .input i');
+    
+        this.searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.trim().toLowerCase();
+            this.filterChats(searchTerm);
+        });
+    
+        searchButton.addEventListener('click', () => {
+            const searchTerm = this.searchInput.value.trim().toLowerCase();
+            this.filterChats(searchTerm);
+        });
+    }
+    
+    filterChats(searchTerm) {
+        const chatItems = this.chatList.querySelectorAll('.chat-item');
+        let hasResults = false;
+    
+        chatItems.forEach(chatItem => {
+            const nameElement = chatItem.querySelector('.chat-name, .user-name, h2, strong');
+            if (!nameElement) return;
+    
+            const name = nameElement.textContent.toLowerCase();
+            const matches = searchTerm === '' || name.includes(searchTerm);
+    
+            chatItem.style.display = matches ? 'flex' : 'none';
+    
+            if (matches) {
+                this.highlightText(nameElement, searchTerm);
+                hasResults = true;
+            } else {
+                this.removeHighlight(nameElement);
+            }
+        });
+    
+        this.toggleNoResults(!hasResults && searchTerm !== '');
+    }
+    
+    highlightText(element, searchTerm) {
+        if (!searchTerm) {
+            element.innerHTML = element.textContent; // Reset to plain text
+            return;
+        }
+    
+        const text = element.textContent;
+        const highlightedText = text.replace(
+            new RegExp(`(${searchTerm})`, 'gi'),
+            `<span class="highlight">$1</span>`
+        );
+    
+        element.innerHTML = highlightedText; // Apply the highlight
+    }
+    
+    removeHighlight(element) {
+        element.innerHTML = element.textContent; // Reset to plain text
+    }
+    
+    toggleNoResults(show) {
+        let noResults = this.chatList.querySelector('.no-results');
+        if (show) {
+            if (!noResults) {
+                noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <div class="no-results-content">
+                        <i class="fas fa-search"></i>
+                        <p>No matching users found</p>
+                    </div>
+                `;
+                this.chatList.appendChild(noResults);
+            }
+        } else if (noResults) {
+            noResults.remove();
+        }
+    }
+    
+    
+
+    formatTime(timestamp) {
+        if (!timestamp) return '';
+        
+        const date = timestamp.toDate();
+        const now = new Date();
+        const today = now.toDateString();
+        const messageDate = date.toDateString();
+
+        if (messageDate === today) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        }
+        return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+    }
+
+    cleanup() {
+        // Unsubscribe from all listeners
+        this.unsubscribeListeners.forEach(unsubscribe => unsubscribe());
+    }
+
+    setupUserListeners() {
+        // Listen for user presence changes
+        firebase.database().ref('.info/connected').on('value', (snap) => {
+            if (snap.val() === true && this.auth.currentUser) {
+                this.updateUserPresence(true);
+            }
+        });
+
+        // Listen for new users
+        firebase.database().ref('users').on('child_added', (snapshot) => {
+            const userData = snapshot.val();
+            if (userData && userData.email !== this.auth.currentUser.email) {
+                this.chatManager.addUserToChat(userData);
+            }
+        });
+
+        // Listen for user removals
+        firebase.database().ref('users').on('child_removed', (snapshot) => {
+            const userData = snapshot.val();
+            if (userData) {
+                this.chatManager.removeUserFromChat(userData.email);
+            }
+        });
+    }
+
+    updateUserPresence(isOnline) {
+        if (!this.auth.currentUser) return;
+
+        const userStatusRef = firebase.database()
+            .ref(`users/${this.auth.currentUser.uid}/status`);
+        
+        userStatusRef.set(isOnline);
+
+        if (isOnline) {
+            userStatusRef.onDisconnect().set(false);
+        }
+    }
+}
+
+// Initialize only once when DOM is loaded
+let whatsAppInstance = null;
+document.addEventListener('DOMContentLoaded', () => {
+    if (!whatsAppInstance) {
+        whatsAppInstance = new WhatsAppChat();
+    }
+});
+
+// Register new user with email
+function registerUser(event) {
+    event.preventDefault();
+    console.log('Registration started'); // Debug log
+    
+    const username = document.getElementById('reg-username').value.trim();
+    const email = document.getElementById('reg-email').value.trim();
+    const password = document.getElementById('reg-password').value;
+
+    console.log('Registering with:', { username, email }); // Debug log
+
+    // Create user with email and password
+    firebase.auth().createUserWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            console.log('User created in Auth:', userCredential); // Debug log
+            const user = userCredential.user;
+            
+            // Create user data object
+            const userData = {
+                id: user.uid,
+                username: username,
+                email: email,
+                createdAt: firebase.database.ServerValue.TIMESTAMP,
+                status: 'online'
+            };
+
+            console.log('Saving user data:', userData); // Debug log
+
+            // Save to Realtime Database
+            return firebase.database().ref('users/' + user.uid).set(userData);
+        })
+        .then(() => {
+            console.log('User data saved successfully'); // Debug log
+            alert('Registration successful!');
+        })
+        .catch((error) => {
+            console.error('Registration error:', error);
+            alert('Registration failed: ' + error.message);
+        });
+}
+
+// Login existing user with email
+function loginUser(event) {
+    event.preventDefault();
+    
+    const email = document.getElementById('login-email').value.trim();
+    const password = document.getElementById('login-password').value;
+
+    auth.signInWithEmailAndPassword(email, password)
+        .then((userCredential) => {
+            // Login successful, auth state listener will handle the redirect
+            console.log('Login successful');
+        })
+        .catch((error) => {
+            console.error('Login error:', error);
+            alert('Login failed: ' + error.message);
+        });
+}
+
+// Auth state change listener
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        // User is signed in
+        console.log('User is signed in:', user);
+        
+        // Get additional user data from database
+        database.ref('users/' + user.uid).once('value')
+            .then((snapshot) => {
+                currentUser = snapshot.val();
+                showApp();
+                
+                // Update user status
+                database.ref('users/' + user.uid).update({
+                    status: 'online',
+                    lastSeen: firebase.database.ServerValue.TIMESTAMP
+                });
+            });
+    } else {
+        // User is signed out
+        currentUser = null;
+        document.getElementById('register-screen').style.display = 'flex';
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('app-container').style.display = 'none';
+    }
+});
+
+// Show main app
+function showApp() {
+    document.getElementById('register-screen').style.display = 'none';
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app-container').style.display = 'flex';
+    initializeApp(currentUser);
+    updateProfileInfo();
+}
+
+// Initialize App
+function initializeApp(user) {
+    currentUser = user;
+    loadUsers();
+    setupPresence();
+}
+
+// Sign Out
+function signOut() {
+    cleanupPresence();
+    auth.signOut().then(() => {
+        window.location.reload();
+    }).catch((error) => {
+        console.error("Error signing out:", error);
+    });
+}
+
+// Toggle between login and register screens
+function toggleAuth(screen) {
+    if (screen === 'login') {
+        document.getElementById('register-screen').style.display = 'none';
+        document.getElementById('login-screen').style.display = 'flex';
+    } else {
+        document.getElementById('register-screen').style.display = 'flex';
+        document.getElementById('login-screen').style.display = 'none';
+    }
+}
+
+// Event Listeners
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM Loaded');
+    
+    // Register form submission
+    const registerForm = document.getElementById('register-form');
+    registerForm.addEventListener('submit', (e) => {
+        console.log('Register form submitted');
+        registerUser(e);
+    });
+
+    // Login form submission
+    const loginForm = document.getElementById('login-form');
+    loginForm.addEventListener('submit', (e) => {
+        console.log('Login form submitted');
+        loginUser(e);
+    });
+
+    // Add profile image click handler
+    const profileImg = document.querySelector('.user-img');
+    if (profileImg) {
+        profileImg.addEventListener('click', () => {
+            // You can add profile edit functionality here
+            console.log('Profile clicked');
+        });
+    }
+});
+
+// Load Users List
+function loadUsers() {
+    const usersList = document.querySelector('.chat-list');
+    const searchInput = document.querySelector('.search-container input');
+    if (!usersList || !searchInput) {
+        console.error('Chat list or search input element not found');
+        return;
+    }
+
+    // Reference to users in Firebase
+    const usersRef = firebase.database().ref('users');
+
+    // Keep track of user elements by ID
+    const userElements = {};
+    const usersData = {}; // Store user data for filtering
+
+    // Function to update or create a user list item
+    function updateUser(user) {
+        const chatId = [currentUser.id, user.id].sort().join('_');
+
+        // Check if user element already exists
+        let userElement = userElements[user.id];
+        if (!userElement) {
+            // Create a new user element
+            userElement = document.createElement('div');
+            userElement.className = 'chat-item';
+            userElement.setAttribute('data-id', user.id);
+            usersList.appendChild(userElement);
+            userElements[user.id] = userElement;
+        }
+
+        // Update last message, unread count, and status in real-time
+        firebase.database().ref('messages').child(chatId).limitToLast(1).on('value', (snapshot) => {
+            let lastMessage = '';
+            let lastTime = '';
+            let unreadCount = 0;
+
+            snapshot.forEach((msgSnapshot) => {
+                const msg = msgSnapshot.val();
+                lastMessage = msg.text;
+                lastTime = formatTime(msg.timestamp);
+                if (!msg.read && msg.senderId !== currentUser.id) {
+                    unreadCount++;
+                }
+            });
+
+            // Update the user element
+            userElement.innerHTML = `
+                <div class="user-wrapper">
+                    <div class="user-avatar">
+                        <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${user.username}&background=00a884&color=fff`}" 
+                             alt="${user.username}">
+                        <span class="status-indicator ${user.status === 'online' ? 'online' : 'offline'}"></span>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-info-top">
+                            <span class="user-name">${user.username}</span>
+                            <span class="last-time">${lastTime}</span>
+                        </div>
+                        <div class="user-info-bottom">
+                            <span class="last-message">${lastMessage || 'Click to start chat'}</span>
+                            ${unreadCount > 0 ? `<span class="unread-count">${unreadCount}</span>` : ''}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+
+        // Add click event to open chat
+        userElement.addEventListener('click', () => startChat(user));
+    }
+
+    // Listen for user additions
+    usersRef.on('child_added', (snapshot) => {
+        const user = snapshot.val();
+        if (user.id !== currentUser.id) {
+            usersData[user.id] = user; // Store user data for search
+            updateUser(user);
+        }
+    });
+
+    // Listen for user updates
+    usersRef.on('child_changed', (snapshot) => {
+        const user = snapshot.val();
+        if (user.id !== currentUser.id) {
+            usersData[user.id] = user; // Update user data for search
+            updateUser(user);
+        }
+    });
+
+    // Listen for user removals
+    usersRef.on('child_removed', (snapshot) => {
+        const user = snapshot.val();
+        const userElement = userElements[user.id];
+        if (userElement) {
+            usersList.removeChild(userElement);
+            delete userElements[user.id];
+            delete usersData[user.id];
+        }
+    });
+
+    // User List Search functionality
+    searchInput.addEventListener('input', (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        Object.values(userElements).forEach((userElement) => {
+            const userId = userElement.getAttribute('data-id');
+            const user = usersData[userId];
+            if (user.username.toLowerCase().includes(searchTerm)) {
+                userElement.style.display = '';
+            } else {
+                userElement.style.display = 'none';
+            }
+        });
+    });
+}
+
+
+// Helper function to format timestamps
+function formatTime(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+}
+
+
+// Clean up function to remove listeners
+function cleanupListeners() {
+    firebase.database().ref('users').off();
+    firebase.database().ref('messages').off();
+}
+
+// Start chat function with proper cleanup
+function startChat(user) {
+    // Clean up previous chat listeners
+    if (currentChat) {
+        firebase.database().ref(`messages/${currentChat.id}`).off();
+    }
+
+    currentChat = {
+        id: [currentUser.id, user.id].sort().join('_'),
+        user: user
+    };
+
+    // Update UI
+    document.querySelector('.main-chat').classList.add('active');
+    updateChatHeader(user);
+    loadMessages(currentChat.id);
+}
+
+// Update chat header with real-time status
+function updateChatHeader(user) {
+    const chatHeader = document.querySelector('.chat-header .chat-info');
+    
+    const updateHeader = (userData) => {
+        chatHeader.innerHTML = `
+            <div class="user-avatar">
+                <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=00a884&color=fff`}" 
+                     alt="${userData.username}">
+                <span class="status-indicator ${userData.status === 'online' ? 'online' : 'offline'}"></span>
+            </div>
+            <div class="contact-info">
+                <div class="contact-name">${userData.username}</div>
+                <div class="contact-status">
+                    ${userData.status === 'online' ? 'online' : formatLastSeen(userData.lastSeen)}
+                </div>
+            </div>
+        `;
+    };
+
+    updateHeader(user);
+
+    // Listen for status changes
+    const statusRef = firebase.database().ref(`users/${user.id}`);
+    statusRef.on('value', (snapshot) => {
+        const updatedUser = snapshot.val();
+        if (updatedUser) {
+            updateHeader(updatedUser);
+        }
+    });
+}
+
+// Load messages without duplicates
+function loadMessages(chatId) {
+    const messagesDiv = document.getElementById('chat-messages');
+    messagesDiv.innerHTML = '';
+
+    firebase.database().ref(`messages/${chatId}`)
+        .on('child_added', (snapshot) => {
+            const message = snapshot.val();
+            const messageId = snapshot.key;
+
+            // Create message element
+            const messageElement = createMessageElement(message, messageId);
+            messagesDiv.appendChild(messageElement);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Mark message as read if it's received and chat is open
+            if (message.senderId !== currentUser.id && !message.read) {
+                firebase.database().ref(`messages/${chatId}/${messageId}`).update({
+                    read: true,
+                    readAt: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+        });
+
+    // Listen for read status changes
+    firebase.database().ref(`messages/${chatId}`)
+        .on('child_changed', (snapshot) => {
+            const message = snapshot.val();
+            const messageElement = document.querySelector(`[data-message-id="${snapshot.key}"]`);
+            if (messageElement) {
+                updateMessageStatus(messageElement, message);
+            }
+        });
+}
+
+// Update message status display
+function updateMessageStatus(messageElement, message) {
+    const statusElement = messageElement.querySelector('.message-status');
+    if (statusElement) {
+        statusElement.innerHTML = getMessageStatusIcon(message);
+    }
+}
+
+// Get status icon based on message state
+function getMessageStatusIcon(message) {
+    if (message.read) {
+        return '<i class="fas fa-check-double" style="color: #53bdeb;"></i>';
+    } else if (message.delivered) {
+        return '<i class="fas fa-check-double" style="color: #8696a0;"></i>';
+    }
+    return '<i class="fas fa-check" style="color: #8696a0;"></i>';
+}
+
+// Create message element with proper status
+function createMessageElement(message, messageId) {
+    const div = document.createElement('div');
+    const isSent = message.senderId === currentUser.id;
+    div.className = `message ${isSent ? 'sent' : 'received'}`;
+    div.setAttribute('data-message-id', messageId);
+
+    // Function to detect if a string is a URL
+    const isUrl = (text) => {
+        const urlPattern = /https?:\/\/[\w\-._~:?#@!$&'()*+,;=%]+/g;
+        return urlPattern.test(text);
+    };
+
+    // Function to detect if a string is a phone number
+    const isPhoneNumber = (text) => {
+        const phonePattern = /\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}/g; // Adjusted pattern for various phone formats including +91
+        return phonePattern.test(text);
+    };
+
+    // Determine content type (URL, phone number, or plain text)
+    let messageContent;
+    if (isUrl(message.text)) {
+        messageContent = `<a href="${message.text}" target="_blank" class="message-text" style="color: blue; text-decoration: none;">${message.text}</a>`;
+    } else if (isPhoneNumber(message.text)) {
+        const formattedNumber = message.text.replace(/\s+/g, ''); // Remove spaces for consistency
+        messageContent = `<a href="tel:${formattedNumber}" class="message-text" style="color: blue; text-decoration: none;">${message.text}</a>`;
+    } else {
+        messageContent = `<p class="message-text">${message.text}</p>`;
+    }
+
+    div.innerHTML = `
+        <div class="message-content">
+            ${messageContent}
+            <div class="message-info">
+                <span class="time">${formatTime(message.timestamp)}</span>
+                ${isSent ? `
+                    <span class="message-status">
+                        ${getMessageStatusIcon(message)}
+                    </span>
+                ` : ''}
+            </div>
+        </div>
+    `;
+
+    return div;
+}
+
+
+
+// Add visibility change handler
+document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible' && currentChat) {
+        // Mark all unread messages as read when chat is visible
+        firebase.database().ref(`messages/${currentChat.id}`)
+            .orderByChild('read')
+            .equalTo(false)
+            .once('value', (snapshot) => {
+                snapshot.forEach((childSnapshot) => {
+                    const message = childSnapshot.val();
+                    if (message.senderId !== currentUser.id) {
+                        childSnapshot.ref.update({
+                            read: true,
+                            readAt: firebase.database.ServerValue.TIMESTAMP
+                        });
+                    }
+                });
+            });
+    }
+});
+
+// Send message with status tracking
+function sendMessage() {
+    if (!currentChat) return;
+
+    const messageInput = document.getElementById('message-input');
+    const message = messageInput.value.trim();
+    
+    if (!message) return;
+
+    const messageData = {
+        text: message,
+        senderId: currentUser.id,
+        timestamp: Date.now(),
+        status: 'sent',
+        read: false,
+        delivered: false
+    };
+
+    messageInput.value = '';
+
+    const chatId = currentChat.id;
+    firebase.database().ref('messages').child(chatId)
+        .push(messageData)
+        .then(() => {
+            messageInput.focus();
+            updateLastMessage(chatId, messageData);
+            scrollToBottom();
+        });
+}
+
+// Update emoji picker initialization
+function initializeEmojiPicker() {
+    const emojiButton = document.querySelector('.emoji-button');
+    const messageInput = document.getElementById('message-input');
+    const chatInput = document.querySelector('.chat-input');
+
+    // Create emoji picker container
+    const emojiPicker = document.createElement('div');
+    emojiPicker.className = 'emoji-picker';
+    emojiPicker.style.display = 'none';
+
+    // Create emoji categories
+    const categories = {
+        'Smileys': ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠"],
+    
+        'Animals': ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🐛","🦋","🐌","🐞","🐜","🦟","🦗","🕷","🕸","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐","🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐕‍🦺","🐈","🐓","🦃","🦚","🦜","🦢","🦩","🕊","🐇","🦝","🦨","🦡","🦦","🦥","🐁","🐀","🐿","🦔"],
+    
+        'Food': ["🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶","🌽","🥕","🧄","🧅","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩","🍗","🍖","🦴","🌭","🍔","🍟","🍕","🥪","🥙","🧆","🌮","🌯","🥗","🥘","🥫","🍝","🍜","🍲","🍛","🍣","🍱","🥟","🦪","🍤","🍙","🍚","🍘","🍥","🥠","🥮","🍢","🍡","🍧","🍨","🍦","🥧","🧁","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🍩","🍪","🌰","🥜","🍯","🥛","🍼","☕️","🍵","🧃","🥤","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧉","🍾","🧊"],
+    
+        'Activities': ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🥅","⛳️","🪁","🏹","🎣","🤿","🥊","🥋","🎽","🛹","🛷","⛸","🥌","🎿","⛷","🏂","🪂","🏋️‍♀️","🏋️","🤼‍♀️","🤼","🤸‍♀️","🤸","🤺","⛹️‍♀️","⛹️","🤾‍♀️","🤾","🏌️‍♀️","🏌️","🏇","🧘‍♀️","🧘","🏄‍♀️","🏄","🏊‍♀️","🏊","🤽‍♀️","🤽","🚣‍♀️","🚣","🧗‍♀️","🧗","🚵‍♀️","🚵","🚴‍♀️","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🏵","🎗","🎫","🎟","🎪","🤹","🤹‍♂️","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🎷","🎺","🎸","🪕","🎻","🎲","♟","🎯","🎳","🎮","🎰","🧩"],
+    
+        'Travel': ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🚚","🚛","🚜","🦯","🦽","🦼","🛴","🚲","🛵","🏍","🛺","🚨","🚔","🚍","🚘","🚖","🚡","🚠","🚟","🚃","🚋","🚞","🚝","🚄","🚅","🚈","🚂","🚆","🚇","🚊","🚉","✈️","🛫","🛬","🛩","💺","🛰","🚀","🛸","🚁","🛶","⛵️","🚤","🛥","🛳","⛴","🚢","⚓️","⛽️","🚧","🚦","🚥","🚏","🗺","🗿","🗽","🗼","🏰","🏯","🏟","🎡","🎢","🎠","⛲️","⛱","🏖","🏝","🏜","🌋","⛰","🏔","🗻","🏕","⛺️","🏠","🏡","🏘","🏚","🏗","🏭","🏢","🏬","🏣","🏤","🏥","🏦","🏨","🏪","🏫","🏩","💒","🏛","⛪️","🕌","🕍","🛕","🕋","⛩","🛤","🛣","🗾","🎑","🏞","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙","🌃","🌌","🌉","🌁"],
+    
+        'Objects': ["⌚️","📱","📲","💻","⌨️","🖥","🖨","🖱","🖲","🕹","🗜","💽","💾","💿","📀","📼","📷","📸","📹","🎥","📽","🎞","📞","☎️","📟","📠","📺","📻","🎙","🎚","🎛","🧭","⏱","⏲","⏰","🕰","⌛️","⏳","📡","🔋","🔌","💡","🔦","🕯","🪔","🧯","🛢","💸","💵","💴","💶","💷","💰","💳","💎","⚖️","🧰","🔧","🔨","⚒","🛠","⛏","🔩","⚙️","🧱","⛓","🧲","🔫","💣","🧨","🪓","🔪","🗡","⚔️","🛡","🚬","⚰️","⚱️","🏺","🔮","📿","🧿","💈","⚗️","🔭","🔬","🕳","🩹","🩺","💊","💉","🧬","🦠","🧫","🧪","🌡","🧹","🧺","🧻","🚽","🚰","🚿","🛁","🛀","🧼","🪒","🧽","🧴","🛎","🔑","🗝","🚪","🪑","🛋","🛏","🛌","🧸","🖼","🛍","🛒","🎁","🎈","🎏","🎀","🎊","🎉","🎎","🏮","🎐","🧧","✉️","📩","📨","📧","💌","📥","📤","📦","🏷","📪","📫","📬","📭","📮","📯","📜","📃","📄","📑","🧾","📊","📈","📉","🗒","🗓","📆","📅","🗑","📇","🗃","🗳","🗄","📋","📁","📂","🗂","🗞","📰","📓","📔","📒","📕","📗","📘","📙","📚","📖","🔖","🧷","🔗","📎","🖇","📐","📏","🧮","📌","📍","✂️","🖊","🖋","✒️","🖌","🖍","📝","✏️","🔍","🔎","🔏","🔐","🔒","🔓"],
+    
+        'Symbols': ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟","☮️","✝️","☪️","🕉","☸️","✡️","🔯","🕎","☯️","☦️","🛐","⛎","♈️","♉️","♊️","♋️","♌️","♍️","♎️","♏️","♐️","♑️","♒️","♓️","🆔","⚛️","🉑","☢️","☣️","📴","📳","🈶","🈚️","🈸","🈺","🈷️","✴️","🆚","💮","🉐","㊙️","㊗️","🈴","🈵","🈹","🈲","🅰️","🅱️","🆎","🆑","🅾️","🆘","❌","⭕️","🛑","⛔️","📛","🚫","💯","💢","♨️","🚷","🚯","🚳","🚱","🔞","📵","🚭","❗️","❕","❓","❔","‼️","⁉️","🔅","🔆","〽️","⚠️","🚸","🔱","⚜️","🔰","♻️","✅","🈯️","💹","❇️","✳️","❎","🌐","💠","Ⓜ️","🌀","💤","🏧","🚾","♿️","🅿️","🈳","🈂️","🛂","🛃","🛄","🛅","🚹","🚺","🚼","🚻","🚮","🎦","📶","🈁","🔣","ℹ️","🔤","🔡","🔠","🆖","🆗","🆙","🆒","🆕","🆓","0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟","🔢","#️⃣","*️⃣","⏏️","▶️","⏸","⏯","⏹","⏺","⏭","⏮","⏩","⏪","⏫","⏬","◀️","🔼","🔽","➡️","⬅️","⬆️","⬇️","↗️","↘️","↙️","↖️","↕️","↔️","↪️","↩️","⤴️","⤵️","🔀","🔁","🔂","🔄","🔃","🎵","🎶","➕","➖","➗","✖️","♾","💲","💱","™️","©️","®️","〰️","➰","➿","🔚","🔙","🔛","🔝","🔜","✔️","☑️","🔘","🔴","🟠","🟡","🟢","🔵","🟣","⚫️","⚪️","🟤","🔺","🔻","🔸","🔹","🔶","🔷","🔳","🔲","▪️","▫️","◾️","◽️","◼️","◻️","🟥","🟧","🟨","🟩","🟦","🟪","⬛️","⬜️","🟫","🔈","🔇","🔉","🔊","🔔","🔕","📣","📢","👁‍🗨","💬","💭","🗯","♠️","♣️","♥️","♦️","🃏","🎴","🀄️","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚","🕛","🕜","🕝","🕞","🕟","🕠","🕡","🕢","🕣","🕤","🕥","🕦","🕧"]
+    };
+
+    // Create category tabs
+    const categoryTabs = document.createElement('div');
+    categoryTabs.className = 'emoji-categories';
+    
+    Object.keys(categories).forEach((category, index) => {
+        const tab = document.createElement('button');
+        tab.className = 'emoji-category-tab';
+        tab.textContent = category;
+        tab.onclick = () => showCategory(category);
+        if (index === 0) tab.classList.add('active');
+        categoryTabs.appendChild(tab);
+    });
+
+    emojiPicker.appendChild(categoryTabs);
+
+    // Create emoji container
+    const emojiContainer = document.createElement('div');
+    emojiContainer.className = 'emoji-container';
+    emojiPicker.appendChild(emojiContainer);
+
+    function showCategory(category) {
+        // Update active tab
+        document.querySelectorAll('.emoji-category-tab').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.textContent === category) tab.classList.add('active');
+        });
+
+        // Show emojis
+        emojiContainer.innerHTML = '';
+        categories[category].forEach(emoji => {
+            const emojiSpan = document.createElement('span');
+            emojiSpan.className = 'emoji';
+            emojiSpan.textContent = emoji;
+            emojiSpan.onclick = () => {
+                insertEmoji(emoji);
+                toggleEmojiPicker();
+            };
+            emojiContainer.appendChild(emojiSpan);
+        });
+    }
+
+    // Toggle emoji picker
+    function toggleEmojiPicker() {
+        const isVisible = emojiPicker.style.display === 'block';
+        emojiPicker.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) showCategory('Smileys'); // Show first category by default
+    }
+
+    // Insert emoji at cursor position
+    function insertEmoji(emoji) {
+        const start = messageInput.selectionStart;
+        const end = messageInput.selectionEnd;
+        const text = messageInput.value;
+        const before = text.substring(0, start);
+        const after = text.substring(end);
+        messageInput.value = before + emoji + after;
+        messageInput.selectionStart = messageInput.selectionEnd = start + emoji.length;
+        messageInput.focus();
+    }
+
+    // Add click handlers
+    emojiButton.onclick = toggleEmojiPicker;
+    
+    // Close emoji picker when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!emojiPicker.contains(e.target) && !emojiButton.contains(e.target)) {
+            emojiPicker.style.display = 'none';
+        }
+    });
+
+    // Add emoji picker to chat input
+    chatInput.appendChild(emojiPicker);
+
+    // Show first category
+    showCategory('Smileys');
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeEmojiPicker();
+});
+
+// Mark messages as read when chat is opened
+function markMessagesAsRead(chatId) {
+    firebase.database().ref('messages').child(chatId)
+        .orderByChild('senderId')
+        .equalTo(currentChat.user.id)
+        .once('value', (snapshot) => {
+            snapshot.forEach((childSnapshot) => {
+                const message = childSnapshot.val();
+                if (!message.read) {
+                    childSnapshot.ref.update({
+                        read: true,
+                        readAt: firebase.database.ServerValue.TIMESTAMP
+                    });
+                }
+            });
+        });
+}
+
+// Update chat status in header
+function updateChatStatus(status) {
+    const statusElement = document.querySelector('.contact-status');
+    if (statusElement) {
+        statusElement.textContent = status === 'online' ? 'online' : 
+            formatLastSeen(currentChat.user.lastSeen);
+    }
+}
+
+// Format time like WhatsApp
+function formatTime(timestamp) {
+    if (!timestamp) return '';
+    
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now - date;
+    const oneDay = 24 * 60 * 60 * 1000;
+    const oneWeek = 7 * oneDay;
+    
+    // Today: show time
+    if (diff < oneDay && date.getDate() === now.getDate()) {
+        return date.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+        });
+    }
+    
+    // Yesterday
+    if (diff < 2 * oneDay && date.getDate() === now.getDate() - 1) {
+        return 'Yesterday';
+    }
+    
+    // Within week: show day name
+    if (diff < oneWeek) {
+        return date.toLocaleDateString('en-US', { weekday: 'short' });
+    }
+    
+    // Older: show date
+    return date.toLocaleDateString('en-US', { 
+        month: 'short',
+        day: 'numeric'
+    });
+}
+
+// Format last seen
+function formatLastSeen(timestamp) {
+    if (!timestamp) return 'offline';
+    
+    const now = new Date();
+    const lastSeen = new Date(timestamp);
+    const diff = now - lastSeen;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    // Just now (within 1 minute)
+    if (minutes < 1) {
+        return 'last seen just now';
+    }
+    
+    // Minutes
+    if (minutes < 60) {
+        return `last seen ${minutes} ${minutes === 1 ? 'minute' : 'minutes'} ago`;
+    }
+    
+    // Hours
+    if (hours < 24) {
+        return `last seen ${hours} ${hours === 1 ? 'hour' : 'hours'} ago`;
+    }
+    
+    // Today
+    if (lastSeen.toDateString() === now.toDateString()) {
+        return `last seen today at ${lastSeen.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+        })}`;
+    }
+    
+    // Yesterday
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (lastSeen.toDateString() === yesterday.toDateString()) {
+        return `last seen yesterday at ${lastSeen.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+        })}`;
+    }
+    
+    // More than 2 days ago
+    return `last seen ${lastSeen.toLocaleDateString('en-US', { 
+        month: 'short',
+        day: 'numeric'
+    })} at ${lastSeen.toLocaleTimeString('en-US', { 
+        hour: 'numeric', 
+        minute: '2-digit',
+        hour12: true 
+    })}`;
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Message input
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+
+    // Enter key handler
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Click handler
+    sendButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        sendMessage();
+    });
+
+    // Mobile back button
+    const backButton = document.querySelector('.back-button');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            document.querySelector('.main-chat').classList.remove('active');
+        });
+    }
+});
+
+// Update profile related functions
+function updateProfileInfo() {
+    if (currentUser) {
+        const profileImage = document.getElementById('profile-image');
+        if (currentUser.photoURL) {
+            profileImage.src = currentUser.photoURL;
+        } else {
+            // Default avatar with user's initial
+            profileImage.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=00a884&color=fff`;
+        }
+    }
+}
+
+// Handle profile image upload
+async function handleProfileImageUpload(file) {
+    if (!file) return;
+
+    try {
+        const storageRef = storage.ref();
+        const fileRef = storageRef.child(`profile-images/${currentUser.id}/${Date.now()}_${file.name}`);
+        
+        // Upload file
+        const snapshot = await fileRef.put(file);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+        
+        // Update user profile
+        await firebase.database().ref('users/' + currentUser.id).update({
+            photoURL: downloadURL
+        });
+
+        // Update current user object
+        currentUser.photoURL = downloadURL;
+        
+        // Update UI
+        document.getElementById('profile-image').src = downloadURL;
+        document.getElementById('profile-preview').src = downloadURL;
+        
+        return downloadURL;
+    } catch (error) {
+        console.error('Error uploading profile image:', error);
+        alert('Failed to upload image. Please try again.');
+    }
+}
+
+// Event listeners
+document.addEventListener('DOMContentLoaded', () => {
+    // Profile image upload handler
+    const profileUpload = document.getElementById('profile-upload');
+    if (profileUpload) {
+        profileUpload.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                // Check file type
+                if (!file.type.startsWith('image/')) {
+                    alert('Please upload an image file');
+                    return;
+                }
+                // Check file size (max 5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('Image size should be less than 5MB');
+                    return;
+                }
+                await handleProfileImageUpload(file);
+            }
+        });
+    }
+
+    // Profile icon click handler
+    const profileIcon = document.querySelector('.profile-icon');
+    if (profileIcon) {
+        profileIcon.addEventListener('click', openProfileModal);
+    }
+});
+
+// Modal functions
+function openProfileModal() {
+    const modal = document.getElementById('profile-modal');
+    const profilePreview = document.getElementById('profile-preview');
+    const editUsername = document.getElementById('edit-username');
+    const editAbout = document.getElementById('edit-about');
+    
+    // Set current values
+    if (currentUser.photoURL) {
+        profilePreview.src = currentUser.photoURL;
+    } else {
+        profilePreview.src = `https://ui-avatars.com/api/?name=${currentUser.username}&background=00a884&color=fff`;
+    }
+    
+    editUsername.value = currentUser.username || '';
+    editAbout.value = currentUser.about || 'Hey there! I am using WhatsApp';
+    
+    modal.style.display = 'block';
+    
+    // Add slide animation class
+    modal.querySelector('.modal-content').style.transform = 'translateX(0)';
+}
+
+function closeProfileModal() {
+    const modal = document.getElementById('profile-modal');
+    const modalContent = modal.querySelector('.modal-content');
+    
+    // Add slide out animation
+    modalContent.style.transform = 'translateX(100%)';
+    
+    // Wait for animation to complete
+    setTimeout(() => {
+        modal.style.display = 'none';
+        modalContent.style.transform = '';
+    }, 300);
+}
+
+// Update profile function
+async function updateProfile() {
+    const username = document.getElementById('edit-username').value.trim();
+    const about = document.getElementById('edit-about').value.trim();
+    
+    if (!username) {
+        alert('Please enter a name');
+        return;
+    }
+
+    try {
+        await firebase.database().ref('users/' + currentUser.id).update({
+            username: username,
+            about: about
+        });
+
+        currentUser.username = username;
+        currentUser.about = about;
+        
+        updateProfileInfo();
+        closeProfileModal();
+        
+        // Show success message
+        const toast = document.createElement('div');
+        toast.className = 'toast-message';
+        toast.textContent = 'Profile updated successfully';
+        document.body.appendChild(toast);
+        
+        setTimeout(() => {
+            toast.remove();
+        }, 30);
+        
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        alert('Failed to update profile');
+    }
+}
+
+// Add this CSS for toast messages
+document.head.insertAdjacentHTML('beforeend', `
+    <style>
+        .toast-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 4px;
+            z-index: 1001;
+            animation: fadeInOut 3s ease-in-out;
+        }
+        
+        @keyframes fadeInOut {
+            0%, 100% { opacity: 0; }
+            10%, 90% { opacity: 1; }
+        }
+    </style>
+`);
+
+// User presence handling
+function setupPresence() {
+    if (!currentUser) return;
+
+    const userStatusRef = firebase.database().ref(`users/${currentUser.id}`);
+    const connectedRef = firebase.database().ref('.info/connected');
+
+    // Set initial online status when page loads
+    userStatusRef.update({
+        status: 'online',
+        lastSeen: firebase.database.ServerValue.TIMESTAMP
+    });
+
+    // Handle real-time connection state
+    connectedRef.on('value', (snap) => {
+        if (snap.val() === true) {
+            // User is connected
+            userStatusRef.update({
+                status: 'online',
+                lastSeen: firebase.database.ServerValue.TIMESTAMP
+            });
+
+            // When user disconnects
+            userStatusRef.onDisconnect().update({
+                status: 'offline',
+                lastSeen: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+    });
+
+    // Handle tab visibility
+    document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+            userStatusRef.update({
+                status: 'online',
+                lastSeen: firebase.database.ServerValue.TIMESTAMP
+            });
+        }
+    });
+
+    // Handle page unload
+    window.addEventListener('beforeunload', () => {
+        // Synchronous update for immediate status change
+        fetch(`${YOUR_API_ENDPOINT}/updateStatus`, {
+            method: 'POST',
+            keepalive: true,
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: currentUser.id,
+                status: 'offline',
+                lastSeen: Date.now()
+            })
+        });
+    });
+
+    // Listen to status changes for all users
+    firebase.database().ref('users').on('value', (snapshot) => {
+        snapshot.forEach((userSnapshot) => {
+            const user = userSnapshot.val();
+            updateUserStatusUI(user.id, user.status, user.lastSeen);
+        });
+    });
+}
+
+// Update user status in UI
+function updateUserStatusUI(userId, status, lastSeen) {
+    const userElement = document.querySelector(`[data-user-id="${userId}"]`);
+    if (!userElement) return;
+
+    const statusElement = userElement.querySelector('.user-status');
+    const statusIndicator = userElement.querySelector('.status-indicator');
+
+    if (status === 'online') {
+        statusElement.textContent = 'online';
+        statusElement.style.color = '#00a884';
+        statusIndicator?.classList.add('online');
+        statusIndicator?.classList.remove('offline');
+    } else {
+        const lastSeenText = formatLastSeen(lastSeen);
+        statusElement.textContent = lastSeenText;
+        statusElement.style.color = '#667781';
+        statusIndicator?.classList.add('offline');
+        statusIndicator?.classList.remove('online');
+    }
+}
+
+// Periodic status check and update
+/*setInterval(() => {
+    if (currentUser && document.visibilityState === 'visible') {
+        firebase.database().ref(`users/${currentUser.id}`).update({
+            status: 'online',
+            lastSeen: firebase.database.ServerValue.TIMESTAMP
+        });
+    }
+}, 10000);*/ // Update every 30 seconds
+
+// Load chats with proper formatting and unread counts
+function loadChats() {
+    const chatsList = document.querySelector('.chats-list');
+    const searchInput = document.querySelector('.search-input');
+    let allChats = [];
+
+    firebase.database().ref('chats').orderByChild('lastMessageTime')
+        .on('value', (snapshot) => {
+            allChats = [];
+            snapshot.forEach((chat) => {
+                if (chat.val().participants.includes(currentUser.id)) {
+                    allChats.unshift({
+                        id: chat.key,
+                        ...chat.val()
+                    });
+                }
+            });
+            filterAndDisplayChats(allChats, searchInput.value);
+        });
+
+    // Search functionality
+    searchInput.addEventListener('input', (e) => {
+        filterAndDisplayChats(allChats, e.target.value);
+    });
+}
+
+// Filter and display chats based on search
+function filterAndDisplayChats(chats, searchTerm) {
+    const chatsList = document.querySelector('.chats-list');
+    chatsList.innerHTML = '';
+    
+    const filteredChats = chats.filter(chat => 
+        chat.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        (chat.lastMessage && chat.lastMessage.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
+
+    filteredChats.forEach(chat => {
+        const chatElement = createChatListItem(chat);
+        chatsList.appendChild(chatElement);
+    });
+}
+
+// Create chat list item with proper formatting
+function createChatListItem(chat) {
+    // Create or find the container for the chat item
+    const div = document.querySelector(`.chat-item[data-chat-id="${chat.id}"]`) || document.createElement('div');
+    div.className = 'chat-item';
+    div.setAttribute('data-chat-id', chat.id);
+
+    const unreadCount = chat.unreadCount || 0;
+    const isUnread = unreadCount > 0 && chat.lastMessageSender !== currentUser.id;
+
+    // Update the content of the chat item
+    div.innerHTML = `
+        <div class="chat-avatar">
+            <img src="${chat.photoURL || `https://ui-avatars.com/api/?name=${chat.name}`}" alt="">
+        </div>
+        <div class="chat-content">
+            <div class="chat-header">
+                <h2 class="chat-name ${isUnread ? 'unread' : ''}">${chat.name}</h2>
+                <span class="chat-time ${isUnread ? 'unread' : ''}">${formatTime(chat.lastMessageTime)}</span>
+            </div>
+            <div class="chat-message-preview">
+                <div class="message-content ${isUnread ? 'unread' : ''}">
+                    ${chat.lastMessageSender === currentUser.id ? 
+                        `<span class="message-status">${getStatusIcon(chat.lastMessageStatus)}</span>` : ''}
+                    <span class="preview-text">${chat.lastMessage || ''}</span>
+                </div>
+                ${isUnread ? `
+                    <div class="unread-badge">
+                        <span>${unreadCount}</span>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `;
+
+    // Add click listener to handle chat selection and mark as read
+    div.addEventListener('click', () => {
+        selectChat(chat);
+        markChatAsRead(chat.id);
+    });
+
+    return div;
+}
+
+// Function to update chat item in real-time
+function updateChatListItem(chat) {
+    const chatItem = document.querySelector(`.chat-item[data-chat-id="${chat.id}"]`);
+    if (chatItem) {
+        const unreadCount = chat.unreadCount || 0;
+        const isUnread = unreadCount > 0 && chat.lastMessageSender !== currentUser.id;
+
+        chatItem.querySelector('.chat-name').classList.toggle('unread', isUnread);
+        chatItem.querySelector('.chat-time').classList.toggle('unread', isUnread);
+        chatItem.querySelector('.chat-time').textContent = formatTime(chat.lastMessageTime);
+
+        const messageContent = chatItem.querySelector('.message-content');
+        if (messageContent) {
+            messageContent.classList.toggle('unread', isUnread);
+            messageContent.innerHTML = `
+                ${chat.lastMessageSender === currentUser.id ? 
+                    `<span class="message-status">${getStatusIcon(chat.lastMessageStatus)}</span>` : ''}
+                <span class="preview-text">${chat.lastMessage || ''}</span>
+            `;
+        }
+
+        const unreadBadge = chatItem.querySelector('.unread-badge');
+        if (unreadBadge) {
+            if (isUnread) {
+                unreadBadge.querySelector('span').textContent = unreadCount;
+            } else {
+                unreadBadge.remove();
+            }
+        } else if (isUnread) {
+            const badge = document.createElement('div');
+            badge.className = 'unread-badge';
+            badge.innerHTML = `<span>${unreadCount}</span>`;
+            chatItem.querySelector('.chat-message-preview').appendChild(badge);
+        }
+    }
+}
+
+
+// Mark chat as read
+function markChatAsRead(chatId) {
+    firebase.database().ref(`chats/${chatId}`).update({
+        unreadCount: 0
+    });
+}
+
+// Format time like WhatsApp
+function formatTime(timestamp) {
+    if (!timestamp) return '';
+    
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diff = now - date;
+    const oneDay = 24 * 60 * 60 * 1000;
+    
+    if (diff < oneDay && date.getDate() === now.getDate()) {
+        return date.toLocaleTimeString('en-US', { 
+            hour: 'numeric', 
+            minute: '2-digit',
+            hour12: true 
+        });
+    } else if (diff < 2 * oneDay && date.getDate() === now.getDate() - 1) {
+        return 'Yesterday';
+    } else if (diff < 7 * oneDay) {
+        return date.toLocaleDateString('en-US', { weekday: 'short' });
+    } else {
+        return date.toLocaleDateString('en-US', { 
+            day: '2-digit',
+            month: '2-digit',
+            year: '2-digit'
+        });
+    }
+}
+
+// Setup input area with attachments and emoji
+function setupMessageInput() {
+    const inputContainer = document.querySelector('.input-container');
+    const messageInput = document.querySelector('.message-input');
+    const emojiButton = document.querySelector('.emoji-button');
+    const attachButton = document.querySelector('.attach-button');
+    const attachMenu = document.querySelector('.attach-menu');
+
+    // Initialize emoji picker
+    const emojiPicker = new EmojiMart.Picker({
+        onEmojiSelect: (emoji) => {
+            const cursorPos = messageInput.selectionStart;
+            const text = messageInput.value;
+            messageInput.value = text.slice(0, cursorPos) + emoji.native + text.slice(cursorPos);
+            messageInput.focus();
+        },
+        theme: 'light',
+        set: 'facebook',
+        showPreview: false,
+        showSkinTones: false,
+        style: {
+            position: 'absolute',
+            bottom: '60px',
+            left: '0',
+            display: 'none',
+            zIndex: 999
+        }
+    });
+
+    inputContainer.appendChild(emojiPicker.element);
+
+    // Toggle emoji picker
+    emojiButton.addEventListener('click', () => {
+        emojiPicker.element.style.display = 
+            emojiPicker.element.style.display === 'none' ? 'block' : 'none';
+    });
+
+    // Handle attachments
+    attachButton.addEventListener('click', () => {
+        attachMenu.classList.toggle('show');
+    });
+
+    // Setup attachment options
+    document.querySelectorAll('.attach-option').forEach(option => {
+        option.addEventListener('click', () => {
+            switch(option.dataset.type) {
+                case 'photo':
+                    uploadFile('image/*');
+                    break;
+                case 'document':
+                    uploadFile('*/*');
+                    break;
+                case 'camera':
+                    openCamera();
+                    break;
+            }
+            attachMenu.classList.remove('show');
+        });
+    });
+
+    // Close menus when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.emoji-button')) {
+            emojiPicker.element.style.display = 'none';
+        }
+        if (!e.target.closest('.attach-button') && !e.target.closest('.attach-menu')) {
+            attachMenu.classList.remove('show');
+        }
+    });
+}
+
+// File upload handler
+function uploadFile(accept) {
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = accept;
+    input.onchange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            uploadToStorage(file);
+        }
+    };
+    input.click();
+}
+
+// Upload to Firebase Storage
+async function uploadToStorage(file) {
+    const storageRef = firebase.storage().ref();
+    const fileRef = storageRef.child(`uploads/${Date.now()}_${file.name}`);
+    
+    try {
+        const snapshot = await fileRef.put(file);
+        const downloadURL = await snapshot.ref.getDownloadURL();
+        sendFileMessage(downloadURL, file.type);
+    } catch (error) {
+        console.error('Upload failed:', error);
+        alert('Upload failed. Please try again.');
+    }
+}
+
+// Send file message
+function sendFileMessage(url, type) {
+    const messageData = {
+        senderId: currentUser.id,
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
+        fileURL: url,
+        fileType: type,
+        type: type.startsWith('image/') ? 'image' : 'document'
+    };
+
+    firebase.database().ref(`messages/${currentChat.id}`).push(messageData);
+}
+
+// Camera access
+function openCamera() {
+    const video = document.createElement('video');
+    const canvas = document.createElement('canvas');
+    
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+            video.play();
+            
+            // Add camera UI
+            const cameraUI = createCameraUI(video, stream);
+            document.body.appendChild(cameraUI);
+        })
+        .catch(err => {
+            console.error('Camera access denied:', err);
+            alert('Could not access camera');
+        });
+}
+
+// Initialize the app
+document.addEventListener('DOMContentLoaded', () => {
+    const whatsApp = new WhatsAppChat();
+});
+
+class MessageHandler {
+    constructor() {
+        this.messageContainer = document.querySelector('.chat-messages');
+        this.setupMessageHandling();
+    }
+
+    setupMessageHandling() {
+        // Handle message sending
+        document.querySelector('.message-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                this.sendMessage(e.target.value);
+                e.target.value = '';
+            }
+        });
+    }
+
+    sendMessage(text) {
+        try {
+            const messageElement = this.createMessageElement(text);
+            this.messageContainer.appendChild(messageElement);
+            this.scrollToBottom();
+        } catch (error) {
+            this.showError('Failed to send message. Please try again.');
+        }
+    }
+
+    createMessageElement(text) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'message sent';
+
+        const content = document.createElement('div');
+        content.className = 'message-content';
+        
+        // Check if it's a long message
+        if (text.length > 100) {
+            content.classList.add('long');
+        }
+
+        const textElement = document.createElement('div');
+        textElement.className = 'message-text';
+        
+        // Format paragraphs
+        const paragraphs = text.split('\n').filter(p => p.trim());
+        if (paragraphs.length > 1) {
+            textElement.classList.add('paragraph');
+            paragraphs.forEach(p => {
+                const para = document.createElement('p');
+                para.textContent = p;
+                textElement.appendChild(para);
+            });
+        } else {
+            textElement.textContent = text;
+        }
+
+        const timeElement = document.createElement('div');
+        timeElement.className = 'message-time';
+        timeElement.textContent = this.formatTime(new Date());
+
+        content.appendChild(textElement);
+        content.appendChild(timeElement);
+        messageDiv.appendChild(content);
+
+        return messageDiv;
+    }
+
+    formatTime(date) {
+        return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    }
+
+    showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'message-error';
+        errorDiv.innerHTML = `
+            <i class="fas fa-exclamation-circle"></i>
+            <span>${message}</span>
+        `;
+        this.messageContainer.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 3000);
+    }
+
+    scrollToBottom() {
+        this.messageContainer.scrollTop = this.messageContainer.scrollHeight;
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const messageHandler = new MessageHandler();
+});
+
+class ChatSearch {
+    constructor() {
+        this.searchInput = document.querySelector('.search-input');
+        this.chatList = document.querySelector('.chat-list');
+        this.init();
+    }
+
+    init() {
+        if (!this.searchInput || !this.chatList) {
+            console.error('Required elements not found');
+            return;
+        }
+        this.setupSearchListener();
+    }
+
+    setupSearchListener() {
+        this.searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.trim().toLowerCase();
+            this.filterChats(searchTerm);
+        });
+    }
+
+    filterChats(searchTerm) {
+        const chatItems = this.chatList.querySelectorAll('.chat-item');
+        let hasResults = false;
+
+        chatItems.forEach(chatItem => {
+            // Get the name from the chat item (checking multiple possible elements)
+            const nameElement = chatItem.querySelector('.chat-name, .user-name') || 
+                              chatItem.querySelector('h2') || 
+                              chatItem.querySelector('strong');
+            
+            if (!nameElement) return;
+
+            const name = nameElement.textContent.toLowerCase();
+            const matches = searchTerm === '' || name.includes(searchTerm);
+
+            // Show/hide chat items based on match
+            chatItem.style.display = matches ? 'flex' : 'none';
+
+            if (matches) {
+                this.highlightText(nameElement, searchTerm);
+                hasResults = true;
+            } else {
+                this.removeHighlight(nameElement);
+            }
+        });
+
+        this.toggleNoResults(!hasResults && searchTerm !== '');
+    }
+
+    highlightText(element, searchTerm) {
+        if (!searchTerm) {
+            element.textContent = element.textContent;
+            return;
+        }
+
+        const text = element.textContent;
+        const highlightedText = text.replace(
+            new RegExp(searchTerm, 'gi'),
+            match => `<span class="highlight">${match}</span>`
+        );
+        element.innerHTML = highlightedText;
+    }
+
+    removeHighlight(element) {
+        if (element) {
+            element.textContent = element.textContent;
+        }
+    }
+
+    toggleNoResults(show) {
+        let noResults = this.chatList.querySelector('.no-results');
+        
+        if (show) {
+            if (!noResults) {
+                noResults = document.createElement('div');
+                noResults.className = 'no-results';
+                noResults.innerHTML = `
+                    <div class="no-results-content">
+                        <i class="fas fa-search"></i>
+                        <p>No matching users found</p>
+                    </div>
+                `;
+                this.chatList.appendChild(noResults);
+            }
+        } else if (noResults) {
+            noResults.remove();
+        }
+    }
+}
+
+// Initialize search functionality when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    // Make sure WhatsApp instance is initialized first
+    if (typeof WhatsAppChat !== 'undefined') {
+        const whatsApp = new WhatsAppChat();
+    } else {
+        console.error('WhatsAppChat class not found');
+    }
+});
+
+class ChatManager {
+    constructor() {
+        this.db = firebase.firestore();
+        this.chatList = document.querySelector('.chat-list');
+        this.searchManager = new ChatSearch(this.chatList);
+        this.setupRealtimeListeners();
+        this.initializeLoading();
+        this.setupMobileBackButton();
+        this.mainChat = document.querySelector('.main-chat');
+        this.defaultView = document.querySelector('.default-view');
+        this.chatView = document.querySelector('.chat-view');
+    }
+
+    setupRealtimeListeners() {
+        // Listen for messages collection changes
+        this.db.collection('messages')
+            .orderBy('timestamp', 'desc')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === 'added' || change.type === 'modified') {
+                        this.updateLastMessage(change.doc.data());
+                    }
+                });
+            });
+
+        // Listen for user status changes
+        this.db.collection('users')
+            .onSnapshot((snapshot) => {
+                snapshot.docChanges().forEach((change) => {
+                    if (change.type === 'modified') {
+                        this.updateUserStatus(change.doc.id, change.doc.data());
+                    }
+                });
+            });
+    }
+
+    updateLastMessage(messageData) {
+        const chatItem = document.querySelector(`[data-chat-id="${messageData.chatId}"]`);
+        if (chatItem) {
+            // Update last message
+            const lastMessageElement = chatItem.querySelector('.chat-last-message');
+            const timeElement = chatItem.querySelector('.chat-time');
+            
+            if (lastMessageElement) {
+                lastMessageElement.textContent = messageData.text;
+            }
+            
+            if (timeElement) {
+                timeElement.textContent = this.formatTimestamp(messageData.timestamp);
+            }
+
+            // Move chat to top
+            this.moveToTop(chatItem);
+        }
+    }
+
+    moveToTop(chatItem) {
+        const parent = chatItem.parentNode;
+        parent.insertBefore(chatItem, parent.firstChild);
+    }
+
+    formatTimestamp(timestamp) {
+        const date = timestamp.toDate();
+        const now = new Date();
+        
+        if (date.toDateString() === now.toDateString()) {
+            return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        } else {
+            return date.toLocaleDateString([], { weekday: 'short' });
+        }
+    }
+
+    updateUserStatus(userId, status) {
+        const userElement = document.querySelector(`[data-user-id="${userId}"]`);
+        if (userElement) {
+            const statusElement = userElement.querySelector('.user-status');
+            const statusIndicator = userElement.querySelector('.status-indicator');
+
+            if (status === 'online') {
+                statusElement.textContent = 'online';
+                statusElement.style.color = '#00a884';
+                statusIndicator?.classList.add('online');
+                statusIndicator?.classList.remove('offline');
+            } else {
+                statusElement.textContent = 'offline';
+                statusElement.style.color = '#667781';
+                statusIndicator?.classList.add('offline');
+                statusIndicator?.classList.remove('online');
+            }
+        }
+    }
+
+    initializeLoading() {
+        // Show loading screen when refreshing or navigating
+        window.addEventListener('beforeunload', () => {
+            document.body.classList.remove('loaded');
+        });
+
+        // Handle loading state for chat initialization
+        firebase.auth().onAuthStateChanged((user) => {
+            if (user) {
+                this.loadInitialData().then(() => {
+                    document.body.classList.add('loaded');
+                });
+            }
+        });
+    }
+
+    async loadInitialData() {
+        try {
+            // Load your initial data here
+            await Promise.all([
+                this.loadChats(),
+                this.loadUserProfile(),
+                // Add other loading promises
+            ]);
+        } catch (error) {
+            console.error('Error loading initial data:', error);
+        }
+    }
+
+    setupMobileBackButton() {
+        const backButton = document.querySelector('.back-button');
+        if (backButton) {
+            backButton.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    document.body.classList.remove('chat-active');
+                    if (this.defaultView) {
+                        this.defaultView.style.display = 'flex';
+                    }
+                    if (this.chatView) {
+                        this.chatView.style.display = 'none';
+                    }
+                }
+            });
+        }
+    }
+
+    selectChat(chatId, userName, userStatus, userAvatar) {
+        // Update chat header with user info
+        const chatHeader = document.querySelector('.chat-header');
+        if (chatHeader) {
+            chatHeader.querySelector('.chat-avatar').src = userAvatar;
+            chatHeader.querySelector('.contact-name').textContent = userName;
+            chatHeader.querySelector('.contact-status').textContent = userStatus;
+        }
+
+        // Show chat view and hide default view
+        if (this.defaultView) {
+            this.defaultView.style.display = 'none';
+        }
+        if (this.chatView) {
+            this.chatView.style.display = 'flex';
+        }
+        if (this.mainChat) {
+            this.mainChat.classList.add('chat-active');
+        }
+
+        // Handle mobile view
+        if (window.innerWidth <= 768) {
+            document.body.classList.add('chat-active');
+        }
+
+        // Load chat messages
+        this.loadChatMessages(chatId);
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const chatManager = new ChatManager();
+});
+
+// Add this to handle profile page logout
+class ProfileManager {
+    constructor() {
+        this.initializeLogout();
+    }
+
+    initializeLogout() {
+        // Find the logout button in the profile modal
+        const logoutBtn = document.querySelector('.logout-btn');
+        if (logoutBtn) {
+            logoutBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.handleLogout();
+            });
+        }
+    }
+
+    async handleLogout() {
+        try {
+            const confirmed = await this.showLogoutConfirmation();
+            
+            if (confirmed) {
+                // Show loading state
+                document.body.classList.add('loading');
+                
+                // Sign out from Firebase
+                await firebase.auth().signOut();
+                
+                // Clear any stored data
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                // Hide app container and profile modal
+                document.getElementById('app-container').style.display = 'none';
+                document.getElementById('profile-modal').style.display = 'none';
+                
+                // Show login screen
+                document.getElementById('login-screen').style.display = 'flex';
+                
+                // Reset form fields
+                document.getElementById('login-email').value = '';
+                document.getElementById('login-password').value = '';
+            }
+        } catch (error) {
+            console.error('Logout error:', error);
+            this.showError('Logout failed. Please try again.');
+        } finally {
+            document.body.classList.remove('loading');
+        }
+    }
+
+    showLogoutConfirmation() {
+        return new Promise((resolve) => {
+            const dialogHtml = `
+                <div class="logout-dialog">
+                    <div class="logout-dialog-content">
+                        <h3>Logout</h3>
+                        <p>Are you sure you want to logout?</p>
+                        <div class="logout-dialog-buttons">
+                            <button class="cancel-button">Cancel</button>
+                            <button class="confirm-button">Logout</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            document.body.insertAdjacentHTML('beforeend', dialogHtml);
+            const dialog = document.querySelector('.logout-dialog');
+
+            // Add click handlers
+            dialog.querySelector('.cancel-button').addEventListener('click', () => {
+                dialog.remove();
+                resolve(false);
+            });
+
+            dialog.querySelector('.confirm-button').addEventListener('click', () => {
+                dialog.remove();
+                resolve(true);
+            });
+
+            // Close on outside click
+            dialog.addEventListener('click', (e) => {
+                if (e.target === dialog) {
+                    dialog.remove();
+                    resolve(false);
+                }
+            });
+        });
+    }
+
+    showError(message) {
+        const errorToast = document.createElement('div');
+        errorToast.className = 'error-toast';
+        errorToast.textContent = message;
+        
+        document.body.appendChild(errorToast);
+        
+        setTimeout(() => {
+            errorToast.remove();
+        }, 3000);
+    }
+}
+
+// Initialize the ProfileManager when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    const profileManager = new ProfileManager();
+});
+
+class MobileResponsive {
+    constructor() {
+        this.sidebar = document.querySelector('.sidebar');
+        this.mainChat = document.querySelector('.main-chat');
+        this.backButton = document.querySelector('.back-button');
+        this.init();
+    }
+
+    init() {
+        // Initial setup
+        this.setupBackButton();
+        this.handleScreenSize();
+
+        // Listen for screen size changes
+        window.addEventListener('resize', () => this.handleScreenSize());
+        
+        // Setup chat item click listeners
+        this.setupChatListeners();
+    }
+
+    setupBackButton() {
+        if (this.backButton) {
+            // Hide back button by default
+            this.backButton.style.display = 'none';
+            
+            // Add click handler
+            this.backButton.addEventListener('click', () => {
+                this.showSidebar();
+            });
+        }
+    }
+
+    handleScreenSize() {
+        const isMobile = window.innerWidth <= 768;
+        
+        if (this.backButton) {
+            // Show/hide back button based on screen size
+            this.backButton.style.display = isMobile ? 'flex' : 'none';
+        }
+
+        if (isMobile) {
+            // Mobile view setup
+            this.sidebar.style.display = 'flex';
+            this.mainChat.style.display = 'none';
+        } else {
+            // Desktop view setup
+            this.sidebar.style.display = 'flex';
+            this.mainChat.style.display = 'flex';
+        }
+    }
+
+    setupChatListeners() {
+        const chatItems = document.querySelectorAll('.chat-item');
+        chatItems.forEach(chat => {
+            chat.addEventListener('click', () => {
+                if (window.innerWidth <= 768) {
+                    this.showMainChat();
+                }
+            });
+        });
+    }
+
+    showSidebar() {
+        if (window.innerWidth <= 768) {
+            this.sidebar.style.display = 'flex';
+            this.mainChat.style.display = 'none';
+        }
+    }
+
+    showMainChat() {
+        if (window.innerWidth <= 768) {
+            this.sidebar.style.display = 'none';
+            this.mainChat.style.display = 'flex';
+        }
+    }
+}
+
+// Add these styles
+const styles = document.createElement('style');
+styles.textContent = `
+    .back-button {
+        align-items: center;
+        padding: 8px;
+        cursor: pointer;
+        color: #54656f;
+        transition: all 0.2s ease;
+    }
+
+    .back-button i {
+        font-size: 20px;
+    }
+
+    @media screen and (max-width: 768px) {
+        .container {
+            position: relative;
+        }
+
+        .sidebar, .main-chat {
+            width: 100%;
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+
+        .main-chat {
+            z-index: 2;
+        }
+
+        .back-button {
+            display: flex !important;
+        }
+    }
+
+    @media screen and (min-width: 769px) {
+        .back-button {
+            display: none !important;
+        }
+    }
+`;
+document.head.appendChild(styles); 
+
+// Add this to your existing script
+document.addEventListener('DOMContentLoaded', () => {
+    // Show loading screen
+    const loadingScreen = document.querySelector('.loading-screen');
+    const mainContent = document.querySelector('.container');
+    
+    // Simulate loading time (you can replace this with actual loading logic)
+    setTimeout(() => {
+        if (loadingScreen && mainContent) {
+            // Hide loading screen
+            loadingScreen.style.opacity = '0';
+            loadingScreen.style.transition = 'opacity 0.5s ease';
+            
+            // Show main content
+            mainContent.style.display = 'flex';
+            document.body.classList.add('loaded');
+            
+            // Remove loading screen after fade out
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 500);
+        }
+    }, 2000); // Adjust time as needed
+}); 
+
+// Emoji functionality
+const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇",
+    "🙂","🙃","😉","😌","😍","😘","😗","😙","😚","😋",
+    "😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏",
+    "😒","😞","😔","😟","😕","🙁","😣","😖","😫","😩",
+    "😢","😭","😤","😠","😡","🤬","🤯","😳","😱","😨",
+    "😰","😥","😓","🤗","🤔","🙄","😬","🙄","😲","😴",
+    "🤤","😪","😵","🤐","🤢","🤮","🤧","😷","🤒","🤕",
+    "🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀"];
+
+function initializeEmojiPicker() {
+    const emojiButton = document.querySelector('.emoji-button');
+    const messageInput = document.getElementById('message-input');
+    const chatInput = document.querySelector('.chat-input');
+
+    // Create emoji picker container
+    const emojiPicker = document.createElement('div');
+    emojiPicker.className = 'emoji-picker';
+    emojiPicker.style.display = 'none';
+
+    // Create emoji categories
+    const categories = {
+        'Smileys': ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠"],
+    
+        'Animals': ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🐛","🦋","🐌","🐞","🐜","🦟","🦗","🕷","🕸","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐","🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐕‍🦺","🐈","🐓","🦃","🦚","🦜","🦢","🦩","🕊","🐇","🦝","🦨","🦡","🦦","🦥","🐁","🐀","🐿","🦔"],
+    
+        'Food': ["🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶","🌽","🥕","🧄","🧅","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩","🍗","🍖","🦴","🌭","🍔","🍟","🍕","🥪","🥙","🧆","🌮","🌯","🥗","🥘","🥫","🍝","🍜","🍲","🍛","🍣","🍱","🥟","🦪","🍤","🍙","🍚","🍘","🍥","🥠","🥮","🍢","🍡","🍧","🍨","🍦","🥧","🧁","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🍩","🍪","🌰","🥜","🍯","🥛","🍼","☕️","🍵","🧃","🥤","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧉","🍾","🧊"],
+    
+        'Activities': ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🥅","⛳️","🪁","🏹","🎣","🤿","🥊","🥋","🎽","🛹","🛷","⛸","🥌","🎿","⛷","🏂","🪂","🏋️‍♀️","🏋️","🤼‍♀️","🤼","🤸‍♀️","🤸","🤺","⛹️‍♀️","⛹️","🤾‍♀️","🤾","🏌️‍♀️","🏌️","🏇","🧘‍♀️","🧘","🏄‍♀️","🏄","🏊‍♀️","🏊","🤽‍♀️","🤽","🚣‍♀️","🚣","🧗‍♀️","🧗","🚵‍♀️","🚵","🚴‍♀️","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🏵","🎗","🎫","🎟","🎪","🤹","🤹‍♂️","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🎷","🎺","🎸","🪕","🎻","🎲","♟","🎯","🎳","🎮","🎰","🧩"],
+    
+        'Travel': ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🚚","🚛","🚜","🦯","🦽","🦼","🛴","🚲","🛵","🏍","🛺","🚨","🚔","🚍","🚘","🚖","🚡","🚠","🚟","🚃","🚋","🚞","🚝","🚄","🚅","🚈","🚂","🚆","🚇","🚊","🚉","✈️","🛫","🛬","🛩","💺","🛰","🚀","🛸","🚁","🛶","⛵️","🚤","🛥","🛳","⛴","🚢","⚓️","⛽️","🚧","🚦","🚥","🚏","🗺","🗿","🗽","🗼","🏰","🏯","🏟","🎡","🎢","🎠","⛲️","⛱","🏖","🏝","🏜","🌋","⛰","🏔","🗻","🏕","⛺️","🏠","🏡","🏘","🏚","🏗","🏭","🏢","🏬","🏣","🏤","🏥","🏦","🏨","🏪","🏫","🏩","💒","🏛","⛪️","🕌","🕍","🛕","🕋","⛩","🛤","🛣","🗾","🎑","🏞","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙","🌃","🌌","🌉","🌁"],
+    
+        'Objects': ["⌚️","📱","📲","💻","⌨️","🖥","🖨","🖱","🖲","🕹","🗜","💽","💾","💿","📀","📼","📷","📸","📹","🎥","📽","🎞","📞","☎️","📟","📠","📺","📻","🎙","🎚","🎛","🧭","⏱","⏲","⏰","🕰","⌛️","⏳","📡","🔋","🔌","💡","🔦","🕯","🪔","🧯","🛢","💸","💵","💴","💶","💷","💰","💳","💎","⚖️","🧰","🔧","🔨","⚒","🛠","⛏","🔩","⚙️","🧱","⛓","🧲","🔫","💣","🧨","🪓","🔪","🗡","⚔️","🛡","🚬","⚰️","⚱️","🏺","🔮","📿","🧿","💈","⚗️","🔭","🔬","🕳","🩹","🩺","💊","💉","🧬","🦠","🧫","🧪","🌡","🧹","🧺","🧻","🚽","🚰","🚿","🛁","🛀","🧼","🪒","🧽","🧴","🛎","🔑","🗝","🚪","🪑","🛋","🛏","🛌","🧸","🖼","🛍","🛒","🎁","🎈","🎏","🎀","🎊","🎉","🎎","🏮","🎐","🧧","✉️","📩","📨","📧","💌","📥","📤","📦","🏷","📪","📫","📬","📭","📮","📯","📜","📃","📄","📑","🧾","📊","📈","📉","🗒","🗓","📆","📅","🗑","📇","🗃","🗳","🗄","📋","📁","📂","🗂","🗞","📰","📓","📔","📒","📕","📗","📘","📙","📚","📖","🔖","🧷","🔗","📎","🖇","📐","📏","🧮","📌","📍","✂️","🖊","🖋","✒️","🖌","🖍","📝","✏️","🔍","🔎","🔏","🔐","🔒","🔓"],
+    
+        'Symbols': ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟","☮️","✝️","☪️","🕉","☸️","✡️","🔯","🕎","☯️","☦️","🛐","⛎","♈️","♉️","♊️","♋️","♌️","♍️","♎️","♏️","♐️","♑️","♒️","♓️","🆔","⚛️","🉑","☢️","☣️","📴","📳","🈶","🈚️","🈸","🈺","🈷️","✴️","🆚","💮","🉐","㊙️","㊗️","🈴","🈵","🈹","🈲","🅰️","🅱️","🆎","🆑","🅾️","🆘","❌","⭕️","🛑","⛔️","📛","🚫","💯","💢","♨️","🚷","🚯","🚳","🚱","🔞","📵","🚭","❗️","❕","❓","❔","‼️","⁉️","🔅","🔆","〽️","⚠️","🚸","🔱","⚜️","🔰","♻️","✅","🈯️","💹","❇️","✳️","❎","🌐","💠","Ⓜ️","🌀","💤","🏧","🚾","♿️","🅿️","🈳","🈂️","🛂","🛃","🛄","🛅","🚹","🚺","🚼","🚻","🚮","🎦","📶","🈁","🔣","ℹ️","🔤","🔡","🔠","🆖","🆗","🆙","🆒","🆕","🆓","0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟","🔢","#️⃣","*️⃣","⏏️","▶️","⏸","⏯","⏹","⏺","⏭","⏮","⏩","⏪","⏫","⏬","◀️","🔼","🔽","➡️","⬅️","⬆️","⬇️","↗️","↘️","↙️","↖️","↕️","↔️","↪️","↩️","⤴️","⤵️","🔀","🔁","🔂","🔄","🔃","🎵","🎶","➕","➖","➗","✖️","♾","💲","💱","™️","©️","®️","〰️","➰","➿","🔚","🔙","🔛","🔝","🔜","✔️","☑️","🔘","🔴","🟠","🟡","🟢","🔵","🟣","⚫️","⚪️","🟤","🔺","🔻","🔸","🔹","🔶","🔷","🔳","🔲","▪️","▫️","◾️","◽️","◼️","◻️","🟥","🟧","🟨","🟩","🟦","🟪","⬛️","⬜️","🟫","🔈","🔇","🔉","🔊","🔔","🔕","📣","📢","👁‍🗨","💬","💭","🗯","♠️","♣️","♥️","♦️","🃏","🎴","🀄️","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚","🕛","🕜","🕝","🕞","🕟","🕠","🕡","🕢","🕣","🕤","🕥","🕦","🕧"]
+    };
+
+    // Create category tabs
+    const categoryTabs = document.createElement('div');
+    categoryTabs.className = 'emoji-categories';
+    
+    Object.keys(categories).forEach((category, index) => {
+        const tab = document.createElement('button');
+        tab.className = 'emoji-category-tab';
+        tab.textContent = category;
+        tab.onclick = () => showCategory(category);
+        if (index === 0) tab.classList.add('active');
+        categoryTabs.appendChild(tab);
+    });
+
+    emojiPicker.appendChild(categoryTabs);
+
+    // Create emoji container
+    const emojiContainer = document.createElement('div');
+    emojiContainer.className = 'emoji-container';
+    emojiPicker.appendChild(emojiContainer);
+
+    function showCategory(category) {
+        // Update active tab
+        document.querySelectorAll('.emoji-category-tab').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.textContent === category) tab.classList.add('active');
+        });
+
+        // Show emojis
+        emojiContainer.innerHTML = '';
+        categories[category].forEach(emoji => {
+            const emojiSpan = document.createElement('span');
+            emojiSpan.className = 'emoji';
+            emojiSpan.textContent = emoji;
+            emojiSpan.onclick = () => {
+                insertEmoji(emoji);
+                toggleEmojiPicker();
+            };
+            emojiContainer.appendChild(emojiSpan);
+        });
+    }
+
+    // Toggle emoji picker
+    function toggleEmojiPicker() {
+        const isVisible = emojiPicker.style.display === 'block';
+        emojiPicker.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) showCategory('Smileys'); // Show first category by default
+    }
+
+    // Insert emoji at cursor position
+    function insertEmoji(emoji) {
+        const start = messageInput.selectionStart;
+        const end = messageInput.selectionEnd;
+        const text = messageInput.value;
+        const before = text.substring(0, start);
+        const after = text.substring(end);
+        messageInput.value = before + emoji + after;
+        messageInput.selectionStart = messageInput.selectionEnd = start + emoji.length;
+        messageInput.focus();
+    }
+
+    // Add click handlers
+    emojiButton.onclick = toggleEmojiPicker;
+    
+    // Close emoji picker when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!emojiPicker.contains(e.target) && !emojiButton.contains(e.target)) {
+            emojiPicker.style.display = 'none';
+        }
+    });
+
+    // Add emoji picker to chat input
+    chatInput.appendChild(emojiPicker);
+
+    // Show first category
+    showCategory('Smileys');
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeEmojiPicker();
+});
+
+function toggleOptionsMenu() {
+    const menu = document.getElementById('options-menu');
+    menu.classList.toggle('show');
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function closeMenu(e) {
+        if (!menu.contains(e.target) && !e.target.matches('.fa-ellipsis-vertical')) {
+            menu.classList.remove('show');
+            document.removeEventListener('click', closeMenu);
+        }
+    });
+} 
+
+// Add this new function
+function toggleChatOptionsMenu() {
+    const menu = document.getElementById('chat-options-menu');
+    menu.classList.toggle('show');
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function closeMenu(e) {
+        if (!menu.contains(e.target) && !e.target.matches('.fa-ellipsis-vertical')) {
+            menu.classList.remove('show');
+            document.removeEventListener('click', closeMenu);
+        }
+    });
+}
+
+// Add this to close both menus when clicking outside
+document.addEventListener('click', (e) => {
+    const sidebarMenu = document.getElementById('options-menu');
+    const chatMenu = document.getElementById('chat-options-menu');
+    const sidebarButton = e.target.matches('.sidebar .fa-ellipsis-vertical');
+    const chatButton = e.target.matches('.chat-actions .fa-ellipsis-vertical');
+
+    if (!sidebarButton && !chatButton) {
+        if (!sidebarMenu.contains(e.target)) {
+            sidebarMenu.classList.remove('show');
+        }
+        if (!chatMenu.contains(e.target)) {
+            chatMenu.classList.remove('show');
+        }
+    }
+}); 
+
+// Add this to your existing script
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingTimer = null;
+let recordingStartTime = null;
+
+function initializeVoiceRecording() {
+    const voiceButton = document.getElementById('voice-record-btn');
+    const sendButton = document.getElementById('send-button');
+    const messageInput = document.getElementById('message-input');
+    
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let recordingStartTime = null;
+    let recordingTimer = null;
+
+    // Create voice recording UI
+    const recordingUI = document.createElement('div');
+    recordingUI.className = 'voice-recording-ui';
+    recordingUI.innerHTML = `
+        <div class="recording-indicator">
+            <i class="fas fa-microphone recording-icon"></i>
+            <span class="recording-time">0:00</span>
+        </div>
+        <div class="recording-controls">
+            <button class="cancel-recording">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="send-recording">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    `;
+    document.querySelector('.chat-input').appendChild(recordingUI);
+
+    voiceButton.addEventListener('click', async () => {
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                startRecording(stream);
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                alert('Could not access microphone');
+            }
+        } else {
+            stopRecording();
+        }
+    });
+
+    function startRecording(stream) {
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        isRecording = true;
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+
+        mediaRecorder.start();
+        recordingStartTime = Date.now();
+        updateRecordingUI(true);
+        startRecordingTimer();
+    }
+
+    function stopRecording() {
+        if (!mediaRecorder) return;
+
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        isRecording = false;
+        stopRecordingTimer();
+        updateRecordingUI(false);
+
+        // Create audio blob and send
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        uploadAndSendVoiceMessage(audioBlob);
+    }
+
+    function updateRecordingUI(isRecording) {
+        recordingUI.style.display = isRecording ? 'flex' : 'none';
+        voiceButton.classList.toggle('recording', isRecording);
+        voiceButton.querySelector('i').className = isRecording ? 'fas fa-stop' : 'fas fa-microphone';
+    }
+
+    function startRecordingTimer() {
+        const timerDisplay = recordingUI.querySelector('.recording-time');
+        recordingTimer = setInterval(() => {
+            const duration = Math.floor((Date.now() - recordingStartTime) / 1000);
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    function stopRecordingTimer() {
+        clearInterval(recordingTimer);
+    }
+
+    async function uploadAndSendVoiceMessage(audioBlob) {
+        try {
+            const storage = firebase.storage();
+            const storageRef = storage.ref();
+            const audioRef = storageRef.child(`voice_messages/${Date.now()}.wav`);
+
+            // Upload audio file
+            const uploadTask = audioRef.put(audioBlob);
+            
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload progress:', progress);
+                },
+                (error) => {
+                    console.error('Upload error:', error);
+                    alert('Failed to send voice message');
+                },
+                async () => {
+                    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                    
+                    // Save message to database
+                    const message = {
+                        type: 'voice',
+                        url: downloadURL,
+                        sender: firebase.auth().currentUser.uid,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP,
+                        duration: Math.floor((Date.now() - recordingStartTime) / 1000)
+                    };
+
+                    await firebase.database().ref('messages').push(message);
+                }
+            );
+        } catch (error) {
+            console.error('Error sending voice message:', error);
+            alert('Failed to send voice message');
+        }
+    }
+}
+
+function sendVoiceMessage(audioBlob) {
+    // Here you would typically:
+    // 1. Upload the audio blob to your server or storage
+    // 2. Get the URL of the uploaded audio
+    // 3. Send the message with the audio URL
+    console.log('Sending voice message:', audioBlob);
+}
+
+// Initialize voice recording when the chat is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initializeVoiceRecording();
+});
+
+// Add this function to update user count
+function updateUserCount() {
+    const usersRef = firebase.database().ref('users');
+    
+    usersRef.on('value', (snapshot) => {
+        let count = 0;
+        snapshot.forEach((childSnapshot) => {
+            const user = childSnapshot.val();
+            // Don't count the current user
+            if (user.id !== firebase.auth().currentUser.uid) {
+                count++;
+            }
+        });
+        
+        // Update the badge
+        const badge = document.querySelector('.user-count-badge');
+        if (badge) {
+            badge.textContent = count;
+            // Hide badge if count is 0
+            badge.style.display = count > 0 ? 'flex' : 'none';
+        }
+    });
+}
+
+// Call this when the app initializes
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing initialization code ...
+    updateUserCount();
+});
+
+// Add this to your existing script
+function initializeImageUpload() {
+    const photoUpload = document.getElementById('photo-upload');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const voiceButton = document.getElementById('voice-record-btn');
+    
+    let selectedImage = null;
+
+    // Create image preview container
+    let previewContainer = document.querySelector('.image-preview-container');
+    if (!previewContainer) {
+        previewContainer = document.createElement('div');
+        previewContainer.className = 'image-preview-container';
+        document.querySelector('.chat-input').insertBefore(previewContainer, null);
+    }
+
+    photoUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        console.log('File selected:', file); // Debug log
+        
+        if (file && file.type.startsWith('image/')) {
+            selectedImage = file;
+            showImagePreview(file);
+            toggleSendButton(true);
+        }
+    });
+
+    function showImagePreview(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewContainer.innerHTML = `
+                <img src="${e.target.result}" class="message-image-preview" alt="Selected image">
+                <div class="image-preview-content">
+                    <input type="text" class="image-caption" placeholder="Add a caption...">
+                    <div class="image-preview-actions">
+                        <button class="cancel-upload" onclick="cancelImageUpload()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            previewContainer.style.display = 'flex';
+            previewContainer.querySelector('.image-caption').focus();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.cancelImageUpload = function() {
+        selectedImage = null;
+        previewContainer.style.display = 'none';
+        photoUpload.value = '';
+        if (!messageInput.value.trim()) {
+            toggleSendButton(false);
+        }
+    };
+
+    sendButton.addEventListener('click', function() {
+        if (selectedImage) {
+            const caption = previewContainer.querySelector('.image-caption')?.value.trim() || '';
+            sendImageMessage(selectedImage, caption);
+        } else if (messageInput.value.trim()) {
+            const text = messageInput.value.trim();
+            sendTextMessage(text);
+            messageInput.value = '';
+            toggleSendButton(false);
+        }
+    });
+
+    function sendImageMessage(imageFile, caption) {
+        // Initialize Firebase Storage
+        const storage = firebase.storage();
+        const storageRef = storage.ref();
+        const imageRef = storageRef.child(`chat_images/${Date.now()}_${imageFile.name}`);
+
+        // Show loading state
+        sendButton.disabled = true;
+
+        // Upload the image
+        const uploadTask = imageRef.put(imageFile);
+
+        // Monitor upload progress
+        uploadTask.on('state_changed', 
+            // Progress function
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload progress:', progress);
+            },
+            // Error function
+            (error) => {
+                console.error('Upload error:', error);
+                alert('Failed to upload image. Please try again.');
+                sendButton.disabled = false;
+            },
+            // Complete function
+            () => {
+                // Get download URL
+                uploadTask.snapshot.ref.getDownloadURL()
+                    .then((downloadURL) => {
+                        // Create message data
+                        const messageData = {
+                            type: 'image',
+                            url: downloadURL,
+                            caption: caption || '',
+                            sender: firebase.auth().currentUser.uid,
+                            timestamp: firebase.database.ServerValue.TIMESTAMP
+                        };
+
+                        // Save message to database
+                        return firebase.database().ref('messages').push(messageData);
+                    })
+                    .then(() => {
+                        console.log('Image sent successfully');
+                        // Reset UI
+                        cancelImageUpload();
+                        sendButton.disabled = false;
+                    })
+                    .catch((error) => {
+                        console.error('Error saving message:', error);
+                        alert('Failed to send image. Please try again.');
+                        sendButton.disabled = false;
+                    });
+            }
+        );
+    }
+
+    function sendTextMessage(text) {
+        const message = {
+            type: 'text',
+            content: text,
+            sender: firebase.auth().currentUser.uid,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        firebase.database().ref('messages').push(message)
+            .catch(error => {
+                console.error('Error sending message:', error);
+                alert('Failed to send message. Please try again.');
+            });
+    }
+
+    function toggleSendButton(show) {
+        if (show) {
+            voiceButton.style.display = 'none';
+            sendButton.style.display = 'block';
+            sendButton.classList.add('show');
+        } else {
+            sendButton.classList.remove('show');
+            setTimeout(() => {
+                if (!messageInput.value.trim() && !selectedImage) {
+                    sendButton.style.display = 'none';
+                    voiceButton.style.display = 'block';
+                }
+            }, 200);
+        }
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeImageUpload();
+    initializeMessageDelete();
+});
+
+// Initialize Firebase Storage
+function initializeFirebaseStorage() {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    return firebase.storage();
+}
+
+// Add message delete functionality
+function initializeMessageDelete() {
+    const chatMessages = document.querySelector('.chat-messages');
+
+    // Add long press and right-click handlers for messages
+    chatMessages.addEventListener('contextmenu', handleMessageRightClick);
+    chatMessages.addEventListener('mousedown', handleMessageLongPress);
+    chatMessages.addEventListener('mouseup', () => clearTimeout(pressTimer));
+    chatMessages.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+
+    let pressTimer;
+
+    function handleMessageLongPress(e) {
+        const messageElement = e.target.closest('.message');
+        if (!messageElement) return;
+
+        pressTimer = setTimeout(() => {
+            showDeleteOptions(messageElement);
+        }, 500);
+    }
+
+    function handleMessageRightClick(e) {
+        e.preventDefault();
+        const messageElement = e.target.closest('.message');
+        if (!messageElement) return;
+        showDeleteOptions(messageElement);
+    }
+
+    function showDeleteOptions(messageElement) {
+        const existingDialog = document.querySelector('.delete-dialog');
+        if (existingDialog) existingDialog.remove();
+
+        const isSentByMe = messageElement.classList.contains('sent');
+        const messageId = messageElement.getAttribute('data-message-id');
+
+        const deleteDialog = document.createElement('div');
+        deleteDialog.className = 'delete-dialog';
+        deleteDialog.innerHTML = `
+            <div class="delete-dialog-content">
+                <div class="delete-dialog-header">
+                    <h3>Delete Message?</h3>
+                </div>
+                <div class="delete-options">
+                    <button class="delete-option delete-for-me">
+                        <i class="fas fa-trash"></i>
+                        Delete for me
+                    </button>
+                    ${isSentByMe ? `
+                        <button class="delete-option delete-for-everyone">
+                            <i class="fas fa-trash-alt"></i>
+                            Delete for everyone
+                        </button>
+                    ` : ''}
+                </div>
+                <button class="cancel-delete">CANCEL</button>
+            </div>
+        `;
+
+        deleteDialog.querySelector('.delete-for-me').onclick = () => {
+            deleteMessageForMe(messageId);
+            deleteDialog.remove();
+        };
+
+        if (isSentByMe) {
+            deleteDialog.querySelector('.delete-for-everyone').onclick = () => {
+                deleteMessageForEveryone(messageId);
+                deleteDialog.remove();
+            };
+        }
+
+        deleteDialog.querySelector('.cancel-delete').onclick = () => {
+            deleteDialog.remove();
+        };
+
+        deleteDialog.onclick = (e) => {
+            if (e.target === deleteDialog) {
+                deleteDialog.remove();
+            }
+        };
+
+        document.body.appendChild(deleteDialog);
+    }
+
+    function deleteMessageForMe(messageId) {
+        if (!messageId) return;
+
+        const messagesRef = firebase.database().ref('messages');
+        const currentUser = firebase.auth().currentUser.uid;
+
+        messagesRef.child(messageId).update({
+            [`deletedFor/${currentUser}`]: true,
+            deletedAt: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (messageElement) {
+                messageElement.remove();
+            }
+        }).catch(error => {
+            console.error('Error deleting message:', error);
+            alert('Failed to delete message');
+        });
+    }
+
+    function deleteMessageForEveryone(messageId) {
+        if (!messageId) return;
+
+        const messagesRef = firebase.database().ref('messages');
+        const currentUser = firebase.auth().currentUser.uid;
+
+        messagesRef.child(messageId).update({
+            deleted: true,
+            deletedBy: currentUser,
+            deletedAt: firebase.database.ServerValue.TIMESTAMP,
+            content: null,
+            text: null,
+            imageUrl: null
+        }).then(() => {
+            const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (messageElement) {
+                messageElement.innerHTML = `
+                    <div class="message-content deleted">
+                        <span class="deleted-text">This message was deleted</span>
+                        <div class="message-time">${formatTime(Date.now())}</div>
+                    </div>
+                `;
+                messageElement.classList.add('deleted');
+            }
+        }).catch(error => {
+            console.error('Error deleting message:', error);
+            alert('Failed to delete message');
+        });
+    }
+
+    // Listen for message deletions in real-time
+    const messagesRef = firebase.database().ref('messages');
+    messagesRef.on('child_changed', (snapshot) => {
+        const message = snapshot.val();
+        const messageId = snapshot.key;
+        const currentUser = firebase.auth().currentUser.uid;
+
+        // Handle message deleted for everyone
+        if (message.deleted) {
+            const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (messageElement) {
+                messageElement.innerHTML = `
+                    <div class="message-content deleted">
+                        <span class="deleted-text">This message was deleted</span>
+                        <div class="message-time">${formatTime(message.deletedAt)}</div>
+                    </div>
+                `;
+                messageElement.classList.add('deleted');
+            }
+        }
+        // Handle message deleted for current user
+        else if (message.deletedFor && message.deletedFor[currentUser]) {
+            const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (messageElement) {
+                messageElement.remove();
+            }
+        }
+    });
+}
+
+// Update the message display function
+function displayMessage(message, messageId) {
+    if (!message || !messageId) return null;
+
+    const currentUser = firebase.auth().currentUser.uid;
+    
+    // Don't display if deleted for current user
+    if (message.deletedFor && message.deletedFor[currentUser]) {
+        return null;
+    }
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${message.sender === currentUser ? 'sent' : 'received'}`;
+    messageDiv.setAttribute('data-message-id', messageId);
+
+    if (message.deleted) {
+        messageDiv.classList.add('deleted');
+        messageDiv.innerHTML = `
+            <div class="message-content deleted">
+                <span class="deleted-text">This message was deleted</span>
+                <div class="message-time">${formatTime(message.deletedAt)}</div>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                ${message.imageUrl ? 
+                    `<img src="${message.imageUrl}" alt="Sent image" class="message-image">` : 
+                    `<div class="message-text">${message.text}</div>`
+                }
+                ${message.caption ? `<div class="message-caption">${message.caption}</div>` : ''}
+                <div class="message-time">${formatTime(message.timestamp)}</div>
+            </div>
+        `;
+    }
+
+    return messageDiv;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeVoiceRecording();
+    initializeImageUpload();
+});
+
+function initializeChatSelection() {
+    const mainChat = document.querySelector('.main-chat');
+    const chatList = document.querySelector('.chat-list');
+    
+    // Add click handler for chat list items
+    chatList.addEventListener('click', (e) => {
+        const chatItem = e.target.closest('.chat-item');
+        if (!chatItem) return;
+
+        // Show chat interface
+        mainChat.classList.add('chat-active');
+
+        // Update chat header with user info
+        const userName = chatItem.querySelector('.user-name')?.textContent || 'User';
+        const userStatus = chatItem.querySelector('.user-status')?.textContent || 'online';
+        const userAvatar = chatItem.querySelector('img')?.src || 'default-avatar.png';
+
+        document.querySelector('.chat-avatar').src = userAvatar;
+        document.querySelector('.contact-name').textContent = userName;
+        document.querySelector('.contact-status').textContent = userStatus;
+
+        // Handle mobile view
+        if (window.innerWidth <= 768) {
+            document.querySelector('.sidebar').style.display = 'none';
+            document.querySelector('.main-chat').style.display = 'flex';
+        }
+    });
+
+    // Back button handler
+    const backButton = document.querySelector('.back-button');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            // Hide chat interface
+            mainChat.classList.remove('chat-active');
+
+            // Handle mobile view
+            if (window.innerWidth <= 768) {
+                document.querySelector('.sidebar').style.display = 'flex';
+                document.querySelector('.main-chat').style.display = 'none';
+            }
+        });
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeChatSelection();
+    initializeVoiceRecording();
+    initializeImageUpload();
+    initializeMessageDelete();
+});
