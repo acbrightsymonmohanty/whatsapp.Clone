@@ -926,63 +926,105 @@ function sendMessage() {
 function initializeEmojiPicker() {
     const emojiButton = document.querySelector('.emoji-button');
     const messageInput = document.getElementById('message-input');
-    
+    const chatInput = document.querySelector('.chat-input');
+
     // Create emoji picker container
     const emojiPicker = document.createElement('div');
-    emojiPicker.className = 'emoji-picker hidden';
+    emojiPicker.className = 'emoji-picker';
+    emojiPicker.style.display = 'none';
+
+    // Create emoji categories
+    const categories = {
+        'Smileys': ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠"],
     
-    // Add emojis to picker
-    emojis.forEach(emoji => {
-        const span = document.createElement('span');
-        span.textContent = emoji;
-        span.onclick = () => {
-            const cursorPos = messageInput.selectionStart;
-            const textBeforeCursor = messageInput.value.substring(0, cursorPos);
-            const textAfterCursor = messageInput.value.substring(cursorPos);
-            
-            messageInput.value = textBeforeCursor + emoji + textAfterCursor;
-            messageInput.focus();
-            
-            // Set cursor position after emoji
-            const newCursorPos = cursorPos + emoji.length;
-            messageInput.setSelectionRange(newCursorPos, newCursorPos);
-            
-            emojiPicker.classList.add('hidden');
-        };
-        emojiPicker.appendChild(span);
-    });
+        'Animals': ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🐛","🦋","🐌","🐞","🐜","🦟","🦗","🕷","🕸","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐","🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐕‍🦺","🐈","🐓","🦃","🦚","🦜","🦢","🦩","🕊","🐇","🦝","🦨","🦡","🦦","🦥","🐁","🐀","🐿","🦔"],
     
-    // Add emoji picker to DOM
-    document.querySelector('.chat-input').appendChild(emojiPicker);
+        'Food': ["🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶","🌽","🥕","🧄","🧅","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩","🍗","🍖","🦴","🌭","🍔","🍟","🍕","🥪","🥙","🧆","🌮","🌯","🥗","🥘","🥫","🍝","🍜","🍲","🍛","🍣","🍱","🥟","🦪","🍤","🍙","🍚","🍘","🍥","🥠","🥮","🍢","🍡","🍧","🍨","🍦","🥧","🧁","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🍩","🍪","🌰","🥜","🍯","🥛","🍼","☕️","🍵","🧃","🥤","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧉","🍾","🧊"],
     
-    // Toggle emoji picker
-    emojiButton.onclick = (e) => {
-        e.stopPropagation();
-        emojiPicker.classList.toggle('hidden');
+        'Activities': ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🥅","⛳️","🪁","🏹","🎣","🤿","🥊","🥋","🎽","🛹","🛷","⛸","🥌","🎿","⛷","🏂","🪂","🏋️‍♀️","🏋️","🤼‍♀️","🤼","🤸‍♀️","🤸","🤺","⛹️‍♀️","⛹️","🤾‍♀️","🤾","🏌️‍♀️","🏌️","🏇","🧘‍♀️","🧘","🏄‍♀️","🏄","🏊‍♀️","🏊","🤽‍♀️","🤽","🚣‍♀️","🚣","🧗‍♀️","🧗","🚵‍♀️","🚵","🚴‍♀️","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🏵","🎗","🎫","🎟","🎪","🤹","🤹‍♂️","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🎷","🎺","🎸","🪕","🎻","🎲","♟","🎯","🎳","🎮","🎰","🧩"],
+    
+        'Travel': ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🚚","🚛","🚜","🦯","🦽","🦼","🛴","🚲","🛵","🏍","🛺","🚨","🚔","🚍","🚘","🚖","🚡","🚠","🚟","🚃","🚋","🚞","🚝","🚄","🚅","🚈","🚂","🚆","🚇","🚊","🚉","✈️","🛫","🛬","🛩","💺","🛰","🚀","🛸","🚁","🛶","⛵️","🚤","🛥","🛳","⛴","🚢","⚓️","⛽️","🚧","🚦","🚥","🚏","🗺","🗿","🗽","🗼","🏰","🏯","🏟","🎡","🎢","🎠","⛲️","⛱","🏖","🏝","🏜","🌋","⛰","🏔","🗻","🏕","⛺️","🏠","🏡","🏘","🏚","🏗","🏭","🏢","🏬","🏣","🏤","🏥","🏦","🏨","🏪","🏫","🏩","💒","🏛","⛪️","🕌","🕍","🛕","🕋","⛩","🛤","🛣","🗾","🎑","🏞","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙","🌃","🌌","🌉","🌁"],
+    
+        'Objects': ["⌚️","📱","📲","💻","⌨️","🖥","🖨","🖱","🖲","🕹","🗜","💽","💾","💿","📀","📼","📷","📸","📹","🎥","📽","🎞","📞","☎️","📟","📠","📺","📻","🎙","🎚","🎛","🧭","⏱","⏲","⏰","🕰","⌛️","⏳","📡","🔋","🔌","💡","🔦","🕯","🪔","🧯","🛢","💸","💵","💴","💶","💷","💰","💳","💎","⚖️","🧰","🔧","🔨","⚒","🛠","⛏","🔩","⚙️","🧱","⛓","🧲","🔫","💣","🧨","🪓","🔪","🗡","⚔️","🛡","🚬","⚰️","⚱️","🏺","🔮","📿","🧿","💈","⚗️","🔭","🔬","🕳","🩹","🩺","💊","💉","🧬","🦠","🧫","🧪","🌡","🧹","🧺","🧻","🚽","🚰","🚿","🛁","🛀","🧼","🪒","🧽","🧴","🛎","🔑","🗝","🚪","🪑","🛋","🛏","🛌","🧸","🖼","🛍","🛒","🎁","🎈","🎏","🎀","🎊","🎉","🎎","🏮","🎐","🧧","✉️","📩","📨","📧","💌","📥","📤","📦","🏷","📪","📫","📬","📭","📮","📯","📜","📃","📄","📑","🧾","📊","📈","📉","🗒","🗓","📆","📅","🗑","📇","🗃","🗳","🗄","📋","📁","📂","🗂","🗞","📰","📓","📔","📒","📕","📗","📘","📙","📚","📖","🔖","🧷","🔗","📎","🖇","📐","📏","🧮","📌","📍","✂️","🖊","🖋","✒️","🖌","🖍","📝","✏️","🔍","🔎","🔏","🔐","🔒","🔓"],
+    
+        'Symbols': ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟","☮️","✝️","☪️","🕉","☸️","✡️","🔯","🕎","☯️","☦️","🛐","⛎","♈️","♉️","♊️","♋️","♌️","♍️","♎️","♏️","♐️","♑️","♒️","♓️","🆔","⚛️","🉑","☢️","☣️","📴","📳","🈶","🈚️","🈸","🈺","🈷️","✴️","🆚","💮","🉐","㊙️","㊗️","🈴","🈵","🈹","🈲","🅰️","🅱️","🆎","🆑","🅾️","🆘","❌","⭕️","🛑","⛔️","📛","🚫","💯","💢","♨️","🚷","🚯","🚳","🚱","🔞","📵","🚭","❗️","❕","❓","❔","‼️","⁉️","🔅","🔆","〽️","⚠️","🚸","🔱","⚜️","🔰","♻️","✅","🈯️","💹","❇️","✳️","❎","🌐","💠","Ⓜ️","🌀","💤","🏧","🚾","♿️","🅿️","🈳","🈂️","🛂","🛃","🛄","🛅","🚹","🚺","🚼","🚻","🚮","🎦","📶","🈁","🔣","ℹ️","🔤","🔡","🔠","🆖","🆗","🆙","🆒","🆕","🆓","0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟","🔢","#️⃣","*️⃣","⏏️","▶️","⏸","⏯","⏹","⏺","⏭","⏮","⏩","⏪","⏫","⏬","◀️","🔼","🔽","➡️","⬅️","⬆️","⬇️","↗️","↘️","↙️","↖️","↕️","↔️","↪️","↩️","⤴️","⤵️","🔀","🔁","🔂","🔄","🔃","🎵","🎶","➕","➖","➗","✖️","♾","💲","💱","™️","©️","®️","〰️","➰","➿","🔚","🔙","🔛","🔝","🔜","✔️","☑️","🔘","🔴","🟠","🟡","🟢","🔵","🟣","⚫️","⚪️","🟤","🔺","🔻","🔸","🔹","🔶","🔷","🔳","🔲","▪️","▫️","◾️","◽️","◼️","◻️","🟥","🟧","🟨","🟩","🟦","🟪","⬛️","⬜️","🟫","🔈","🔇","🔉","🔊","🔔","🔕","📣","📢","👁‍🗨","💬","💭","🗯","♠️","♣️","♥️","♦️","🃏","🎴","🀄️","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚","🕛","🕜","🕝","🕞","🕟","🕠","🕡","🕢","🕣","🕤","🕥","🕦","🕧"]
     };
+
+    // Create category tabs
+    const categoryTabs = document.createElement('div');
+    categoryTabs.className = 'emoji-categories';
+    
+    Object.keys(categories).forEach((category, index) => {
+        const tab = document.createElement('button');
+        tab.className = 'emoji-category-tab';
+        tab.textContent = category;
+        tab.onclick = () => showCategory(category);
+        if (index === 0) tab.classList.add('active');
+        categoryTabs.appendChild(tab);
+    });
+
+    emojiPicker.appendChild(categoryTabs);
+
+    // Create emoji container
+    const emojiContainer = document.createElement('div');
+    emojiContainer.className = 'emoji-container';
+    emojiPicker.appendChild(emojiContainer);
+
+    function showCategory(category) {
+        // Update active tab
+        document.querySelectorAll('.emoji-category-tab').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.textContent === category) tab.classList.add('active');
+        });
+
+        // Show emojis
+        emojiContainer.innerHTML = '';
+        categories[category].forEach(emoji => {
+            const emojiSpan = document.createElement('span');
+            emojiSpan.className = 'emoji';
+            emojiSpan.textContent = emoji;
+            emojiSpan.onclick = () => {
+                insertEmoji(emoji);
+                toggleEmojiPicker();
+            };
+            emojiContainer.appendChild(emojiSpan);
+        });
+    }
+
+    // Toggle emoji picker
+    function toggleEmojiPicker() {
+        const isVisible = emojiPicker.style.display === 'block';
+        emojiPicker.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) showCategory('Smileys'); // Show first category by default
+    }
+
+    // Insert emoji at cursor position
+    function insertEmoji(emoji) {
+        const start = messageInput.selectionStart;
+        const end = messageInput.selectionEnd;
+        const text = messageInput.value;
+        const before = text.substring(0, start);
+        const after = text.substring(end);
+        messageInput.value = before + emoji + after;
+        messageInput.selectionStart = messageInput.selectionEnd = start + emoji.length;
+        messageInput.focus();
+    }
+
+    // Add click handlers
+    emojiButton.onclick = toggleEmojiPicker;
     
     // Close emoji picker when clicking outside
     document.addEventListener('click', (e) => {
         if (!emojiPicker.contains(e.target) && !emojiButton.contains(e.target)) {
-            emojiPicker.classList.add('hidden');
+            emojiPicker.style.display = 'none';
         }
     });
 
-    // Add keypress event listener to message input
-    messageInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-            emojiPicker.classList.add('hidden'); // Hide emoji picker after sending
-        }
-    });
+    // Add emoji picker to chat input
+    chatInput.appendChild(emojiPicker);
 
-    // Add click event listener to send button
-    document.getElementById('send-button').addEventListener('click', (e) => {
-        e.preventDefault();
-        sendMessage();
-        emojiPicker.classList.add('hidden'); // Hide emoji picker after sending
-    });
+    // Show first category
+    showCategory('Smileys');
 }
 
 // Initialize when DOM is loaded
@@ -2334,55 +2376,773 @@ const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","
     "😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏",
     "😒","😞","😔","😟","😕","🙁","😣","😖","😫","😩",
     "😢","😭","😤","😠","😡","🤬","🤯","😳","😱","😨",
-    "😰","😥","😓","🤗","🤔","😑","😬","🙄","😲","😴",
-    "🤤","😪","😵","😵‍","🤐","🤢","😷","🤒","🤕","🤑",
-    "🤠","😈"];
+    "😰","😥","😓","🤗","🤔","🙄","😬","🙄","😲","😴",
+    "🤤","😪","😵","🤐","🤢","🤮","🤧","😷","🤒","🤕",
+    "🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀"];
 
 function initializeEmojiPicker() {
     const emojiButton = document.querySelector('.emoji-button');
-    const chatInput = document.querySelector('.chat-input input');
-    
+    const messageInput = document.getElementById('message-input');
+    const chatInput = document.querySelector('.chat-input');
+
     // Create emoji picker container
     const emojiPicker = document.createElement('div');
-    emojiPicker.className = 'emoji-picker hidden';
+    emojiPicker.className = 'emoji-picker';
+    emojiPicker.style.display = 'none';
+
+    // Create emoji categories
+    const categories = {
+        'Smileys': ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏","😒","😞","😔","😟","😕","🙁","☹️","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠"],
     
-    // Add emojis to picker
-    emojis.forEach(emoji => {
-        const span = document.createElement('span');
-        span.textContent = emoji;
-        span.onclick = () => {
-            const cursorPos = chatInput.selectionStart;
-            const textBeforeCursor = chatInput.value.substring(0, cursorPos);
-            const textAfterCursor = chatInput.value.substring(cursorPos);
-            
-            chatInput.value = textBeforeCursor + emoji + textAfterCursor;
-            chatInput.focus();
-            
-            // Set cursor position after emoji
-            const newCursorPos = cursorPos + emoji.length;
-            chatInput.setSelectionRange(newCursorPos, newCursorPos);
-            
-            emojiPicker.classList.add('hidden');
-        };
-        emojiPicker.appendChild(span);
-    });
+        'Animals': ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🐛","🦋","🐌","🐞","🐜","🦟","🦗","🕷","🕸","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐","🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐕‍🦺","🐈","🐓","🦃","🦚","🦜","🦢","🦩","🕊","🐇","🦝","🦨","🦡","🦦","🦥","🐁","🐀","🐿","🦔"],
     
-    // Add emoji picker to DOM
-    document.querySelector('.chat-input').appendChild(emojiPicker);
+        'Food': ["🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶","🌽","🥕","🧄","🧅","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩","🍗","🍖","🦴","🌭","🍔","🍟","🍕","🥪","🥙","🧆","🌮","🌯","🥗","🥘","🥫","🍝","🍜","🍲","🍛","🍣","🍱","🥟","🦪","🍤","🍙","🍚","🍘","🍥","🥠","🥮","🍢","🍡","🍧","🍨","🍦","🥧","🧁","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🍩","🍪","🌰","🥜","🍯","🥛","🍼","☕️","🍵","🧃","🥤","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧉","🍾","🧊"],
     
-    // Toggle emoji picker
-    emojiButton.onclick = (e) => {
-        e.stopPropagation();
-        emojiPicker.classList.toggle('hidden');
+        'Activities': ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🥅","⛳️","🪁","🏹","🎣","🤿","🥊","🥋","🎽","🛹","🛷","⛸","🥌","🎿","⛷","🏂","🪂","🏋️‍♀️","🏋️","🤼‍♀️","🤼","🤸‍♀️","🤸","🤺","⛹️‍♀️","⛹️","🤾‍♀️","🤾","🏌️‍♀️","🏌️","🏇","🧘‍♀️","🧘","🏄‍♀️","🏄","🏊‍♀️","🏊","🤽‍♀️","🤽","🚣‍♀️","🚣","🧗‍♀️","🧗","🚵‍♀️","🚵","🚴‍♀️","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🏵","🎗","🎫","🎟","🎪","🤹","🤹‍♂️","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🎷","🎺","🎸","🪕","🎻","🎲","♟","🎯","🎳","🎮","🎰","🧩"],
+    
+        'Travel': ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🚚","🚛","🚜","🦯","🦽","🦼","🛴","🚲","🛵","🏍","🛺","🚨","🚔","🚍","🚘","🚖","🚡","🚠","🚟","🚃","🚋","🚞","🚝","🚄","🚅","🚈","🚂","🚆","🚇","🚊","🚉","✈️","🛫","🛬","🛩","💺","🛰","🚀","🛸","🚁","🛶","⛵️","🚤","🛥","🛳","⛴","🚢","⚓️","⛽️","🚧","🚦","🚥","🚏","🗺","🗿","🗽","🗼","🏰","🏯","🏟","🎡","🎢","🎠","⛲️","⛱","🏖","🏝","🏜","🌋","⛰","🏔","🗻","🏕","⛺️","🏠","🏡","🏘","🏚","🏗","🏭","🏢","🏬","🏣","🏤","🏥","🏦","🏨","🏪","🏫","🏩","💒","🏛","⛪️","🕌","🕍","🛕","🕋","⛩","🛤","🛣","🗾","🎑","🏞","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙","🌃","🌌","🌉","🌁"],
+    
+        'Objects': ["⌚️","📱","📲","💻","⌨️","🖥","🖨","🖱","🖲","🕹","🗜","💽","💾","💿","📀","📼","📷","📸","📹","🎥","📽","🎞","📞","☎️","📟","📠","📺","📻","🎙","🎚","🎛","🧭","⏱","⏲","⏰","🕰","⌛️","⏳","📡","🔋","🔌","💡","🔦","🕯","🪔","🧯","🛢","💸","💵","💴","💶","💷","💰","💳","💎","⚖️","🧰","🔧","🔨","⚒","🛠","⛏","🔩","⚙️","🧱","⛓","🧲","🔫","💣","🧨","🪓","🔪","🗡","⚔️","🛡","🚬","⚰️","⚱️","🏺","🔮","📿","🧿","💈","⚗️","🔭","🔬","🕳","🩹","🩺","💊","💉","🧬","🦠","🧫","🧪","🌡","🧹","🧺","🧻","🚽","🚰","🚿","🛁","🛀","🧼","🪒","🧽","🧴","🛎","🔑","🗝","🚪","🪑","🛋","🛏","🛌","🧸","🖼","🛍","🛒","🎁","🎈","🎏","🎀","🎊","🎉","🎎","🏮","🎐","🧧","✉️","📩","📨","📧","💌","📥","📤","📦","🏷","📪","📫","📬","📭","📮","📯","📜","📃","📄","📑","🧾","📊","📈","📉","🗒","🗓","📆","📅","🗑","📇","🗃","🗳","🗄","📋","📁","📂","🗂","🗞","📰","📓","📔","📒","📕","📗","📘","📙","📚","📖","🔖","🧷","🔗","📎","🖇","📐","📏","🧮","📌","📍","✂️","🖊","🖋","✒️","🖌","🖍","📝","✏️","🔍","🔎","🔏","🔐","🔒","🔓"],
+    
+        'Symbols': ["❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟","☮️","✝️","☪️","🕉","☸️","✡️","🔯","🕎","☯️","☦️","🛐","⛎","♈️","♉️","♊️","♋️","♌️","♍️","♎️","♏️","♐️","♑️","♒️","♓️","🆔","⚛️","🉑","☢️","☣️","📴","📳","🈶","🈚️","🈸","🈺","🈷️","✴️","🆚","💮","🉐","㊙️","㊗️","🈴","🈵","🈹","🈲","🅰️","🅱️","🆎","🆑","🅾️","🆘","❌","⭕️","🛑","⛔️","📛","🚫","💯","💢","♨️","🚷","🚯","🚳","🚱","🔞","📵","🚭","❗️","❕","❓","❔","‼️","⁉️","🔅","🔆","〽️","⚠️","🚸","🔱","⚜️","🔰","♻️","✅","🈯️","💹","❇️","✳️","❎","🌐","💠","Ⓜ️","🌀","💤","🏧","🚾","♿️","🅿️","🈳","🈂️","🛂","🛃","🛄","🛅","🚹","🚺","🚼","🚻","🚮","🎦","📶","🈁","🔣","ℹ️","🔤","🔡","🔠","🆖","🆗","🆙","🆒","🆕","🆓","0️⃣","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","9️⃣","🔟","🔢","#️⃣","*️⃣","⏏️","▶️","⏸","⏯","⏹","⏺","⏭","⏮","⏩","⏪","⏫","⏬","◀️","🔼","🔽","➡️","⬅️","⬆️","⬇️","↗️","↘️","↙️","↖️","↕️","↔️","↪️","↩️","⤴️","⤵️","🔀","🔁","🔂","🔄","🔃","🎵","🎶","➕","➖","➗","✖️","♾","💲","💱","™️","©️","®️","〰️","➰","➿","🔚","🔙","🔛","🔝","🔜","✔️","☑️","🔘","🔴","🟠","🟡","🟢","🔵","🟣","⚫️","⚪️","🟤","🔺","🔻","🔸","🔹","🔶","🔷","🔳","🔲","▪️","▫️","◾️","◽️","◼️","◻️","🟥","🟧","🟨","🟩","🟦","🟪","⬛️","⬜️","🟫","🔈","🔇","🔉","🔊","🔔","🔕","📣","📢","👁‍🗨","💬","💭","🗯","♠️","♣️","♥️","♦️","🃏","🎴","🀄️","🕐","🕑","🕒","🕓","🕔","🕕","🕖","🕗","🕘","🕙","🕚","🕛","🕜","🕝","🕞","🕟","🕠","🕡","🕢","🕣","🕤","🕥","🕦","🕧"]
     };
+
+    // Create category tabs
+    const categoryTabs = document.createElement('div');
+    categoryTabs.className = 'emoji-categories';
+    
+    Object.keys(categories).forEach((category, index) => {
+        const tab = document.createElement('button');
+        tab.className = 'emoji-category-tab';
+        tab.textContent = category;
+        tab.onclick = () => showCategory(category);
+        if (index === 0) tab.classList.add('active');
+        categoryTabs.appendChild(tab);
+    });
+
+    emojiPicker.appendChild(categoryTabs);
+
+    // Create emoji container
+    const emojiContainer = document.createElement('div');
+    emojiContainer.className = 'emoji-container';
+    emojiPicker.appendChild(emojiContainer);
+
+    function showCategory(category) {
+        // Update active tab
+        document.querySelectorAll('.emoji-category-tab').forEach(tab => {
+            tab.classList.remove('active');
+            if (tab.textContent === category) tab.classList.add('active');
+        });
+
+        // Show emojis
+        emojiContainer.innerHTML = '';
+        categories[category].forEach(emoji => {
+            const emojiSpan = document.createElement('span');
+            emojiSpan.className = 'emoji';
+            emojiSpan.textContent = emoji;
+            emojiSpan.onclick = () => {
+                insertEmoji(emoji);
+                toggleEmojiPicker();
+            };
+            emojiContainer.appendChild(emojiSpan);
+        });
+    }
+
+    // Toggle emoji picker
+    function toggleEmojiPicker() {
+        const isVisible = emojiPicker.style.display === 'block';
+        emojiPicker.style.display = isVisible ? 'none' : 'block';
+        if (!isVisible) showCategory('Smileys'); // Show first category by default
+    }
+
+    // Insert emoji at cursor position
+    function insertEmoji(emoji) {
+        const start = messageInput.selectionStart;
+        const end = messageInput.selectionEnd;
+        const text = messageInput.value;
+        const before = text.substring(0, start);
+        const after = text.substring(end);
+        messageInput.value = before + emoji + after;
+        messageInput.selectionStart = messageInput.selectionEnd = start + emoji.length;
+        messageInput.focus();
+    }
+
+    // Add click handlers
+    emojiButton.onclick = toggleEmojiPicker;
     
     // Close emoji picker when clicking outside
     document.addEventListener('click', (e) => {
         if (!emojiPicker.contains(e.target) && !emojiButton.contains(e.target)) {
-            emojiPicker.classList.add('hidden');
+            emojiPicker.style.display = 'none';
+        }
+    });
+
+    // Add emoji picker to chat input
+    chatInput.appendChild(emojiPicker);
+
+    // Show first category
+    showCategory('Smileys');
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeEmojiPicker();
+});
+
+function toggleOptionsMenu() {
+    const menu = document.getElementById('options-menu');
+    menu.classList.toggle('show');
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function closeMenu(e) {
+        if (!menu.contains(e.target) && !e.target.matches('.fa-ellipsis-vertical')) {
+            menu.classList.remove('show');
+            document.removeEventListener('click', closeMenu);
+        }
+    });
+} 
+
+// Add this new function
+function toggleChatOptionsMenu() {
+    const menu = document.getElementById('chat-options-menu');
+    menu.classList.toggle('show');
+    
+    // Close menu when clicking outside
+    document.addEventListener('click', function closeMenu(e) {
+        if (!menu.contains(e.target) && !e.target.matches('.fa-ellipsis-vertical')) {
+            menu.classList.remove('show');
+            document.removeEventListener('click', closeMenu);
         }
     });
 }
 
-// Call this function when the chat interface is initialized
-initializeEmojiPicker(); 
+// Add this to close both menus when clicking outside
+document.addEventListener('click', (e) => {
+    const sidebarMenu = document.getElementById('options-menu');
+    const chatMenu = document.getElementById('chat-options-menu');
+    const sidebarButton = e.target.matches('.sidebar .fa-ellipsis-vertical');
+    const chatButton = e.target.matches('.chat-actions .fa-ellipsis-vertical');
+
+    if (!sidebarButton && !chatButton) {
+        if (!sidebarMenu.contains(e.target)) {
+            sidebarMenu.classList.remove('show');
+        }
+        if (!chatMenu.contains(e.target)) {
+            chatMenu.classList.remove('show');
+        }
+    }
+}); 
+
+// Add this to your existing script
+let isRecording = false;
+let mediaRecorder = null;
+let audioChunks = [];
+let recordingTimer = null;
+let recordingStartTime = null;
+
+function initializeVoiceRecording() {
+    const voiceButton = document.getElementById('voice-record-btn');
+    const sendButton = document.getElementById('send-button');
+    const messageInput = document.getElementById('message-input');
+    
+    let mediaRecorder = null;
+    let audioChunks = [];
+    let isRecording = false;
+    let recordingStartTime = null;
+    let recordingTimer = null;
+
+    // Create voice recording UI
+    const recordingUI = document.createElement('div');
+    recordingUI.className = 'voice-recording-ui';
+    recordingUI.innerHTML = `
+        <div class="recording-indicator">
+            <i class="fas fa-microphone recording-icon"></i>
+            <span class="recording-time">0:00</span>
+        </div>
+        <div class="recording-controls">
+            <button class="cancel-recording">
+                <i class="fas fa-times"></i>
+            </button>
+            <button class="send-recording">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    `;
+    document.querySelector('.chat-input').appendChild(recordingUI);
+
+    voiceButton.addEventListener('click', async () => {
+        if (!isRecording) {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                startRecording(stream);
+            } catch (error) {
+                console.error('Error accessing microphone:', error);
+                alert('Could not access microphone');
+            }
+        } else {
+            stopRecording();
+        }
+    });
+
+    function startRecording(stream) {
+        mediaRecorder = new MediaRecorder(stream);
+        audioChunks = [];
+        isRecording = true;
+
+        mediaRecorder.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+        };
+
+        mediaRecorder.start();
+        recordingStartTime = Date.now();
+        updateRecordingUI(true);
+        startRecordingTimer();
+    }
+
+    function stopRecording() {
+        if (!mediaRecorder) return;
+
+        mediaRecorder.stop();
+        mediaRecorder.stream.getTracks().forEach(track => track.stop());
+        isRecording = false;
+        stopRecordingTimer();
+        updateRecordingUI(false);
+
+        // Create audio blob and send
+        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+        uploadAndSendVoiceMessage(audioBlob);
+    }
+
+    function updateRecordingUI(isRecording) {
+        recordingUI.style.display = isRecording ? 'flex' : 'none';
+        voiceButton.classList.toggle('recording', isRecording);
+        voiceButton.querySelector('i').className = isRecording ? 'fas fa-stop' : 'fas fa-microphone';
+    }
+
+    function startRecordingTimer() {
+        const timerDisplay = recordingUI.querySelector('.recording-time');
+        recordingTimer = setInterval(() => {
+            const duration = Math.floor((Date.now() - recordingStartTime) / 1000);
+            const minutes = Math.floor(duration / 60);
+            const seconds = duration % 60;
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    }
+
+    function stopRecordingTimer() {
+        clearInterval(recordingTimer);
+    }
+
+    async function uploadAndSendVoiceMessage(audioBlob) {
+        try {
+            const storage = firebase.storage();
+            const storageRef = storage.ref();
+            const audioRef = storageRef.child(`voice_messages/${Date.now()}.wav`);
+
+            // Upload audio file
+            const uploadTask = audioRef.put(audioBlob);
+            
+            uploadTask.on('state_changed',
+                (snapshot) => {
+                    const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log('Upload progress:', progress);
+                },
+                (error) => {
+                    console.error('Upload error:', error);
+                    alert('Failed to send voice message');
+                },
+                async () => {
+                    const downloadURL = await uploadTask.snapshot.ref.getDownloadURL();
+                    
+                    // Save message to database
+                    const message = {
+                        type: 'voice',
+                        url: downloadURL,
+                        sender: firebase.auth().currentUser.uid,
+                        timestamp: firebase.database.ServerValue.TIMESTAMP,
+                        duration: Math.floor((Date.now() - recordingStartTime) / 1000)
+                    };
+
+                    await firebase.database().ref('messages').push(message);
+                }
+            );
+        } catch (error) {
+            console.error('Error sending voice message:', error);
+            alert('Failed to send voice message');
+        }
+    }
+}
+
+function sendVoiceMessage(audioBlob) {
+    // Here you would typically:
+    // 1. Upload the audio blob to your server or storage
+    // 2. Get the URL of the uploaded audio
+    // 3. Send the message with the audio URL
+    console.log('Sending voice message:', audioBlob);
+}
+
+// Initialize voice recording when the chat is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initializeVoiceRecording();
+});
+
+// Add this function to update user count
+function updateUserCount() {
+    const usersRef = firebase.database().ref('users');
+    
+    usersRef.on('value', (snapshot) => {
+        let count = 0;
+        snapshot.forEach((childSnapshot) => {
+            const user = childSnapshot.val();
+            // Don't count the current user
+            if (user.id !== firebase.auth().currentUser.uid) {
+                count++;
+            }
+        });
+        
+        // Update the badge
+        const badge = document.querySelector('.user-count-badge');
+        if (badge) {
+            badge.textContent = count;
+            // Hide badge if count is 0
+            badge.style.display = count > 0 ? 'flex' : 'none';
+        }
+    });
+}
+
+// Call this when the app initializes
+document.addEventListener('DOMContentLoaded', () => {
+    // ... existing initialization code ...
+    updateUserCount();
+});
+
+// Add this to your existing script
+function initializeImageUpload() {
+    const photoUpload = document.getElementById('photo-upload');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const voiceButton = document.getElementById('voice-record-btn');
+    
+    let selectedImage = null;
+
+    // Create image preview container
+    let previewContainer = document.querySelector('.image-preview-container');
+    if (!previewContainer) {
+        previewContainer = document.createElement('div');
+        previewContainer.className = 'image-preview-container';
+        document.querySelector('.chat-input').insertBefore(previewContainer, null);
+    }
+
+    photoUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        console.log('File selected:', file); // Debug log
+        
+        if (file && file.type.startsWith('image/')) {
+            selectedImage = file;
+            showImagePreview(file);
+            toggleSendButton(true);
+        }
+    });
+
+    function showImagePreview(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewContainer.innerHTML = `
+                <img src="${e.target.result}" class="message-image-preview" alt="Selected image">
+                <div class="image-preview-content">
+                    <input type="text" class="image-caption" placeholder="Add a caption...">
+                    <div class="image-preview-actions">
+                        <button class="cancel-upload" onclick="cancelImageUpload()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            previewContainer.style.display = 'flex';
+            previewContainer.querySelector('.image-caption').focus();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.cancelImageUpload = function() {
+        selectedImage = null;
+        previewContainer.style.display = 'none';
+        photoUpload.value = '';
+        if (!messageInput.value.trim()) {
+            toggleSendButton(false);
+        }
+    };
+
+    sendButton.addEventListener('click', function() {
+        if (selectedImage) {
+            const caption = previewContainer.querySelector('.image-caption')?.value.trim() || '';
+            sendImageMessage(selectedImage, caption);
+        } else if (messageInput.value.trim()) {
+            const text = messageInput.value.trim();
+            sendTextMessage(text);
+            messageInput.value = '';
+            toggleSendButton(false);
+        }
+    });
+
+    function sendImageMessage(imageFile, caption) {
+        // Initialize Firebase Storage
+        const storage = firebase.storage();
+        const storageRef = storage.ref();
+        const imageRef = storageRef.child(`chat_images/${Date.now()}_${imageFile.name}`);
+
+        // Show loading state
+        sendButton.disabled = true;
+
+        // Upload the image
+        const uploadTask = imageRef.put(imageFile);
+
+        // Monitor upload progress
+        uploadTask.on('state_changed', 
+            // Progress function
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload progress:', progress);
+            },
+            // Error function
+            (error) => {
+                console.error('Upload error:', error);
+                alert('Failed to upload image. Please try again.');
+                sendButton.disabled = false;
+            },
+            // Complete function
+            () => {
+                // Get download URL
+                uploadTask.snapshot.ref.getDownloadURL()
+                    .then((downloadURL) => {
+                        // Create message data
+                        const messageData = {
+                            type: 'image',
+                            url: downloadURL,
+                            caption: caption || '',
+                            sender: firebase.auth().currentUser.uid,
+                            timestamp: firebase.database.ServerValue.TIMESTAMP
+                        };
+
+                        // Save message to database
+                        return firebase.database().ref('messages').push(messageData);
+                    })
+                    .then(() => {
+                        console.log('Image sent successfully');
+                        // Reset UI
+                        cancelImageUpload();
+                        sendButton.disabled = false;
+                    })
+                    .catch((error) => {
+                        console.error('Error saving message:', error);
+                        alert('Failed to send image. Please try again.');
+                        sendButton.disabled = false;
+                    });
+            }
+        );
+    }
+
+    function sendTextMessage(text) {
+        const message = {
+            type: 'text',
+            content: text,
+            sender: firebase.auth().currentUser.uid,
+            timestamp: firebase.database.ServerValue.TIMESTAMP
+        };
+
+        firebase.database().ref('messages').push(message)
+            .catch(error => {
+                console.error('Error sending message:', error);
+                alert('Failed to send message. Please try again.');
+            });
+    }
+
+    function toggleSendButton(show) {
+        if (show) {
+            voiceButton.style.display = 'none';
+            sendButton.style.display = 'block';
+            sendButton.classList.add('show');
+        } else {
+            sendButton.classList.remove('show');
+            setTimeout(() => {
+                if (!messageInput.value.trim() && !selectedImage) {
+                    sendButton.style.display = 'none';
+                    voiceButton.style.display = 'block';
+                }
+            }, 200);
+        }
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeImageUpload();
+    initializeMessageDelete();
+});
+
+// Initialize Firebase Storage
+function initializeFirebaseStorage() {
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    return firebase.storage();
+}
+
+// Add message delete functionality
+function initializeMessageDelete() {
+    const chatMessages = document.querySelector('.chat-messages');
+
+    // Add long press and right-click handlers for messages
+    chatMessages.addEventListener('contextmenu', handleMessageRightClick);
+    chatMessages.addEventListener('mousedown', handleMessageLongPress);
+    chatMessages.addEventListener('mouseup', () => clearTimeout(pressTimer));
+    chatMessages.addEventListener('mouseleave', () => clearTimeout(pressTimer));
+
+    let pressTimer;
+
+    function handleMessageLongPress(e) {
+        const messageElement = e.target.closest('.message');
+        if (!messageElement) return;
+
+        pressTimer = setTimeout(() => {
+            showDeleteOptions(messageElement);
+        }, 500);
+    }
+
+    function handleMessageRightClick(e) {
+        e.preventDefault();
+        const messageElement = e.target.closest('.message');
+        if (!messageElement) return;
+        showDeleteOptions(messageElement);
+    }
+
+    function showDeleteOptions(messageElement) {
+        const existingDialog = document.querySelector('.delete-dialog');
+        if (existingDialog) existingDialog.remove();
+
+        const isSentByMe = messageElement.classList.contains('sent');
+        const messageId = messageElement.getAttribute('data-message-id');
+
+        const deleteDialog = document.createElement('div');
+        deleteDialog.className = 'delete-dialog';
+        deleteDialog.innerHTML = `
+            <div class="delete-dialog-content">
+                <div class="delete-dialog-header">
+                    <h3>Delete Message?</h3>
+                </div>
+                <div class="delete-options">
+                    <button class="delete-option delete-for-me">
+                        <i class="fas fa-trash"></i>
+                        Delete for me
+                    </button>
+                    ${isSentByMe ? `
+                        <button class="delete-option delete-for-everyone">
+                            <i class="fas fa-trash-alt"></i>
+                            Delete for everyone
+                        </button>
+                    ` : ''}
+                </div>
+                <button class="cancel-delete">CANCEL</button>
+            </div>
+        `;
+
+        deleteDialog.querySelector('.delete-for-me').onclick = () => {
+            deleteMessageForMe(messageId);
+            deleteDialog.remove();
+        };
+
+        if (isSentByMe) {
+            deleteDialog.querySelector('.delete-for-everyone').onclick = () => {
+                deleteMessageForEveryone(messageId);
+                deleteDialog.remove();
+            };
+        }
+
+        deleteDialog.querySelector('.cancel-delete').onclick = () => {
+            deleteDialog.remove();
+        };
+
+        deleteDialog.onclick = (e) => {
+            if (e.target === deleteDialog) {
+                deleteDialog.remove();
+            }
+        };
+
+        document.body.appendChild(deleteDialog);
+    }
+
+    function deleteMessageForMe(messageId) {
+        if (!messageId) return;
+
+        const messagesRef = firebase.database().ref('messages');
+        const currentUser = firebase.auth().currentUser.uid;
+
+        messagesRef.child(messageId).update({
+            [`deletedFor/${currentUser}`]: true,
+            deletedAt: firebase.database.ServerValue.TIMESTAMP
+        }).then(() => {
+            const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (messageElement) {
+                messageElement.remove();
+            }
+        }).catch(error => {
+            console.error('Error deleting message:', error);
+            alert('Failed to delete message');
+        });
+    }
+
+    function deleteMessageForEveryone(messageId) {
+        if (!messageId) return;
+
+        const messagesRef = firebase.database().ref('messages');
+        const currentUser = firebase.auth().currentUser.uid;
+
+        messagesRef.child(messageId).update({
+            deleted: true,
+            deletedBy: currentUser,
+            deletedAt: firebase.database.ServerValue.TIMESTAMP,
+            content: null,
+            text: null,
+            imageUrl: null
+        }).then(() => {
+            const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (messageElement) {
+                messageElement.innerHTML = `
+                    <div class="message-content deleted">
+                        <span class="deleted-text">This message was deleted</span>
+                        <div class="message-time">${formatTime(Date.now())}</div>
+                    </div>
+                `;
+                messageElement.classList.add('deleted');
+            }
+        }).catch(error => {
+            console.error('Error deleting message:', error);
+            alert('Failed to delete message');
+        });
+    }
+
+    // Listen for message deletions in real-time
+    const messagesRef = firebase.database().ref('messages');
+    messagesRef.on('child_changed', (snapshot) => {
+        const message = snapshot.val();
+        const messageId = snapshot.key;
+        const currentUser = firebase.auth().currentUser.uid;
+
+        // Handle message deleted for everyone
+        if (message.deleted) {
+            const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (messageElement) {
+                messageElement.innerHTML = `
+                    <div class="message-content deleted">
+                        <span class="deleted-text">This message was deleted</span>
+                        <div class="message-time">${formatTime(message.deletedAt)}</div>
+                    </div>
+                `;
+                messageElement.classList.add('deleted');
+            }
+        }
+        // Handle message deleted for current user
+        else if (message.deletedFor && message.deletedFor[currentUser]) {
+            const messageElement = document.querySelector(`[data-message-id="${messageId}"]`);
+            if (messageElement) {
+                messageElement.remove();
+            }
+        }
+    });
+}
+
+// Update the message display function
+function displayMessage(message, messageId) {
+    if (!message || !messageId) return null;
+
+    const currentUser = firebase.auth().currentUser.uid;
+    
+    // Don't display if deleted for current user
+    if (message.deletedFor && message.deletedFor[currentUser]) {
+        return null;
+    }
+
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${message.sender === currentUser ? 'sent' : 'received'}`;
+    messageDiv.setAttribute('data-message-id', messageId);
+
+    if (message.deleted) {
+        messageDiv.classList.add('deleted');
+        messageDiv.innerHTML = `
+            <div class="message-content deleted">
+                <span class="deleted-text">This message was deleted</span>
+                <div class="message-time">${formatTime(message.deletedAt)}</div>
+            </div>
+        `;
+    } else {
+        messageDiv.innerHTML = `
+            <div class="message-content">
+                ${message.imageUrl ? 
+                    `<img src="${message.imageUrl}" alt="Sent image" class="message-image">` : 
+                    `<div class="message-text">${message.text}</div>`
+                }
+                ${message.caption ? `<div class="message-caption">${message.caption}</div>` : ''}
+                <div class="message-time">${formatTime(message.timestamp)}</div>
+            </div>
+        `;
+    }
+
+    return messageDiv;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initializeVoiceRecording();
+    initializeImageUpload();
+});
+
+function initializeChatSelection() {
+    const mainChat = document.querySelector('.main-chat');
+    const chatList = document.querySelector('.chat-list');
+    
+    // Add click handler for chat list items
+    chatList.addEventListener('click', (e) => {
+        const chatItem = e.target.closest('.chat-item');
+        if (!chatItem) return;
+
+        // Show chat interface
+        mainChat.classList.add('chat-active');
+
+        // Update chat header with user info
+        const userName = chatItem.querySelector('.user-name')?.textContent || 'User';
+        const userStatus = chatItem.querySelector('.user-status')?.textContent || 'online';
+        const userAvatar = chatItem.querySelector('img')?.src || 'default-avatar.png';
+
+        document.querySelector('.chat-avatar').src = userAvatar;
+        document.querySelector('.contact-name').textContent = userName;
+        document.querySelector('.contact-status').textContent = userStatus;
+
+        // Handle mobile view
+        if (window.innerWidth <= 768) {
+            document.querySelector('.sidebar').style.display = 'none';
+            document.querySelector('.main-chat').style.display = 'flex';
+        }
+    });
+
+    // Back button handler
+    const backButton = document.querySelector('.back-button');
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            // Hide chat interface
+            mainChat.classList.remove('chat-active');
+
+            // Handle mobile view
+            if (window.innerWidth <= 768) {
+                document.querySelector('.sidebar').style.display = 'flex';
+                document.querySelector('.main-chat').style.display = 'none';
+            }
+        });
+    }
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeChatSelection();
+    initializeVoiceRecording();
+    initializeImageUpload();
+    initializeMessageDelete();
+});
