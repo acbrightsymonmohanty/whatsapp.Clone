@@ -918,8 +918,77 @@ function sendMessage() {
         .then(() => {
             messageInput.focus();
             updateLastMessage(chatId, messageData);
+            scrollToBottom();
         });
 }
+
+// Update emoji picker initialization
+function initializeEmojiPicker() {
+    const emojiButton = document.querySelector('.emoji-button');
+    const messageInput = document.getElementById('message-input');
+    
+    // Create emoji picker container
+    const emojiPicker = document.createElement('div');
+    emojiPicker.className = 'emoji-picker hidden';
+    
+    // Add emojis to picker
+    emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.textContent = emoji;
+        span.onclick = () => {
+            const cursorPos = messageInput.selectionStart;
+            const textBeforeCursor = messageInput.value.substring(0, cursorPos);
+            const textAfterCursor = messageInput.value.substring(cursorPos);
+            
+            messageInput.value = textBeforeCursor + emoji + textAfterCursor;
+            messageInput.focus();
+            
+            // Set cursor position after emoji
+            const newCursorPos = cursorPos + emoji.length;
+            messageInput.setSelectionRange(newCursorPos, newCursorPos);
+            
+            emojiPicker.classList.add('hidden');
+        };
+        emojiPicker.appendChild(span);
+    });
+    
+    // Add emoji picker to DOM
+    document.querySelector('.chat-input').appendChild(emojiPicker);
+    
+    // Toggle emoji picker
+    emojiButton.onclick = (e) => {
+        e.stopPropagation();
+        emojiPicker.classList.toggle('hidden');
+    };
+    
+    // Close emoji picker when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!emojiPicker.contains(e.target) && !emojiButton.contains(e.target)) {
+            emojiPicker.classList.add('hidden');
+        }
+    });
+
+    // Add keypress event listener to message input
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+            emojiPicker.classList.add('hidden'); // Hide emoji picker after sending
+        }
+    });
+
+    // Add click event listener to send button
+    document.getElementById('send-button').addEventListener('click', (e) => {
+        e.preventDefault();
+        sendMessage();
+        emojiPicker.classList.add('hidden'); // Hide emoji picker after sending
+    });
+}
+
+// Initialize when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    initializeEmojiPicker();
+});
 
 // Mark messages as read when chat is opened
 function markMessagesAsRead(chatId) {
@@ -2258,3 +2327,62 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, 2000); // Adjust time as needed
 }); 
+
+// Emoji functionality
+const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇",
+    "🙂","🙃","😉","😌","😍","😘","😗","😙","😚","😋",
+    "😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏",
+    "😒","😞","😔","😟","😕","🙁","😣","😖","😫","😩",
+    "😢","😭","😤","😠","😡","🤬","🤯","😳","😱","😨",
+    "😰","😥","😓","🤗","🤔","😑","😬","🙄","😲","😴",
+    "🤤","😪","😵","😵‍","🤐","🤢","😷","🤒","🤕","🤑",
+    "🤠","😈"];
+
+function initializeEmojiPicker() {
+    const emojiButton = document.querySelector('.emoji-button');
+    const chatInput = document.querySelector('.chat-input input');
+    
+    // Create emoji picker container
+    const emojiPicker = document.createElement('div');
+    emojiPicker.className = 'emoji-picker hidden';
+    
+    // Add emojis to picker
+    emojis.forEach(emoji => {
+        const span = document.createElement('span');
+        span.textContent = emoji;
+        span.onclick = () => {
+            const cursorPos = chatInput.selectionStart;
+            const textBeforeCursor = chatInput.value.substring(0, cursorPos);
+            const textAfterCursor = chatInput.value.substring(cursorPos);
+            
+            chatInput.value = textBeforeCursor + emoji + textAfterCursor;
+            chatInput.focus();
+            
+            // Set cursor position after emoji
+            const newCursorPos = cursorPos + emoji.length;
+            chatInput.setSelectionRange(newCursorPos, newCursorPos);
+            
+            emojiPicker.classList.add('hidden');
+        };
+        emojiPicker.appendChild(span);
+    });
+    
+    // Add emoji picker to DOM
+    document.querySelector('.chat-input').appendChild(emojiPicker);
+    
+    // Toggle emoji picker
+    emojiButton.onclick = (e) => {
+        e.stopPropagation();
+        emojiPicker.classList.toggle('hidden');
+    };
+    
+    // Close emoji picker when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!emojiPicker.contains(e.target) && !emojiButton.contains(e.target)) {
+            emojiPicker.classList.add('hidden');
+        }
+    });
+}
+
+// Call this function when the chat interface is initialized
+initializeEmojiPicker(); 
