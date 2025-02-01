@@ -430,6 +430,7 @@ class WhatsAppChat {
     }
 }
 
+
 // Initialize only once when DOM is loaded
 let whatsAppInstance = null;
 document.addEventListener('DOMContentLoaded', () => {
@@ -744,42 +745,34 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load Users List
 function loadUsers() {
     const usersList = document.querySelector('.chat-list');
-    const searchInput = document.querySelector('.search-input');
-    
-    // Clear existing users first
-    usersList.innerHTML = '';
-    
-    // Keep track of displayed users by ID
-    const displayedUsers = new Set();
+    const searchInput = document.querySelector('.search-container input');
+    if (!usersList || !searchInput) {
+        console.error('Chat list or search input element not found');
+        return;
+    }
 
     // Reference to users in Firebase
     const usersRef = firebase.database().ref('users');
 
-    // Remove existing listeners before adding new ones
-    usersRef.off();
+    // Keep track of user elements by ID
+    const userElements = {};
+    const usersData = {}; // Store user data for filtering
 
     // Function to update or create a user list item
     function updateUser(user) {
-        // Skip if user is current user or already displayed
-        if (user.id === currentUser.id || displayedUsers.has(user.id)) {
-            return;
-        }
-
-        displayedUsers.add(user.id);
         const chatId = [currentUser.id, user.id].sort().join('_');
 
-        // Create a new user element
-        const userElement = document.createElement('div');
-        userElement.className = 'chat-item';
-        userElement.setAttribute('data-id', user.id);
-        usersList.appendChild(userElement);
+        // Check if user element already exists
+        let userElement = userElements[user.id];
+        if (!userElement) {
+            // Create a new user element
+            userElement = document.createElement('div');
+            userElement.className = 'chat-item';
+            userElement.setAttribute('data-id', user.id);
+            usersList.appendChild(userElement);
+            userElements[user.id] = userElement;
+        }
 
-        // Update user element content
-        updateUserElement(userElement, user, chatId);
-    }
-
-    // Function to update user element content
-    function updateUserElement(element, user, chatId) {
         // Update last message, unread count, and status in real-time
         firebase.database().ref('messages').child(chatId).limitToLast(1).on('value', (snapshot) => {
             let lastMessage = '';
@@ -795,7 +788,8 @@ function loadUsers() {
                 }
             });
 
-            element.innerHTML = `
+            // Update the user element
+            userElement.innerHTML = `
                 <div class="user-wrapper">
                     <div class="user-avatar">
                         <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${user.username}&background=00a884&color=fff`}" 
@@ -817,13 +811,14 @@ function loadUsers() {
         });
 
         // Add click event to open chat
-        element.addEventListener('click', () => startChat(user));
+        userElement.addEventListener('click', () => startChat(user));
     }
 
     // Listen for user additions
     usersRef.on('child_added', (snapshot) => {
         const user = snapshot.val();
         if (user.id !== currentUser.id) {
+            usersData[user.id] = user; // Store user data for search
             updateUser(user);
         }
     });
@@ -832,22 +827,34 @@ function loadUsers() {
     usersRef.on('child_changed', (snapshot) => {
         const user = snapshot.val();
         if (user.id !== currentUser.id) {
-            const userElement = document.querySelector(`[data-id="${user.id}"]`);
-            if (userElement) {
-                const chatId = [currentUser.id, user.id].sort().join('_');
-                updateUserElement(userElement, user, chatId);
-            }
+            usersData[user.id] = user; // Update user data for search
+            updateUser(user);
         }
     });
 
     // Listen for user removals
     usersRef.on('child_removed', (snapshot) => {
         const user = snapshot.val();
-        const userElement = document.querySelector(`[data-id="${user.id}"]`);
+        const userElement = userElements[user.id];
         if (userElement) {
-            userElement.remove();
-            displayedUsers.delete(user.id);
+            usersList.removeChild(userElement);
+            delete userElements[user.id];
+            delete usersData[user.id];
         }
+    });
+
+    // User List Search functionality
+    searchInput.addEventListener('input', (event) => {
+        const searchTerm = event.target.value.toLowerCase();
+        Object.values(userElements).forEach((userElement) => {
+            const userId = userElement.getAttribute('data-id');
+            const user = usersData[userId];
+            if (user.username.toLowerCase().includes(searchTerm)) {
+                userElement.style.display = '';
+            } else {
+                userElement.style.display = 'none';
+            }
+        });
     });
 }
 
