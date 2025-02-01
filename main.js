@@ -479,75 +479,227 @@ function registerUser(event) {
         });
 }
 
-// Login existing user with email
+// Update the loginUser function
 function loginUser(event) {
     event.preventDefault();
     
     const email = document.getElementById('login-email').value.trim();
     const password = document.getElementById('login-password').value;
 
-    auth.signInWithEmailAndPassword(email, password)
-        .then((userCredential) => {
-            // Login successful, auth state listener will handle the redirect
-            console.log('Login successful');
-        })
-        .catch((error) => {
-            console.error('Login error:', error);
-            alert('Login failed: ' + error.message);
+    // Show loading state
+    const loginBtn = document.querySelector('#login-form button[type="submit"]');
+    if (loginBtn) {
+        loginBtn.disabled = true;
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+    }
+
+    // First sign out any existing session
+    auth.signOut().then(() => {
+        // Then attempt to sign in
+        return auth.signInWithEmailAndPassword(email, password);
+    })
+    .then((userCredential) => {
+        // Set session flag
+        sessionStorage.setItem('isNewLogin', 'true');
+        
+        // Update user status
+        return database.ref('users/' + userCredential.user.uid).update({
+            status: 'online',
+            lastSeen: firebase.database.ServerValue.TIMESTAMP
         });
+    })
+    .then(() => {
+        // Reload the page
+        window.location.href = window.location.href.split('#')[0];
+    })
+    .catch((error) => {
+        console.error('Login error:', error);
+        alert('Login failed: ' + error.message);
+        
+        // Reset login button
+        if (loginBtn) {
+            loginBtn.disabled = false;
+            loginBtn.innerHTML = 'Login';
+        }
+    });
 }
 
-// Auth state change listener
+// Update the auth state change listener
 auth.onAuthStateChanged((user) => {
+    const isNewLogin = sessionStorage.getItem('isNewLogin') === 'true';
+    
     if (user) {
         // User is signed in
         console.log('User is signed in:', user);
         
-        // Get additional user data from database
+        // Get user data
         database.ref('users/' + user.uid).once('value')
             .then((snapshot) => {
                 currentUser = snapshot.val();
-                showApp();
+                
+                // Clear any existing data and listeners
+                cleanupBeforeLogin();
                 
                 // Update user status
-                database.ref('users/' + user.uid).update({
+                return database.ref('users/' + user.uid).update({
                     status: 'online',
                     lastSeen: firebase.database.ServerValue.TIMESTAMP
                 });
+            })
+            .then(() => {
+                // Initialize app
+                showApp();
+                setupPresence();
+                loadUsers();
+                updateProfileInfo();
+                initializeChatSelection();
+                
+                // Clear login flag
+                sessionStorage.removeItem('isNewLogin');
+            })
+            .catch((error) => {
+                console.error('Error initializing app:', error);
+                alert('Error initializing app. Please try again.');
             });
     } else {
         // User is signed out
-        currentUser = null;
-        document.getElementById('register-screen').style.display = 'flex';
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-container').style.display = 'none';
+        if (!isNewLogin) {
+            cleanupBeforeLogin();
+            currentUser = null;
+            
+            // Show login screen
+            document.getElementById('register-screen').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('app-container').style.display = 'none';
+        }
     }
 });
 
-// Show main app
+// Update cleanupBeforeLogin function
+function cleanupBeforeLogin() {
+    // Remove all Firebase listeners
+    firebase.database().ref('users').off();
+    firebase.database().ref('messages').off();
+    firebase.database().ref('.info/connected').off();
+    
+    // Clear all chat data
+    const chatList = document.querySelector('.chat-list');
+    if (chatList) chatList.innerHTML = '';
+    
+    const chatMessages = document.querySelector('.chat-messages');
+    if (chatMessages) chatMessages.innerHTML = '';
+    
+    // Reset chat state
+    currentChat = null;
+    
+    // Clear stored data (except session flag)
+    const isNewLogin = sessionStorage.getItem('isNewLogin');
+    localStorage.clear();
+    sessionStorage.clear();
+    if (isNewLogin) {
+        sessionStorage.setItem('isNewLogin', isNewLogin);
+    }
+    
+    // Reset UI elements
+    const mainChat = document.querySelector('.main-chat');
+    if (mainChat) {
+        mainChat.classList.remove('active', 'chat-active');
+    }
+}
+
+// Update showApp function
 function showApp() {
+    // Update display
     document.getElementById('register-screen').style.display = 'none';
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app-container').style.display = 'flex';
-    initializeApp(currentUser);
-    updateProfileInfo();
+    
+    // Reset any existing chat views
+    const mainChat = document.querySelector('.main-chat');
+    if (mainChat) {
+        mainChat.classList.remove('active', 'chat-active');
+    }
+    
+    // Clear any existing messages
+    const chatMessages = document.querySelector('.chat-messages');
+    if (chatMessages) {
+        chatMessages.innerHTML = '';
+    }
 }
 
-// Initialize App
-function initializeApp(user) {
-    currentUser = user;
-    loadUsers();
-    setupPresence();
-}
-
-// Sign Out
+// Update the signOut function to handle logout without refresh
 function signOut() {
-    cleanupPresence();
-    auth.signOut().then(() => {
-        window.location.reload();
-    }).catch((error) => {
-        console.error("Error signing out:", error);
-    });
+    // Show loading state
+    const logoutBtn = document.querySelector('.logout-btn');
+    if (logoutBtn) {
+        logoutBtn.disabled = true;
+        logoutBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging out...';
+    }
+
+    Promise.resolve()
+        .then(() => {
+            // First update user status to offline
+            if (currentUser) {
+                return firebase.database().ref(`users/${currentUser.id}`).update({
+                    status: 'offline',
+                    lastSeen: firebase.database.ServerValue.TIMESTAMP
+                });
+            }
+        })
+        .then(() => {
+            // Clean up all listeners
+            firebase.database().ref('users').off();
+            firebase.database().ref('messages').off();
+            
+            // Clear any stored data
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            // Clear current user and chat
+            currentUser = null;
+            currentChat = null;
+            
+            // Clear chat list
+            const chatList = document.querySelector('.chat-list');
+            if (chatList) {
+                chatList.innerHTML = '';
+            }
+            
+            // Sign out from Firebase
+            return auth.signOut();
+        })
+        .then(() => {
+            // Update UI without page refresh
+            document.getElementById('app-container').style.display = 'none';
+            document.getElementById('profile-modal').style.display = 'none';
+            document.getElementById('login-screen').style.display = 'flex';
+            document.getElementById('register-screen').style.display = 'none';
+            
+            // Reset form fields
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            
+            // Clear main chat area
+            const mainChat = document.querySelector('.main-chat');
+            if (mainChat) {
+                mainChat.classList.remove('active');
+                const messages = mainChat.querySelector('.chat-messages');
+                if (messages) {
+                    messages.innerHTML = '';
+                }
+            }
+        })
+        .catch((error) => {
+            console.error("Error signing out:", error);
+            alert('Error signing out. Please try again.');
+        })
+        .finally(() => {
+            // Reset logout button
+            if (logoutBtn) {
+                logoutBtn.disabled = false;
+                logoutBtn.innerHTML = '<i class="fas fa-sign-out-alt"></i> Logout';
+            }
+        });
 }
 
 // Toggle between login and register screens
@@ -592,34 +744,42 @@ document.addEventListener('DOMContentLoaded', () => {
 // Load Users List
 function loadUsers() {
     const usersList = document.querySelector('.chat-list');
-    const searchInput = document.querySelector('.search-container input');
-    if (!usersList || !searchInput) {
-        console.error('Chat list or search input element not found');
-        return;
-    }
+    const searchInput = document.querySelector('.search-input');
+    
+    // Clear existing users first
+    usersList.innerHTML = '';
+    
+    // Keep track of displayed users by ID
+    const displayedUsers = new Set();
 
     // Reference to users in Firebase
     const usersRef = firebase.database().ref('users');
 
-    // Keep track of user elements by ID
-    const userElements = {};
-    const usersData = {}; // Store user data for filtering
+    // Remove existing listeners before adding new ones
+    usersRef.off();
 
     // Function to update or create a user list item
     function updateUser(user) {
-        const chatId = [currentUser.id, user.id].sort().join('_');
-
-        // Check if user element already exists
-        let userElement = userElements[user.id];
-        if (!userElement) {
-            // Create a new user element
-            userElement = document.createElement('div');
-            userElement.className = 'chat-item';
-            userElement.setAttribute('data-id', user.id);
-            usersList.appendChild(userElement);
-            userElements[user.id] = userElement;
+        // Skip if user is current user or already displayed
+        if (user.id === currentUser.id || displayedUsers.has(user.id)) {
+            return;
         }
 
+        displayedUsers.add(user.id);
+        const chatId = [currentUser.id, user.id].sort().join('_');
+
+        // Create a new user element
+        const userElement = document.createElement('div');
+        userElement.className = 'chat-item';
+        userElement.setAttribute('data-id', user.id);
+        usersList.appendChild(userElement);
+
+        // Update user element content
+        updateUserElement(userElement, user, chatId);
+    }
+
+    // Function to update user element content
+    function updateUserElement(element, user, chatId) {
         // Update last message, unread count, and status in real-time
         firebase.database().ref('messages').child(chatId).limitToLast(1).on('value', (snapshot) => {
             let lastMessage = '';
@@ -635,8 +795,7 @@ function loadUsers() {
                 }
             });
 
-            // Update the user element
-            userElement.innerHTML = `
+            element.innerHTML = `
                 <div class="user-wrapper">
                     <div class="user-avatar">
                         <img src="${user.photoURL || `https://ui-avatars.com/api/?name=${user.username}&background=00a884&color=fff`}" 
@@ -658,14 +817,13 @@ function loadUsers() {
         });
 
         // Add click event to open chat
-        userElement.addEventListener('click', () => startChat(user));
+        element.addEventListener('click', () => startChat(user));
     }
 
     // Listen for user additions
     usersRef.on('child_added', (snapshot) => {
         const user = snapshot.val();
         if (user.id !== currentUser.id) {
-            usersData[user.id] = user; // Store user data for search
             updateUser(user);
         }
     });
@@ -674,34 +832,22 @@ function loadUsers() {
     usersRef.on('child_changed', (snapshot) => {
         const user = snapshot.val();
         if (user.id !== currentUser.id) {
-            usersData[user.id] = user; // Update user data for search
-            updateUser(user);
+            const userElement = document.querySelector(`[data-id="${user.id}"]`);
+            if (userElement) {
+                const chatId = [currentUser.id, user.id].sort().join('_');
+                updateUserElement(userElement, user, chatId);
+            }
         }
     });
 
     // Listen for user removals
     usersRef.on('child_removed', (snapshot) => {
         const user = snapshot.val();
-        const userElement = userElements[user.id];
+        const userElement = document.querySelector(`[data-id="${user.id}"]`);
         if (userElement) {
-            usersList.removeChild(userElement);
-            delete userElements[user.id];
-            delete usersData[user.id];
+            userElement.remove();
+            displayedUsers.delete(user.id);
         }
-    });
-
-    // User List Search functionality
-    searchInput.addEventListener('input', (event) => {
-        const searchTerm = event.target.value.toLowerCase();
-        Object.values(userElements).forEach((userElement) => {
-            const userId = userElement.getAttribute('data-id');
-            const user = usersData[userId];
-            if (user.username.toLowerCase().includes(searchTerm)) {
-                userElement.style.display = '';
-            } else {
-                userElement.style.display = 'none';
-            }
-        });
     });
 }
 
@@ -941,7 +1087,7 @@ function initializeEmojiPicker() {
     
         'Food': ["🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶","🌽","🥕","🧄","🧅","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩","🍗","🍖","🦴","🌭","🍔","🍟","🍕","🥪","🥙","🧆","🌮","🌯","🥗","🥘","🥫","🍝","🍜","🍲","🍛","🍣","🍱","🥟","🦪","🍤","🍙","🍚","🍘","🍥","🥠","🥮","🍢","🍡","🍧","🍨","🍦","🥧","🧁","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🍩","🍪","🌰","🥜","🍯","🥛","🍼","☕️","🍵","🧃","🥤","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧉","🍾","🧊"],
     
-        'Activities': ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🥅","⛳️","🪁","🏹","🎣","🤿","🥊","🥋","🎽","🛹","🛷","⛸","🥌","🎿","⛷","🏂","🪂","🏋️‍♀️","🏋️","🤼‍♀️","🤼","🤸‍♀️","🤸","🤺","⛹️‍♀️","⛹️","🤾‍♀️","🤾","🏌️‍♀️","🏌️","🏇","🧘‍♀️","🧘","🏄‍♀️","🏄","🏊‍♀️","🏊","🤽‍♀️","🤽","🚣‍♀️","🚣","🧗‍♀️","🧗","🚵‍♀️","🚵","🚴‍♀️","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🏵","🎗","🎫","🎟","🎪","🤹","🤹‍♂️","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🎷","🎺","🎸","🪕","🎻","🎲","♟","🎯","🎳","🎮","🎰","🧩"],
+        'Activities': ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🥅","⛳️","🪁‍♀️","🚣","🧗‍♀️","🧗","🚵‍♀️","🚵","🚴‍♀️","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🏵","🎗","🎫","🎟","🎪","🤹","🤹‍♂️","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🎷","🎺","🎸","🪕","🎻","🎲","♟","🎯","🎳","🎮","🎰","🧩"],
     
         'Travel': ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🚚","🚛","🚜","🦯","🦽","🦼","🛴","🚲","🛵","🏍","🛺","🚨","🚔","🚍","🚘","🚖","🚡","🚠","🚟","🚃","🚋","🚞","🚝","🚄","🚅","🚈","🚂","🚆","🚇","🚊","🚉","✈️","🛫","🛬","🛩","💺","🛰","🚀","🛸","🚁","🛶","⛵️","🚤","🛥","🛳","⛴","🚢","⚓️","⛽️","🚧","🚦","🚥","🚏","🗺","🗿","🗽","🗼","🏰","🏯","🏟","🎡","🎢","🎠","⛲️","⛱","🏖","🏝","🏜","🌋","⛰","🏔","🗻","🏕","⛺️","🏠","🏡","🏘","🏚","🏗","🏭","🏢","🏬","🏣","🏤","🏥","🏦","🏨","🏪","🏫","🏩","💒","🏛","⛪️","🕌","🕍","🛕","🕋","⛩","🛤","🛣","🗾","🎑","🏞","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙","🌃","🌌","🌉","🌁"],
     
@@ -1357,16 +1503,14 @@ document.head.insertAdjacentHTML('beforeend', `
 function setupPresence() {
     if (!currentUser) return;
 
-    const userStatusRef = firebase.database().ref(`users/${currentUser.id}`);
-    const connectedRef = firebase.database().ref('.info/connected');
+    const userStatusRef = database.ref(`users/${currentUser.id}`);
+    const connectedRef = database.ref('.info/connected');
 
-    // Set initial online status when page loads
-    userStatusRef.update({
-        status: 'online',
-        lastSeen: firebase.database.ServerValue.TIMESTAMP
-    });
+    // Remove any existing listeners
+    userStatusRef.off();
+    connectedRef.off();
 
-    // Handle real-time connection state
+    // Set up new presence system
     connectedRef.on('value', (snap) => {
         if (snap.val() === true) {
             // User is connected
@@ -1375,7 +1519,7 @@ function setupPresence() {
                 lastSeen: firebase.database.ServerValue.TIMESTAMP
             });
 
-            // When user disconnects
+            // Set up disconnect handler
             userStatusRef.onDisconnect().update({
                 status: 'offline',
                 lastSeen: firebase.database.ServerValue.TIMESTAMP
@@ -1383,7 +1527,7 @@ function setupPresence() {
         }
     });
 
-    // Handle tab visibility
+    // Handle visibility change
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible') {
             userStatusRef.update({
@@ -1391,31 +1535,6 @@ function setupPresence() {
                 lastSeen: firebase.database.ServerValue.TIMESTAMP
             });
         }
-    });
-
-    // Handle page unload
-    window.addEventListener('beforeunload', () => {
-        // Synchronous update for immediate status change
-        fetch(`${YOUR_API_ENDPOINT}/updateStatus`, {
-            method: 'POST',
-            keepalive: true,
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                userId: currentUser.id,
-                status: 'offline',
-                lastSeen: Date.now()
-            })
-        });
-    });
-
-    // Listen to status changes for all users
-    firebase.database().ref('users').on('value', (snapshot) => {
-        snapshot.forEach((userSnapshot) => {
-            const user = userSnapshot.val();
-            updateUserStatusUI(user.id, user.status, user.lastSeen);
-        });
     });
 }
 
@@ -2141,11 +2260,11 @@ class ProfileManager {
                 
                 // Sign out from Firebase
                 await firebase.auth().signOut();
-                
-                // Clear any stored data
-                localStorage.clear();
-                sessionStorage.clear();
-                
+    
+    // Clear any stored data
+    localStorage.clear();
+    sessionStorage.clear();
+    
                 // Hide app container and profile modal
                 document.getElementById('app-container').style.display = 'none';
                 document.getElementById('profile-modal').style.display = 'none';
@@ -2371,14 +2490,7 @@ document.addEventListener('DOMContentLoaded', () => {
 }); 
 
 // Emoji functionality
-const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇",
-    "🙂","🙃","😉","😌","😍","😘","😗","😙","😚","😋",
-    "😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏",
-    "😒","😞","😔","😟","😕","🙁","😣","😖","😫","😩",
-    "😢","😭","😤","😠","😡","🤬","🤯","😳","😱","😨",
-    "😰","😥","😓","🤗","🤔","🙄","😬","🙄","😲","😴",
-    "🤤","😪","😵","🤐","🤢","🤮","🤧","😷","🤒","🤕",
-    "🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀"];
+const emojis = ["😀","😃","😄","😁","😆","😅","😂","🤣","😊","😇","🙂","🙃","😉","😌","😍","😘","😗","😙","😚","😋","😛","😝","😜","🤪","🤨","🧐","🤓","😎","🤩","😏","😒","😞","😔","😟","😕","🙁","😣","😖","😫","😩","🥺","😢","😭","😤","😠","😡","🤬","🤯","😳","🥵","🥶","😱","😨","😰","😥","😓","🤗","🤔","🤭","🤫","🤥","😶","😐","😑","😬","🙄","😯","😦","😧","😮","😲","🥱","😴","🤤","😪","😵","🤐","🥴","🤢","🤮","🤧","😷","🤒","🤕","🤑","🤠","😈","👿","👹","👺","🤡","💩","👻","💀"];
 
 function initializeEmojiPicker() {
     const emojiButton = document.querySelector('.emoji-button');
@@ -2397,8 +2509,6 @@ function initializeEmojiPicker() {
         'Animals': ["🐶","🐱","🐭","🐹","🐰","🦊","🐻","🐼","🐨","🐯","🦁","🐮","🐷","🐽","🐸","🐵","🙈","🙉","🙊","🐒","🐔","🐧","🐦","🐤","🐣","🐥","🦆","🦅","🦉","🦇","🐺","🐗","🐴","🦄","🐝","🐛","🦋","🐌","🐞","🐜","🦟","🦗","🕷","🕸","🦂","🐢","🐍","🦎","🦖","🦕","🐙","🦑","🦐","🦞","🦀","🐡","🐠","🐟","🐬","🐳","🐋","🦈","🐊","🐅","🐆","🦓","🦍","🦧","🐘","🦛","🦏","🐪","🐫","🦒","🦘","🐃","🐂","🐄","🐎","🐖","🐏","🐑","🦙","🐐","🦌","🐕","🐩","🦮","🐕‍🦺","🐈","🐓","🦃","🦚","🦜","🦢","🦩","🕊","🐇","🦝","🦨","🦡","🦦","🦥","🐁","🐀","🐿","🦔"],
     
         'Food': ["🍏","🍎","🍐","🍊","🍋","🍌","🍉","🍇","🍓","🍈","🍒","🍑","🥭","🍍","🥥","🥝","🍅","🍆","🥑","🥦","🥬","🥒","🌶","🌽","🥕","🧄","🧅","🥔","🍠","🥐","🥯","🍞","🥖","🥨","🧀","🥚","🍳","🧈","🥞","🧇","🥓","🥩","🍗","🍖","🦴","🌭","🍔","🍟","🍕","🥪","🥙","🧆","🌮","🌯","🥗","🥘","🥫","🍝","🍜","🍲","🍛","🍣","🍱","🥟","🦪","🍤","🍙","🍚","🍘","🍥","🥠","🥮","🍢","🍡","🍧","🍨","🍦","🥧","🧁","🍰","🎂","🍮","🍭","🍬","🍫","🍿","🍩","🍪","🌰","🥜","🍯","🥛","🍼","☕️","🍵","🧃","🥤","🍶","🍺","🍻","🥂","🍷","🥃","🍸","🍹","🧉","🍾","🧊"],
-    
-        'Activities': ["⚽️","🏀","🏈","⚾️","🥎","🎾","🏐","🏉","🥏","🎱","🪀","🏓","🏸","🏒","🏑","🥍","🏏","🥅","⛳️","🪁","🏹","🎣","🤿","🥊","🥋","🎽","🛹","🛷","⛸","🥌","🎿","⛷","🏂","🪂","🏋️‍♀️","🏋️","🤼‍♀️","🤼","🤸‍♀️","🤸","🤺","⛹️‍♀️","⛹️","🤾‍♀️","🤾","🏌️‍♀️","🏌️","🏇","🧘‍♀️","🧘","🏄‍♀️","🏄","🏊‍♀️","🏊","🤽‍♀️","🤽","🚣‍♀️","🚣","🧗‍♀️","🧗","🚵‍♀️","🚵","🚴‍♀️","🚴","🏆","🥇","🥈","🥉","🏅","🎖","🏵","🎗","🎫","🎟","🎪","🤹","🤹‍♂️","🎭","🩰","🎨","🎬","🎤","🎧","🎼","🎹","🥁","🎷","🎺","🎸","🪕","🎻","🎲","♟","🎯","🎳","🎮","🎰","🧩"],
     
         'Travel': ["🚗","🚕","🚙","🚌","🚎","🏎","🚓","🚑","🚒","🚐","🚚","🚛","🚜","🦯","🦽","🦼","🛴","🚲","🛵","🏍","🛺","🚨","🚔","🚍","🚘","🚖","🚡","🚠","🚟","🚃","🚋","🚞","🚝","🚄","🚅","🚈","🚂","🚆","🚇","🚊","🚉","✈️","🛫","🛬","🛩","💺","🛰","🚀","🛸","🚁","🛶","⛵️","🚤","🛥","🛳","⛴","🚢","⚓️","⛽️","🚧","🚦","🚥","🚏","🗺","🗿","🗽","🗼","🏰","🏯","🏟","🎡","🎢","🎠","⛲️","⛱","🏖","🏝","🏜","🌋","⛰","🏔","🗻","🏕","⛺️","🏠","🏡","🏘","🏚","🏗","🏭","🏢","🏬","🏣","🏤","🏥","🏦","🏨","🏪","🏫","🏩","💒","🏛","⛪️","🕌","🕍","🛕","🕋","⛩","🛤","🛣","🗾","🎑","🏞","🌅","🌄","🌠","🎇","🎆","🌇","🌆","🏙","🌃","🌌","🌉","🌁"],
     
@@ -2560,10 +2670,10 @@ function initializeVoiceRecording() {
             <span class="recording-time">0:00</span>
         </div>
         <div class="recording-controls">
-            <button class="cancel-recording">
+            <button class="cancel-recording" onclick="cancelRecording()">
                 <i class="fas fa-times"></i>
             </button>
-            <button class="send-recording">
+            <button class="send-recording" onclick="sendRecording()">
                 <i class="fas fa-paper-plane"></i>
             </button>
         </div>
@@ -2826,14 +2936,14 @@ function initializeImageUpload() {
 
                         // Save message to database
                         return firebase.database().ref('messages').push(messageData);
-                    })
-                    .then(() => {
+                })
+                .then(() => {
                         console.log('Image sent successfully');
                         // Reset UI
                         cancelImageUpload();
                         sendButton.disabled = false;
-                    })
-                    .catch((error) => {
+                })
+                .catch((error) => {
                         console.error('Error saving message:', error);
                         alert('Failed to send image. Please try again.');
                         sendButton.disabled = false;
@@ -2862,7 +2972,7 @@ function initializeImageUpload() {
             voiceButton.style.display = 'none';
             sendButton.style.display = 'block';
             sendButton.classList.add('show');
-        } else {
+    } else {
             sendButton.classList.remove('show');
             setTimeout(() => {
                 if (!messageInput.value.trim() && !selectedImage) {
@@ -3097,7 +3207,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initializeChatSelection() {
     const mainChat = document.querySelector('.main-chat');
-    const chatList = document.querySelector('.chat-list');
+        const chatList = document.querySelector('.chat-list');
     
     // Add click handler for chat list items
     chatList.addEventListener('click', (e) => {
