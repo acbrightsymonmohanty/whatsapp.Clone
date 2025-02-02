@@ -84,6 +84,9 @@ class WhatsAppChat {
                 logoutBtn.classList.add('loading');
                 logoutBtn.disabled = true;
 
+                // Update user status to offline
+                await this.updateUserPresence(false);
+
                 // Cleanup listeners
                 this.cleanup();
                 
@@ -449,6 +452,12 @@ function registerUser(event) {
     const password = document.getElementById('reg-password').value;
 
     console.log('Registering with:', { username, email }); // Debug log
+
+    // Ensure username and email are not empty
+    if (!username || !email) {
+        alert('Username and email are required.');
+        return;
+    }
 
     // Create user with email and password
     firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -1057,7 +1066,7 @@ function sendMessage() {
     const messageData = {
         text: message,
         senderId: currentUser.id,
-        timestamp: Date.now(),
+        timestamp: firebase.database.ServerValue.TIMESTAMP,
         status: 'sent',
         read: false,
         delivered: false
@@ -1072,6 +1081,10 @@ function sendMessage() {
             messageInput.focus();
             updateLastMessage(chatId, messageData);
             scrollToBottom();
+        })
+        .catch((error) => {
+            console.error('Error sending message:', error);
+            //alert('Failed to send message. Please try again.');
         });
 }
 
@@ -2391,10 +2404,6 @@ class MobileResponsive {
         if (isMobile) {
             // Mobile view setup
             this.sidebar.style.display = 'flex';
-            this.mainChat.style.display = 'none';
-        } else {
-            // Desktop view setup
-            this.sidebar.style.display = 'flex';
             this.mainChat.style.display = 'flex';
         }
     }
@@ -2852,8 +2861,6 @@ function initializeImageUpload() {
 
     photoUpload.addEventListener('change', function(e) {
         const file = e.target.files[0];
-        console.log('File selected:', file); // Debug log
-        
         if (file && file.type.startsWith('image/')) {
             selectedImage = file;
             showImagePreview(file);
@@ -2895,83 +2902,55 @@ function initializeImageUpload() {
             const caption = previewContainer.querySelector('.image-caption')?.value.trim() || '';
             sendImageMessage(selectedImage, caption);
         } else if (messageInput.value.trim()) {
-            const text = messageInput.value.trim();
-            sendTextMessage(text);
-            messageInput.value = '';
-            toggleSendButton(false);
+            sendMessage();
         }
     });
 
     function sendImageMessage(imageFile, caption) {
-        // Initialize Firebase Storage
         const storage = firebase.storage();
         const storageRef = storage.ref();
         const imageRef = storageRef.child(`chat_images/${Date.now()}_${imageFile.name}`);
 
-        // Show loading state
         sendButton.disabled = true;
 
-        // Upload the image
         const uploadTask = imageRef.put(imageFile);
 
-        // Monitor upload progress
         uploadTask.on('state_changed', 
-            // Progress function
             (snapshot) => {
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                 console.log('Upload progress:', progress);
             },
-            // Error function
             (error) => {
                 console.error('Upload error:', error);
                 alert('Failed to upload image. Please try again.');
                 sendButton.disabled = false;
             },
-            // Complete function
             () => {
-                // Get download URL
                 uploadTask.snapshot.ref.getDownloadURL()
                     .then((downloadURL) => {
-                        // Create message data
                         const messageData = {
-                            type: 'image',
-                            url: downloadURL,
-                            caption: caption || '',
-                            sender: firebase.auth().currentUser.uid,
-                            timestamp: firebase.database.ServerValue.TIMESTAMP
+                            imageUrl: downloadURL,
+                            caption: caption,
+                            senderId: currentUser.id,
+                            timestamp: firebase.database.ServerValue.TIMESTAMP,
+                            type: 'image'
                         };
-
-                        // Save message to database
-                        return firebase.database().ref('messages').push(messageData);
-                })
-                .then(() => {
-                        console.log('Image sent successfully');
-                        // Reset UI
-                        cancelImageUpload();
+                        return firebase.database().ref(`messages/${currentChat.id}`).push(messageData);
+                    })
+                    .then(() => {
+                        selectedImage = null;
+                        previewContainer.style.display = 'none';
+                        photoUpload.value = '';
                         sendButton.disabled = false;
-                })
-                .catch((error) => {
-                        console.error('Error saving message:', error);
-                        alert('Failed to send image. Please try again.');
+                        toggleSendButton(false);
+                    })
+                    .catch((error) => {
+                        console.error('Error sending image message:', error);
+                        alert('Failed to send image message. Please try again.');
                         sendButton.disabled = false;
                     });
             }
         );
-    }
-
-    function sendTextMessage(text) {
-        const message = {
-            type: 'text',
-            content: text,
-            sender: firebase.auth().currentUser.uid,
-            timestamp: firebase.database.ServerValue.TIMESTAMP
-        };
-
-        firebase.database().ref('messages').push(message)
-            .catch(error => {
-                console.error('Error sending message:', error);
-                alert('Failed to send message. Please try again.');
-            });
     }
 
     function toggleSendButton(show) {
@@ -2979,13 +2958,11 @@ function initializeImageUpload() {
             voiceButton.style.display = 'none';
             sendButton.style.display = 'block';
             sendButton.classList.add('show');
-    } else {
+        } else {
             sendButton.classList.remove('show');
             setTimeout(() => {
-                if (!messageInput.value.trim() && !selectedImage) {
-                    sendButton.style.display = 'none';
-                    voiceButton.style.display = 'block';
-                }
+                sendButton.style.display = 'none';
+                voiceButton.style.display = 'block';
             }, 200);
         }
     }
@@ -2993,6 +2970,7 @@ function initializeImageUpload() {
 
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
+    setupMessageInput();
     initializeImageUpload();
     initializeMessageDelete();
 });
@@ -3214,7 +3192,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function initializeChatSelection() {
     const mainChat = document.querySelector('.main-chat');
-        const chatList = document.querySelector('.chat-list');
+    const chatList = document.querySelector('.chat-list');
     
     // Add click handler for chat list items
     chatList.addEventListener('click', (e) => {
@@ -3229,9 +3207,13 @@ function initializeChatSelection() {
         const userStatus = chatItem.querySelector('.user-status')?.textContent || 'online';
         const userAvatar = chatItem.querySelector('img')?.src || 'default-avatar.png';
 
-        document.querySelector('.chat-avatar').src = userAvatar;
-        document.querySelector('.contact-name').textContent = userName;
-        document.querySelector('.contact-status').textContent = userStatus;
+        const chatAvatar = document.querySelector('.chat-avatar');
+        const contactName = document.querySelector('.contact-name');
+        const contactStatus = document.querySelector('.contact-status');
+
+        if (chatAvatar) chatAvatar.src = userAvatar;
+        if (contactName) contactName.textContent = userName;
+        if (contactStatus) contactStatus.textContent = userStatus;
 
         // Handle mobile view
         if (window.innerWidth <= 768) {
@@ -3262,4 +3244,176 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeVoiceRecording();
     initializeImageUpload();
     initializeMessageDelete();
+});
+
+// ...existing code...
+
+function setupMessageInput() {
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const voiceButton = document.getElementById('voice-record-btn');
+
+    // Initially show the microphone button
+    sendButton.style.display = 'none';
+    voiceButton.style.display = 'block';
+
+    // Toggle send button based on input
+    messageInput.addEventListener('input', () => {
+        if (messageInput.value.trim()) {
+            sendButton.style.display = 'block';
+            voiceButton.style.display = 'none';
+        } else {
+            sendButton.style.display = 'none';
+            voiceButton.style.display = 'block';
+        }
+    });
+
+    // Enter key handler
+    messageInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+
+    // Click handler
+    sendButton.addEventListener('click', (e) => {
+        e.preventDefault();
+        sendMessage();
+    });
+}
+
+// ...existing code...
+
+function initializeImageUpload() {
+    const photoUpload = document.getElementById('photo-upload');
+    const messageInput = document.getElementById('message-input');
+    const sendButton = document.getElementById('send-button');
+    const voiceButton = document.getElementById('voice-record-btn');
+    
+    let selectedImage = null;
+
+    // Create image preview container
+    let previewContainer = document.querySelector('.image-preview-container');
+    if (!previewContainer) {
+        previewContainer = document.createElement('div');
+        previewContainer.className = 'image-preview-container';
+        document.querySelector('.chat-input').insertBefore(previewContainer, null);
+    }
+
+    photoUpload.addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            selectedImage = file;
+            showImagePreview(file);
+            toggleSendButton(true);
+        }
+    });
+
+    function showImagePreview(file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            previewContainer.innerHTML = `
+                <img src="${e.target.result}" class="message-image-preview" alt="Selected image">
+                <div class="image-preview-content">
+                    <input type="text" class="image-caption" placeholder="Add a caption...">
+                    <div class="image-preview-actions">
+                        <button class="cancel-upload" onclick="cancelImageUpload()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+            previewContainer.style.display = 'flex';
+            previewContainer.querySelector('.image-caption').focus();
+        };
+        reader.readAsDataURL(file);
+    }
+
+    window.cancelImageUpload = function() {
+        selectedImage = null;
+        previewContainer.style.display = 'none';
+        photoUpload.value = '';
+        if (!messageInput.value.trim()) {
+            toggleSendButton(false);
+        }
+    };
+
+    sendButton.addEventListener('click', function() {
+        if (selectedImage) {
+            const caption = previewContainer.querySelector('.image-caption')?.value.trim() || '';
+            sendImageMessage(selectedImage, caption);
+        } else if (messageInput.value.trim()) {
+            sendMessage();
+        }
+    });
+
+    function sendImageMessage(imageFile, caption) {
+        const storage = firebase.storage();
+        const storageRef = storage.ref();
+        const imageRef = storageRef.child(`chat_images/${Date.now()}_${imageFile.name}`);
+
+        sendButton.disabled = true;
+
+        const uploadTask = imageRef.put(imageFile);
+
+        uploadTask.on('state_changed', 
+            (snapshot) => {
+                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log('Upload progress:', progress);
+            },
+            (error) => {
+                console.error('Upload error:', error);
+                alert('Failed to upload image. Please try again.');
+                sendButton.disabled = false;
+            },
+            () => {
+                uploadTask.snapshot.ref.getDownloadURL()
+                    .then((downloadURL) => {
+                        const messageData = {
+                            imageUrl: downloadURL,
+                            caption: caption,
+                            senderId: currentUser.id,
+                            timestamp: firebase.database.ServerValue.TIMESTAMP,
+                            type: 'image'
+                        };
+                        return firebase.database().ref(`messages/${currentChat.id}`).push(messageData);
+                    })
+                    .then(() => {
+                        selectedImage = null;
+                        previewContainer.style.display = 'none';
+                        photoUpload.value = '';
+                        sendButton.disabled = false;
+                        toggleSendButton(false);
+                    })
+                    .catch((error) => {
+                        console.error('Error sending image message:', error);
+                        alert('Failed to send image message. Please try again.');
+                        sendButton.disabled = false;
+                    });
+            }
+        );
+    }
+
+    function toggleSendButton(show) {
+        if (show) {
+            voiceButton.style.display = 'none';
+            sendButton.style.display = 'block';
+            sendButton.classList.add('show');
+        } else {
+            sendButton.classList.remove('show');
+            setTimeout(() => {
+                sendButton.style.display = 'none';
+                voiceButton.style.display = 'block';
+            }, 200);
+        }
+    }
+}
+
+// ...existing code...
+
+document.addEventListener('DOMContentLoaded', () => {
+    setupMessageInput();
+    initializeImageUpload();
+    // ...existing code...
 });
