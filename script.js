@@ -905,11 +905,7 @@ function updateChatHeader(user) {
     
     const updateHeader = (userData) => {
         chatHeader.innerHTML = `
-            <div class="user-avatar">
-                <img src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=00a884&color=fff`}" 
-                     alt="${userData.username}">
-                <span class="status-indicator ${userData.status === 'online' ? 'online' : 'offline'}"></span>
-            </div>
+            <img class="chat-avatar" src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=random`}" alt="Contact avatar">
             <div class="contact-info">
                 <div class="contact-name">${userData.username}</div>
                 <div class="contact-status">
@@ -1552,6 +1548,11 @@ function setupPresence() {
         if (document.visibilityState === 'visible') {
             userStatusRef.update({
                 status: 'online',
+                lastSeen: firebase.database.ServerValue.TIMESTAMP
+            });
+        } else {
+            userStatusRef.update({
+                status: 'offline',
                 lastSeen: firebase.database.ServerValue.TIMESTAMP
             });
         }
@@ -3203,17 +3204,14 @@ function initializeChatSelection() {
         mainChat.classList.add('chat-active');
 
         // Update chat header with user info
-        const userName = chatItem.querySelector('.user-name')?.textContent || 'User';
-        const userStatus = chatItem.querySelector('.user-status')?.textContent || 'online';
-        const userAvatar = chatItem.querySelector('img')?.src || 'default-avatar.png';
-
-        const chatAvatar = document.querySelector('.chat-avatar');
-        const contactName = document.querySelector('.contact-name');
-        const contactStatus = document.querySelector('.contact-status');
-
-        if (chatAvatar) chatAvatar.src = userAvatar;
-        if (contactName) contactName.textContent = userName;
-        if (contactStatus) contactStatus.textContent = userStatus;
+        const userId = chatItem.getAttribute('data-user-id');
+        const userRef = firebase.database().ref(`users/${userId}`);
+        userRef.once('value').then((snapshot) => {
+            const user = snapshot.val();
+            if (user) {
+                updateChatHeader(user);
+            }
+        });
 
         // Handle mobile view
         if (window.innerWidth <= 768) {
