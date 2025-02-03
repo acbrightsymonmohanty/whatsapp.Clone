@@ -905,7 +905,7 @@ function updateChatHeader(user) {
     
     const updateHeader = (userData) => {
         chatHeader.innerHTML = `
-            <img class="chat-avatar" src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=random`}" alt="Contact avatar">
+            <img class="chat-avatar" src="${userData.photoURL || `https://ui-avatars.com/api/?name=${userData.username}&background=00a884&color=fff`}" alt="Contact avatar">
             <div class="contact-info">
                 <div class="contact-name">${userData.username}</div>
                 <div class="contact-status">
