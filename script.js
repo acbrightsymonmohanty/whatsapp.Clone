@@ -18,6 +18,34 @@ let currentChat = null;
 let userPresenceRef = null;
 let activeChats = new Map();
 
+// Add this function at the beginning of your script
+function playNotificationSound() {
+    const audio = document.getElementById('notification-sound');
+    if (audio) {
+        // Reset the audio to start
+        audio.currentTime = 0;
+        // Play the sound
+        audio.play().catch(error => {
+            console.log('Error playing sound:', error);
+        });
+    }
+}
+
+function shouldPlayNotification(message) {
+    // Don't play for own messages
+    if (message.senderId === currentUser.id) return false;
+    
+    // Always play if page is not visible
+    if (document.visibilityState !== 'visible') return true;
+    
+    // If no chat is open, play the sound
+    if (!currentChat) return true;
+    
+    // If message is from a different chat than the one currently open, play the sound
+    const messageChat = [currentUser.id, message.senderId].sort().join('_');
+    return messageChat !== currentChat.id;
+}
+
 class WhatsAppChat {
     constructor() {
         this.db = firebase.firestore();
@@ -941,6 +969,11 @@ function loadMessages(chatId) {
             const messageElement = createMessageElement(message, messageId);
             messagesDiv.appendChild(messageElement);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Play notification if needed
+            if (shouldPlayNotification(message)) {
+                playNotificationSound();
+            }
 
             // Mark message as read if it's received and chat is open
             if (message.senderId !== currentUser.id && !message.read) {
@@ -3407,6 +3440,32 @@ function initializeImageUpload() {
         }
     }
 }
+// Find your message handling code (where you receive new messages) and add the sound
+function handleNewMessage(message) {
+    // Your existing message handling code...
+    
+    // Play notification sound if the message is not from the current user
+    if (message.senderId !== currentUserId && !document.hasFocus()) {
+        playNotificationSound();
+    }
+}
+
+function setupGlobalMessageListener() {
+    firebase.database().ref('messages').on('child_added', (chatSnapshot) => {
+        chatSnapshot.ref.limitToLast(1).on('child_added', (messageSnapshot) => {
+            const message = messageSnapshot.val();
+            if (shouldPlayNotification(message)) {
+                playNotificationSound();
+            }
+        });
+    });
+}
+// Update your initialization code
+document.addEventListener('DOMContentLoaded', () => {
+    // ...existing initialization code...
+    setupGlobalMessageListener();
+});
+
 
 // ...existing code...
 
